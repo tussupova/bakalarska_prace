@@ -1,8 +1,9 @@
 import React from 'react'
+import SignUp from "../components/SignUp";
 
 
 
-export const SignUp = () => {
+export const SignUpPage = () => {
   return <>
     <SignUp/>
   </>
