@@ -16,6 +16,11 @@ import FormLabel from "@material-ui/core/FormLabel";
 import {borders} from '@material-ui/system';
 import {DropzoneArea} from "material-ui-dropzone";
 import TextField from "@material-ui/core/TextField";
+import SetPeriod from "./SetPeriod";
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormGroup from '@material-ui/core/FormGroup';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -174,11 +179,7 @@ export default function Routine() {
                 href="#contained-buttons">
           Date
         </Button>
-
-        <Button className={classes.marginAll} variant="contained" color="primary"
-                href="#contained-buttons">
-          Period
-        </Button>
+        <SetPeriod></SetPeriod>
         <Button className={`${classes.marginAll}${classes.createButton}`} variant="contained" color="secondaryn"
                 href="#contained-buttons">
           Create Custom Product
