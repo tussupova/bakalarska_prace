@@ -6,7 +6,6 @@ import {
 } from "react-router-dom";
 import {RoutinePage} from "../pages/Routine.page";
 import {NotFoundPage} from "../pages/NotFound.page";
-import SignUp from "./SignUp";
 import {SignIn, SignInPage} from "../pages/SignIn.page";
 import {SignUpPage} from "../pages/SignUp.page";
 
