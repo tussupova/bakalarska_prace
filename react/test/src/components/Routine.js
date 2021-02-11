@@ -14,6 +14,7 @@ import SetPeriod from "./SetPeriod";
 import Indicator from "./createRoutine/Indicator";
 import NoteAndPhotos from "./createRoutine/NoteAndPhotos";
 import ProductsOfRoutine from "./createRoutine/ProductsOfRoutine";
+import Typography from "@material-ui/core/Typography";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -48,10 +49,13 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
     minWidth: 150,
   },
-  test:{
-    display:'flex',
-    flexDirection:'row',
+  test: {
+    display: 'flex',
+    flexDirection: 'row',
     justifyContent: 'space-between',
+    [theme.breakpoints.down('xs')]: {
+      flexDirection: 'column'
+    }
   }
 }));
 
@@ -81,7 +85,7 @@ export default function Routine() {
           <Grid item xs={12}>
             <Paper className={classes.paper}>
               <grid>
-                Some title
+                <Typography> Some title </Typography>
               </grid>
               <grid>
                 <Button className={classes.menuButton} variant="contained" color="primary"

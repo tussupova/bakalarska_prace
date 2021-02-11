@@ -43,7 +43,7 @@ export default function ProductsOfRoutine() {
   ];
   const animatedComponents = makeAnimated();
   return (
-    <Grid className={classes.multiSelectGrid}>
+    <Grid className={classes.multiSelectGrid} xs={12}>
       <FormControl className={classes.multiSelectItem}>
         <div>
           <FormLabel className={classes.multiSelectLabel} component="legend">Cleansing</FormLabel></div>

@@ -69,7 +69,7 @@ export default function Indicator() {
     setSelectedDate(date);
   };
   return (
-    <Grid container className={classes.mainGrid}>
+    <Grid container className={classes.mainGrid} xs={12}>
       <Grid item>
         <Paper className={classes.paper}>
           <div>
