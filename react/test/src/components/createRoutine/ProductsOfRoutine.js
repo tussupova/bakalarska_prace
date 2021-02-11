@@ -10,9 +10,9 @@ const useStyles = makeStyles((theme) => ({
 
   multiSelectGrid: {
     borderColor: 'black',
-    width: theme.spacing(150),
-    marginTop: theme.spacing(2),
-    marginLeft: theme.spacing(5),
+    /*width: theme.spacing(150),*/
+    margin: theme.spacing(3),
+    padding: theme.spacing(3),
     border: '2px solid'
 
   },
@@ -43,7 +43,7 @@ export default function ProductsOfRoutine() {
   ];
   const animatedComponents = makeAnimated();
   return (
-    <Grid className={classes.multiSelectGrid} xs={12}>
+    <Grid className={classes.multiSelectGrid} xs={12} lg={8}>
       <FormControl className={classes.multiSelectItem}>
         <div>
           <FormLabel className={classes.multiSelectLabel} component="legend">Cleansing</FormLabel></div>

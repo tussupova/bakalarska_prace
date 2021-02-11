@@ -18,6 +18,7 @@ import {KeyboardTimePicker} from '@material-ui/pickers'
 const useStyles = makeStyles((theme) => ({
 
   paper: {
+    width: '90%',
     padding: theme.spacing(2),
     textAlign: 'center',
     color: theme.palette.text.secondary,
@@ -31,14 +32,13 @@ const useStyles = makeStyles((theme) => ({
   },
   mainGrid: {
     width: theme.spacing(100),
-    marginLeft: theme.spacing(5),
-    marginTop: theme.spacing(2),
+    margin: theme.spacing(3)
   },
-  sleep:{
+  sleep: {
     width: theme.spacing(20)
   },
-  calendarWidth:{
-    width:theme.spacing(30)
+  calendarWidth: {
+    width: theme.spacing(30)
   }
 
 }));
@@ -69,7 +69,7 @@ export default function Indicator() {
     setSelectedDate(date);
   };
   return (
-    <Grid container className={classes.mainGrid} xs={12}>
+    <Grid container className={classes.mainGrid} xs={12} lg={6}>
       <Grid item>
         <Paper className={classes.paper}>
           <div>
@@ -125,15 +125,15 @@ export default function Indicator() {
                 }}
               />
               <KeyboardTimePicker
-              margin="normal"
-              id="time-picker"
-              label="Wake Up"
-              value={selectedDate}
-              onChange={handleDateChange}
-              KeyboardButtonProps={{
-                'aria-label': 'change time',
-              }}
-            />
+                margin="normal"
+                id="time-picker"
+                label="Wake Up"
+                value={selectedDate}
+                onChange={handleDateChange}
+                KeyboardButtonProps={{
+                  'aria-label': 'change time',
+                }}
+              />
             </Grid>
 
           </div>

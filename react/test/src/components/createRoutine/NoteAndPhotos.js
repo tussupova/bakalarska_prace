@@ -12,8 +12,6 @@ const useStyles = makeStyles((theme) => ({
     borderColor: 'black',
     margin: theme.spacing(3),
     padding:theme.spacing(3),
-
-
   },
   note: {
     width: '100%',
@@ -29,6 +27,9 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(1),
     textAlign: 'center'
 
+  },
+  dropText:{
+    padding: theme.spacing(1)
   }
 }));
 export default function NoteAndPhotos() {
@@ -36,9 +37,9 @@ export default function NoteAndPhotos() {
   return (
 
     <Grid className={classes.photoAndNoteGrid} xs={12} lg={12}>
-      <DropzoneArea
+      <DropzoneArea className={classes.dropText}
         acceptedFiles={['image/*']}
-        dropzoneText={"Drag and drop an image here or click"}
+        dropzoneText={<Typography> Drag and drop an image here or click</Typography>}
         onChange={(files) => console.log('Files:', files)}
       />
       <FormControl className={classes.note}>

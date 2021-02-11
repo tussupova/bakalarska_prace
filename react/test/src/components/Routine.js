@@ -15,12 +15,17 @@ import Indicator from "./createRoutine/Indicator";
 import NoteAndPhotos from "./createRoutine/NoteAndPhotos";
 import ProductsOfRoutine from "./createRoutine/ProductsOfRoutine";
 import Typography from "@material-ui/core/Typography";
+import NewBDay from "../NewBDay";
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import Link from "@material-ui/core/Link";
+import Breadcrumbs from "@material-ui/core/Breadcrumbs";
+import HomeIcon from '@material-ui/icons/Home';
 
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
-    frozen: true,
+
     position: "sticky"
   },
   paper: {
@@ -31,22 +36,43 @@ const useStyles = makeStyles((theme) => ({
     frozen: true
 
   },
+  actionGrid: {
+    flexDirection: 'row',
+    [theme.breakpoints.down('xs')]: {
+      flexDirection: 'column',
+      alignContent: 'center'
+    }
+
+  },
+  selectDateCalendar: {
+    width: '16%',
+    margin: theme.spacing(0),
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    [theme.breakpoints.down('xs')]: {
+      width: '80%',
+    }
+  },
   createButton: {
-    color: "#43a047"
+
+    color: theme.palette.getContrastText(theme.palette.error.main),
+    background: theme.palette.error.main,
   },
   menuButton: {
     marginRight: theme.spacing(2),
     marginLeft: theme.spacing(2)
   },
   marginAll: {
-    margin: theme.spacing(3)
+    margin: theme.spacing(3),
+    backgroundColor: theme.palette.success.main,
+    color: theme.palette.primary.contrastText
   },
   button: {
     display: 'block',
     marginTop: theme.spacing(2),
   },
   formControl: {
-    margin: theme.spacing(1),
+    margin: theme.spacing(2),
     minWidth: 150,
   },
   test: {
@@ -56,8 +82,20 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('xs')]: {
       flexDirection: 'column'
     }
+  },
+  breadcrumbs:{
+    padding: theme.spacing(2),
+
+  },
+  breadcrumbsFont:{
+    fontSize:theme.spacing(1.5)
   }
 }));
+
+function handleClick(event) {
+  event.preventDefault();
+  console.info('You clicked a breadcrumb.');
+}
 
 export default function Routine() {
   const classes = useStyles();
@@ -80,12 +118,23 @@ export default function Routine() {
 
   return (
     <>
+      <div className={classes.breadcrumbs}>
+        <Breadcrumbs separator={<NavigateNextIcon fontSize="inherit"/>} aria-label="breadcrumb">
+          <Link color="inherit" href="/" onClick={handleClick} fontSize>
+            <Typography className={classes.breadcrumbsFont}><HomeIcon/></Typography>
+          </Link>
+          <Link color="inherit" href="/getting-started/installation/" onClick={handleClick}>
+            <Typography className={classes.breadcrumbsFont}>My Routine</Typography>
+          </Link>
+          <Typography color="textPrimary" className={classes.breadcrumbsFont}>Create Routine</Typography>
+        </Breadcrumbs>
+      </div>
       <div className={classes.root}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Paper className={classes.paper}>
               <grid>
-                <Typography> Some title </Typography>
+                <Typography> Create Routine </Typography>
               </grid>
               <grid>
                 <Button className={classes.menuButton} variant="contained" color="primary"
@@ -102,12 +151,9 @@ export default function Routine() {
 
         </Grid>
       </div>
-      <div>
-        <Button className={classes.button} onClick={handleOpen}>
-          Select routine type
-        </Button>
+      <Grid container className={classes.actionGrid}>
         <FormControl className={classes.formControl}>
-          <InputLabel id="demo-controlled-open-select-label">Routine Type</InputLabel>
+          <InputLabel id="demo-controlled-open-select-label"><Typography>Routine Type</Typography></InputLabel>
           <Select
             labelId="demo-controlled-open-select-label"
             id="demo-controlled-open-select"
@@ -122,17 +168,14 @@ export default function Routine() {
             <MenuItem value={30}>Other</MenuItem>
           </Select>
         </FormControl>
-        <Button className={classes.marginAll} variant="contained" color="primary"
-                href="#contained-buttons">
-          Date
-        </Button>
+        <div className={classes.selectDateCalendar}><NewBDay/></div>
         <SetPeriod/>
-        <Button className={`${classes.marginAll}${classes.createButton}`} variant="contained" color="secondaryn"
+        <Button className={classes.marginAll} variant="contained"
                 href="#contained-buttons">
-          Create Custom Product
+          <Typography>Create Custom Product</Typography>
         </Button>
-      </div>
-      <Grid>
+      </Grid>
+      <Grid xs={12}>
         <Grid className={classes.test}>
           <ProductsOfRoutine/>
           <Indicator/>
