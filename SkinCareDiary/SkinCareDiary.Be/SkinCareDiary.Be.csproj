@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SkinCareDiary.Database\SkinCareDiary.Database.csproj" />
+      <ProjectReference Include="..\SkinCareDiary.Services\SkinCareDiary.Services.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="data\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="data\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="data\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="data\**" />
+    </ItemGroup>
+
+</Project>

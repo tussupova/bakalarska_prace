@@ -1,0 +1,18 @@
+﻿version: "3"
+services:
+  papDB:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: kymbat
+    volumes:
+      - ./data:/var/lib/mysql
+    ports:
+      - 3306:3306
+      - 33060:33060
+
+  papAdminer:
+    image: adminer
+    ports:
+      - 8080:8080
