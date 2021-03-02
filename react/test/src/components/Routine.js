@@ -15,7 +15,7 @@ import Indicator from "./createRoutine/Indicator";
 import NoteAndPhotos from "./createRoutine/NoteAndPhotos";
 import ProductsOfRoutine from "./createRoutine/ProductsOfRoutine";
 import Typography from "@material-ui/core/Typography";
-import NewBDay from "../NewBDay";
+import NewBDay from "./NewBDay";
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Link from "@material-ui/core/Link";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";

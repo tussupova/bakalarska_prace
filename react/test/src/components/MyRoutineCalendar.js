@@ -14,10 +14,17 @@ const localizer = momentLocalizer(moment)
 const useStyles = makeStyles((theme) => ({
   calendarGrid: {
     height: theme.spacing(60),
-    width: theme.spacing(100)
+    width: theme.spacing(140),
+    margin: theme.spacing(5),
+
+    [theme.breakpoints.down('xs')]: {
+      width: '90%',
+      margin: theme.spacing(2.5)
+
+    }
   },
   createButton: {
-    margin: theme.spacing(3),
+    margin: theme.spacing(5),
     backgroundColor: theme.palette.success.main,
     color: theme.palette.primary.contrastText
   }
