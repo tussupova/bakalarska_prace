@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
+using System.Net;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using SkinCareDiary.Database.DB;
+using SkinCareDiary.Services.Helpers;
 using SkinCareDiary.Services.Models.User;
 
 namespace SkinCareDiary.Be.Controllers
@@ -8,15 +13,32 @@ namespace SkinCareDiary.Be.Controllers
     
     public class UserController: ControllerBase
     {
-        [HttpPost]
-        public int Post(DtoCustomer user)
+        /*[HttpPost]
+        public int Post(DtoUserRequest user)
         {
-            if (user.Name == "Tom")
+            LoginHelper.CreateAccount(user);
+            return 5;
+        }*/
+
+        [HttpPost("login")]
+        [ProducesResponseType(typeof(DtoUserResponse), StatusCodes.Status200OK)]
+        public IActionResult Login(DtoLoginUser user)
+        {
+            var userDto = LoginHelper.Login(user.Email, user.Password);
+            if (userDto != null)
             {
-                return 2;
+                return Ok(userDto);
             }
 
-            return 1;
+            return Unauthorized();
         }
+
+        [HttpGet]
+        public DtoUserResponse Get(int Id)
+        {
+            return LoginHelper.GetUserFromId(Id);
+        }
+
+        
     }
 }

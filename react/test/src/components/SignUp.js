@@ -79,6 +79,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
 }));
+
 function StyledRadio(props) {
   const classes = useStyles();
   return (
@@ -92,6 +93,7 @@ function StyledRadio(props) {
     />
   );
 }
+
 export default function SignUp() {
   const classes = useStyles();
   const {register, handleSubmit} = useForm();
@@ -157,7 +159,6 @@ export default function SignUp() {
                   </div>
                 </RadioGroup>
               </FormControl>
-
             </Grid>
             <Grid item xs={12}>
               <NewBDay/>

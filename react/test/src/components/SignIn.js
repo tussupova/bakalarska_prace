@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -8,8 +8,10 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import {useForm} from "react-hook-form";
+import loginAsync from "../services/UserServices";
 
 
 function Copyright() {
@@ -47,16 +49,27 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
   const classes = useStyles();
+  const {register, handleSubmit} = useForm();
+  const [passwordError, setPasswordError] = useState('')
 
+  const login = async (data) => {
+    try {
+      const response = await loginAsync({password: data.password, email: data.email})
+      console.log('ok', response)
+    } catch (err) {
+      console.log('muj error catch', err)
+      setPasswordError('Nepovedlo se prihlasit')
+    }
+  }
 
   return (
     <Container component="main" maxWidth="xs">
-      <CssBaseline />
+      <CssBaseline/>
       <div className={classes.paper}>
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form} noValidate onSubmit={handleSubmit((data) => login(data))}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -66,7 +79,9 @@ export default function SignIn() {
             label="Email Address"
             name="email"
             autoComplete="email"
-            autoFocus
+            autoFocus inputRef={register}
+            helperText={passwordError}
+            error={Boolean(passwordError)}
           />
           <TextField
             variant="outlined"
@@ -77,10 +92,12 @@ export default function SignIn() {
             label="Password"
             type="password"
             id="password"
-            autoComplete="current-password"
+            autoComplete="current-password" inputRef={register}
+            helperText={passwordError}
+            error={Boolean(passwordError)}
           />
           <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
+            control={<Checkbox value="remember" color="primary"/>}
             label="Remember me"
           />
           <Button
@@ -107,7 +124,7 @@ export default function SignIn() {
         </form>
       </div>
       <Box mt={8}>
-        <Copyright />
+        <Copyright/>
       </Box>
     </Container>
   );
