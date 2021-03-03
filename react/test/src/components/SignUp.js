@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
 import makeStyles from "@material-ui/core/styles/makeStyles";
@@ -17,6 +17,8 @@ import clsx from "clsx";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import RadioGroup from "@material-ui/core/RadioGroup";
+import {loginAsync, signUp, signUpAsync} from "../services/UserServices";
+import {useHistory} from "react-router-dom";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -97,6 +99,45 @@ function StyledRadio(props) {
 export default function SignUp() {
   const classes = useStyles();
   const {register, handleSubmit} = useForm();
+  // const [passwordError, setPasswordError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [nameError, setNameError]= useState('');
+  const [emailError, setEmailError]= useState('');
+
+  const history = useHistory()
+
+  const signUp = async (data) => {
+    if (data.password.length < 5) {
+      setPasswordError('Password is too short')
+    }
+    else if (data.password.length>25){
+      setPasswordError('Password is too long')
+    }
+    else if (data.name.length===0){
+      setNameError('Please, fill the name')
+    }
+    else if (data.email.length===0){
+      setEmailError('Please, fill the email')
+    }
+
+    else
+    {
+      try {
+        const response = await signUpAsync({
+          password: data.password,
+          email: data.email,
+          name: data.name,
+          birthday: data.birthday,
+          gender: data.gender
+        });
+        history.push('/myRoutine')
+      } catch (err) {
+        console.log('my error catch', err)
+
+        //setPasswordError('Invalid credentials')
+      }
+    }
+  }
 
 
   return (
@@ -109,18 +150,20 @@ export default function SignUp() {
         <form
           className={classes.form}
           noValidate
-          onSubmit={handleSubmit((data) => alert(JSON.stringify(data)))}
+          onSubmit={handleSubmit((data) => signUp(data))}
         >
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
                 autoComplete="name"
-                name="Name"
+                name="name"
                 variant="outlined"
                 required
                 fullWidth
-                id="Name"
+                id="name"
                 label="Name"
+                helperText={nameError}
+                error={Boolean(nameError)}
                 autoFocus inputRef={register}
               />
             </Grid>
@@ -134,6 +177,8 @@ export default function SignUp() {
                 label="Email Address"
                 name="email"
                 autoComplete="email" inputRef={register}
+                helperText={emailError}
+                error={Boolean(emailError)}
               />
             </Grid>
             <Grid item xs={12}>
@@ -145,6 +190,8 @@ export default function SignUp() {
                 label="Password"
                 type="password"
                 id="password"
+                helperText={passwordError}
+                error={Boolean(passwordError)}
                 autoComplete="current-password" inputRef={register}
               />
             </Grid>

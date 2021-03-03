@@ -245,8 +245,11 @@ namespace SkinCareDiary.Database.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<string>("Password")
-                        .HasColumnType("text");
+                    b.Property<byte[]>("Password")
+                        .HasColumnType("varbinary(4000)");
+
+                    b.Property<byte[]>("Salt")
+                        .HasColumnType("varbinary(4000)");
 
                     b.Property<string>("SkinType")
                         .HasColumnType("text");

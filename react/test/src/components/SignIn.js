@@ -11,7 +11,12 @@ import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {useForm} from "react-hook-form";
-import loginAsync from "../services/UserServices";
+import {loginAsync} from "../services/UserServices";
+import {useHistory} from "react-router-dom";
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import InputAdornment from '@material-ui/core/InputAdornment';
+
 
 
 function Copyright() {
@@ -50,15 +55,26 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn() {
   const classes = useStyles();
   const {register, handleSubmit} = useForm();
-  const [passwordError, setPasswordError] = useState('')
+  const [passwordError, setPasswordError] = useState('');
+  const [passwordVisibility, setPasswordVisibility] = useState('password');
+  const history = useHistory()
+
 
   const login = async (data) => {
     try {
-      const response = await loginAsync({password: data.password, email: data.email})
-      console.log('ok', response)
+      const response = await loginAsync({password: data.password, email: data.email});
+      history.push('/myRoutine')
+
     } catch (err) {
-      console.log('muj error catch', err)
-      setPasswordError('Nepovedlo se prihlasit')
+      console.log('my error catch', err)
+      setPasswordError('Invalid credentials')
+    }
+  }
+  const changePasswordVisibility = () => {
+    if (passwordVisibility === 'password') {
+      setPasswordVisibility('text')
+    } else {
+      setPasswordVisibility('password')
     }
   }
 
@@ -90,12 +106,16 @@ export default function SignIn() {
             fullWidth
             name="password"
             label="Password"
-            type="password"
+            type={passwordVisibility}
             id="password"
             autoComplete="current-password" inputRef={register}
             helperText={passwordError}
             error={Boolean(passwordError)}
-          />
+            InputProps={{
+              endAdornment: <InputAdornment position="end"><VisibilityOffIcon onClick={changePasswordVisibility}/></InputAdornment>
+            }}
+          >
+          </TextField>
           <FormControlLabel
             control={<Checkbox value="remember" color="primary"/>}
             label="Remember me"

@@ -4,33 +4,38 @@ using SkinCareDiary.Services.Models.User;
 
 namespace SkinCareDiary.Services.Helpers
 {
-    public static class LoginHelper
+    public class LoginHelper: ILoginHelper
     {
-        public static DtoUserRequest WhoIsLogined { get; set; }
+        private readonly IJwtHelper _jwtHelper;
 
-        public static DtoUserResponse Login(string login, string password)
+        public LoginHelper(IJwtHelper jwtHelper)
         {
-            using (var db= new RepositoryContext())
-            {
-                var x = db.Users.Where(o => o.Email == login).Where(o => o.Password == password).FirstOrDefault();
-                return MapUserToDtoUserResponse(x);
-            }
+            _jwtHelper = jwtHelper;
         }
 
-        public static DtoUserResponse GetUserFromId(int id)
+        public DtoUserResponse Login(string login, string password)
         {
-            using (var db= new RepositoryContext())
+            using (var db = new RepositoryContext())
             {
-                var x = db.Users.Where(o => o.Id == id).FirstOrDefault();
-                return MapUserToDtoUserResponse(x);
-            }
-        }
-        public static DtoUserResponse MapUserToDtoUserResponse(User user)
-        {
-            if (user == null)
-            {
+                var x = db.Users.Where(o => o.Email == login).FirstOrDefault();
+                if (x == null)
+                {
+                    return null;
+                }
+
+                var hashedPassword = _jwtHelper.HashPassword(password, x.Salt);
+
+                if (_jwtHelper.HashEquals(hashedPassword, x.Password))
+                {
+                    return MapUserToDtoUserResponse(x);
+                }
+
                 return null;
             }
+        }
+
+        public DtoUserResponse MapUserToDtoUserResponse(User user)
+        {
             //ony for user, not for admin
             var dtoUser = new DtoUserResponse
             {
@@ -39,42 +44,48 @@ namespace SkinCareDiary.Services.Helpers
                 Name = user.Name,
                 BirthDay = user.BirthDay,
                 SkinType = user.SkinType,
-                Password = user.Password,
-                Email = user.Email
+                Email = user.Email,
+                Token = _jwtHelper.GenerateJwtToken(user),
             };
 
             return dtoUser;
         }
-        
+
 
         //for new user - SignIn
-        public static void CreateAccount(DtoUserRequest customer)
+        public DtoUserResponse CreateAccount(DtoUserSignIUp customer)
         {
             using (var context = new RepositoryContext())
+            {
+                var salt = _jwtHelper.GenerateSalt();
+                var newUser = new User()
                 {
-                    var newUser = new User()
-                    {
-                        Name = customer.Name,
-                        Gender=customer.Gender,
-                        BirthDay=customer.BirthDay,
-                        Password = customer.Password, 
-                        Email = customer.Email
-                        
-                        //TODO add other attributes
-                    };
-                    context.Users.Add(newUser);
-                    context.SaveChanges();
-                    WhoIsLogined = customer;
+                    Name = customer.Name,
+                    Gender = customer.Gender,
+                    BirthDay = customer.BirthDay,
+                    Salt = salt,
+                    Password = _jwtHelper.HashPassword(customer.Password, salt),
+                    Email = customer.Email
+
+                    //TODO add other attributes
+                };
+                if (IsUserExist(newUser))
+                {
+                    return null;
                 }
+
+                context.Users.Add(newUser);
+                context.SaveChanges();
+                return MapUserToDtoUserResponse(newUser);
+            }
         }
 
-        
-        static public void LogOut()
+        public bool IsUserExist(User user)
         {
-            WhoIsLogined = null;
+            using (var db = new RepositoryContext())
+            {
+                return db.Users.Any(o => o.Email == user.Email);
+            }
         }
-
-
-
     }
 }
