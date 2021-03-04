@@ -11,7 +11,7 @@ import {
 
 export default function NewBDay() {
 
-    const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18'));
+    const [selectedDate, setSelectedDate] = React.useState(Date.now);
 
     const handleDateChange = (date) => {
         setSelectedDate(date);

@@ -5,6 +5,9 @@ import moment from 'moment'
 import * as dates from 'react-big-calendar-like-google/lib/css/react-big-calendar.css';
 import {Button, Typography} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
+import {sendData} from "../services/UserServices";
+import {useHistory} from "react-router-dom";
+
 BigCalendar.momentLocalizer(moment);
 /*
 const localizer = momentLocalizer(moment)
@@ -40,34 +43,47 @@ const getRoutineType = (date, culture, localizer) => {
   }
 };
 
-
+const authGet = async () => {
+  try {
+    const x = await sendData();
+    console.log(x.headers);
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 export default function Routine() {
   const classes = useStyles();
+  const history = useHistory();
+
+  const onClickCreateRoutine = () => {
+    history.push('/createRoutine');
+  }
   const [event, setEvent] = useState();
   return (
     <>
+      <button onClick={authGet}>test</button>
       <Grid container>
-      <div className={classes.calendarGrid}>
-        <BigCalendar
-          //vybirani casu
-          selectable
-          step={160}
-          timeslots={3}
-          events={[]}
-          formats={{
-            timeGutterFormat: (date, culture, localizer) => {
-              return getRoutineType(date, culture, localizer);
-            }
-          }}
-        />
-      </div>
-      <div>
-        <Button className={classes.createButton} variant="contained"
-                href="#contained-buttons">
-          <Typography>Create Routine</Typography>
-        </Button>
-      </div>
+        <div className={classes.calendarGrid}>
+          <BigCalendar
+            //vybirani casu
+            selectable
+            step={160}
+            timeslots={3}
+            events={[]}
+            formats={{
+              timeGutterFormat: (date, culture, localizer) => {
+                return getRoutineType(date, culture, localizer);
+              }
+            }}
+          />
+        </div>
+        <div>
+          <Button className={classes.createButton} variant="contained"
+                  href="#contained-buttons" onClick={onClickCreateRoutine}>
+            <Typography>Create Routine</Typography>
+          </Button>
+        </div>
       </Grid>
     </>
   );

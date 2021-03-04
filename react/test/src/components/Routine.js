@@ -115,7 +115,6 @@ export default function Routine() {
     setOpen(true);
   };
 
-
   return (
     <>
       <div className={classes.breadcrumbs}>
@@ -129,6 +128,7 @@ export default function Routine() {
           <Typography color="textPrimary" className={classes.breadcrumbsFont}>Create Routine</Typography>
         </Breadcrumbs>
       </div>
+      <form>
       <div className={classes.root}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
@@ -182,6 +182,7 @@ export default function Routine() {
         </Grid>
         <NoteAndPhotos/>
       </Grid>
+      </form>
     </>
   );
 }

@@ -18,7 +18,6 @@ import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 import InputAdornment from '@material-ui/core/InputAdornment';
 
 
-
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -63,6 +62,7 @@ export default function SignIn() {
   const login = async (data) => {
     try {
       const response = await loginAsync({password: data.password, email: data.email});
+      localStorage.setItem('authToken', response.data.token);
       history.push('/myRoutine')
 
     } catch (err) {
@@ -77,6 +77,7 @@ export default function SignIn() {
       setPasswordVisibility('password')
     }
   }
+
 
   return (
     <Container component="main" maxWidth="xs">
@@ -112,7 +113,8 @@ export default function SignIn() {
             helperText={passwordError}
             error={Boolean(passwordError)}
             InputProps={{
-              endAdornment: <InputAdornment position="end"><VisibilityOffIcon onClick={changePasswordVisibility}/></InputAdornment>
+              endAdornment: <InputAdornment position="end"><VisibilityOffIcon
+                onClick={changePasswordVisibility}/></InputAdornment>
             }}
           >
           </TextField>
