@@ -17,6 +17,7 @@ import {KeyboardTimePicker} from '@material-ui/pickers'
 
 const useStyles = makeStyles((theme) => ({
 
+
   paper: {
     width: '90%',
     padding: theme.spacing(2),
@@ -61,13 +62,10 @@ const marks = [
     label: '3,5 L',
   }
 ];
-export default function Indicator() {
-  const classes = useStyles();
-  const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
+export default function Indicator(props) {
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
+  const classes = useStyles();
+
   return (
     <Grid container className={classes.mainGrid} xs={12} lg={6}>
       <Grid item>
@@ -75,21 +73,24 @@ export default function Indicator() {
           <div>
             <Typography>Stress</Typography>
             <FormControl component="fieldset">
-              <RadioGroup row aria-label="position" name="position" defaultValue="top">
+              <RadioGroup row aria-label="position" name="Stress" defaultValue="top" value={props.value.Stress} onChange={props.onChange}>
                 <FormControlLabel
                   value="happy"
+                  name="Stress"
                   control={<Radio color="primary"/>}
                   label={<MoodIcon className={classes.iconSize}></MoodIcon>}
                   labelPlacement="bottom"
                 />
                 <FormControlLabel
                   value="normal"
+                  name="Stress"
                   control={<Radio color="primary"/>}
                   label={<SentimentSatisfiedIcon className={classes.iconSize}></SentimentSatisfiedIcon>}
                   labelPlacement="bottom"
                 />
                 <FormControlLabel
-                  value="stress"
+                  value="bad"
+                  name="Stress"
                   control={<Radio color="primary"/>}
                   label={<MoodBadIcon className={classes.iconSize}></MoodBadIcon>}
                   labelPlacement="bottom"
@@ -97,11 +98,10 @@ export default function Indicator() {
               </RadioGroup>
             </FormControl>
           </div>
-          <div>
+          <div name ="Water">
             <Typography>Water</Typography>
-
             <Slider className={classes.waterSlider}
-                    defaultValue={2}
+
                     getAriaValueText={valuetext}
                     aria-labelledby="discrete-slider"
                     valueLabelDisplay="auto"
@@ -109,6 +109,10 @@ export default function Indicator() {
                     marks={marks}
                     min={0.5}
                     max={3.5}
+                    name="Water"
+                    value={props.value.Water}
+                    onChange={props.onChange}
+                   onChangeCommitted={props.onChange}
             />
           </div>
           <div>
@@ -116,20 +120,20 @@ export default function Indicator() {
             <Grid container justify="space-around">
               <KeyboardTimePicker
                 margin="normal"
-                id="time-picker"
+                id="go-to-sleep"
                 label="Go To Sleep"
-                value={selectedDate}
-                onChange={handleDateChange}
+/*                value={props.value.GoToSleep}
+                onChange={props.OnChange}*/
                 KeyboardButtonProps={{
                   'aria-label': 'change time',
                 }}
               />
               <KeyboardTimePicker
                 margin="normal"
-                id="time-picker"
+                id="wake-up"
+/*                value={props.value.WakeUp}
+                onChange={props.OnChange}*/
                 label="Wake Up"
-                value={selectedDate}
-                onChange={handleDateChange}
                 KeyboardButtonProps={{
                   'aria-label': 'change time',
                 }}

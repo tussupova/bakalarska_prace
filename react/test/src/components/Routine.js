@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, useState} from 'react'
 import {Button} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Grid from "@material-ui/core/Grid";
@@ -20,6 +20,7 @@ import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Link from "@material-ui/core/Link";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import HomeIcon from '@material-ui/icons/Home';
+import {useForm} from "react-hook-form";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -83,12 +84,12 @@ const useStyles = makeStyles((theme) => ({
       flexDirection: 'column'
     }
   },
-  breadcrumbs:{
+  breadcrumbs: {
     padding: theme.spacing(2),
 
   },
-  breadcrumbsFont:{
-    fontSize:theme.spacing(1.5)
+  breadcrumbsFont: {
+    fontSize: theme.spacing(1.5)
   }
 }));
 
@@ -100,12 +101,16 @@ function handleClick(event) {
 export default function Routine() {
   const classes = useStyles();
 
-  const [routineType, setAge] = React.useState('');
+  const [routineType, setRoutineType] = React.useState('');
   const [open, setOpen] = React.useState(false);
+  const [selectedDate, setSelectedDate] = React.useState(new Date());
+  const [stressIndicator, setStressIndicator] = React.useState('');
+  const [waterIndicator, setWaterIndicator] = React.useState('');
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
+  const [indicator, setIndicators] = useState({
+    Water: '2', Stress: 'normal', GoToSleep: '', WakeUp: ''
+  });
+
 
   const handleClose = () => {
     setOpen(false);
@@ -114,6 +119,9 @@ export default function Routine() {
   const handleOpen = () => {
     setOpen(true);
   };
+  const saveRoutine = (data) => {
+    console.log(data)
+  }
 
   return (
     <>
@@ -128,7 +136,7 @@ export default function Routine() {
           <Typography color="textPrimary" className={classes.breadcrumbsFont}>Create Routine</Typography>
         </Breadcrumbs>
       </div>
-      <form>
+
       <div className={classes.root}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
@@ -138,7 +146,7 @@ export default function Routine() {
               </grid>
               <grid>
                 <Button className={classes.menuButton} variant="contained" color="primary"
-                        href="#contained-buttons">
+                        href="#contained-buttons" type="submit">
                   Save
                 </Button>
                 <Button className={classes.menuButton} variant="contained" color="primary"
@@ -161,14 +169,19 @@ export default function Routine() {
             onClose={handleClose}
             onOpen={handleOpen}
             value={routineType}
-            onChange={handleChange}
+            onChange={(event) => {
+              setRoutineType(event.target.value);
+            }}
           >
-            <MenuItem value={10}>Morning Routine</MenuItem>
-            <MenuItem value={20}>Evening Routine</MenuItem>
-            <MenuItem value={30}>Other</MenuItem>
+            <MenuItem value={"Morning"}>Morning Routine</MenuItem>
+            <MenuItem value={"Evening"}>Evening Routine</MenuItem>
+            <MenuItem value={"Other"}>Other</MenuItem>
           </Select>
         </FormControl>
-        <div className={classes.selectDateCalendar}><NewBDay/></div>
+        <div className={classes.selectDateCalendar}>
+          <NewBDay value={selectedDate} onChange={(event) => {
+            setSelectedDate(event);
+          }}/></div>
         <SetPeriod/>
         <Button className={classes.marginAll} variant="contained"
                 href="#contained-buttons">
@@ -178,11 +191,23 @@ export default function Routine() {
       <Grid xs={12}>
         <Grid className={classes.test}>
           <ProductsOfRoutine/>
-          <Indicator/>
+          <Indicator value={indicator} onChange={(event) => {
+            console.log(event.target.name)
+            setIndicators({...indicator, [event.target.name]: event.target.value});
+
+          }}
+                     onChangeCommitted={(event) => {
+
+                       setIndicators(event.Water.value === '' ? '' : Number(event.Water.value));
+
+                     }}
+          />
+
         </Grid>
+        <div> tady je voda{Number(indicator.Water)}</div>
+        <div>je to stress {indicator.Stress}</div>
         <NoteAndPhotos/>
       </Grid>
-      </form>
     </>
   );
 }
