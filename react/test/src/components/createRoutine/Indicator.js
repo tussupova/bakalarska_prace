@@ -111,7 +111,7 @@ export default function Indicator(props) {
                     max={3.5}
                     name="Water"
                     value={props.value.Water}
-                    onChange={props.onChange}
+                    onChange={props.onChangeForSlider}
                    onChangeCommitted={props.onChange}
             />
           </div>
@@ -122,8 +122,9 @@ export default function Indicator(props) {
                 margin="normal"
                 id="go-to-sleep"
                 label="Go To Sleep"
-/*                value={props.value.GoToSleep}
-                onChange={props.OnChange}*/
+                name="GoToSleep"
+                value={props.value.GoToSleep}
+                onChange={props.onChangeForGoToSlepp}
                 KeyboardButtonProps={{
                   'aria-label': 'change time',
                 }}
@@ -131,8 +132,9 @@ export default function Indicator(props) {
               <KeyboardTimePicker
                 margin="normal"
                 id="wake-up"
-/*                value={props.value.WakeUp}
-                onChange={props.OnChange}*/
+                name="WakeUp"
+                value={props.value.WakeUp}
+                onChange={props.onChangeForWakeUp}
                 label="Wake Up"
                 KeyboardButtonProps={{
                   'aria-label': 'change time',

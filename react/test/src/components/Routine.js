@@ -192,10 +192,22 @@ export default function Routine() {
         <Grid className={classes.test}>
           <ProductsOfRoutine/>
           <Indicator value={indicator} onChange={(event) => {
-            console.log(event.target.name)
+
             setIndicators({...indicator, [event.target.name]: event.target.value});
 
+
           }}
+                     onChangeForGoToSlepp={(event) => {
+                       setIndicators({GoToSleep: event.toString()})
+                     }}
+                     onChangeForWakeUp={(event) => {
+                       setIndicators({WakeUp: event.toString()})
+                     }}
+                     onChangeForSlider={(event, newValue)=>{
+
+                       setIndicators({Water: newValue});
+
+                     }}
                      onChangeCommitted={(event) => {
 
                        setIndicators(event.Water.value === '' ? '' : Number(event.Water.value));
@@ -206,6 +218,8 @@ export default function Routine() {
         </Grid>
         <div> tady je voda{Number(indicator.Water)}</div>
         <div>je to stress {indicator.Stress}</div>
+        <div>je to cas{indicator.GoToSleep}</div>
+        <div>je to cas spani{indicator.WakeUp}</div>
         <NoteAndPhotos/>
       </Grid>
     </>
