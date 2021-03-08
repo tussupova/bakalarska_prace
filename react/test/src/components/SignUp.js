@@ -130,7 +130,7 @@ export default function SignUp() {
           birthday: data.birthday,
           gender: data.gender
         });
-        history.push('/myRoutine')
+        history.push('/my-routine')
       } catch (err) {
         console.log('my error catch', err)
 

@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button';
 import Box from "@material-ui/core/Box";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import {useHistory} from "react-router-dom";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -36,6 +37,17 @@ export default function Navigation() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const history = useHistory();
+
+  const onClickRoutine = () => {
+    history.push('/my-routine');
+  }
+  const onClickAlbum = () => {
+    history.push('/album');
+  }
+  const onClickShelf=()=>{
+    history.push('/shelf')
+  }
 
   return (
     <div className={classes.root}>
@@ -46,11 +58,14 @@ export default function Navigation() {
               <Box p={1} flexGrow={1}>
                 LOGO
               </Box>
-              <Button className={classes.menuButton} color="inherit" p={1}>
-                My Products
+              <Button className={classes.menuButton} color="inherit" p={1} onClick={onClickRoutine}>
+                Routine
               </Button>
-              <Button className={classes.menuButton} color="inherit" p={1}>
-                My Routine
+              <Button className={classes.menuButton} color="inherit" p={1} onClick={onClickAlbum}>
+                Album
+              </Button>
+              <Button className={classes.menuButton} color="inherit" p={1} onClick={onClickShelf}>
+                Shelf
               </Button>
               <div>
                 <Button className={classes.menuButton} color="inherit" p={1} aria-controls="simple-menu"

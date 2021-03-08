@@ -57,7 +57,7 @@ export default function Routine() {
   const history = useHistory();
 
   const onClickCreateRoutine = () => {
-    history.push('/createRoutine');
+    history.push('/create-routine');
   }
   const [event, setEvent] = useState();
   return (

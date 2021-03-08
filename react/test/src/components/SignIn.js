@@ -63,7 +63,7 @@ export default function SignIn() {
     try {
       const response = await loginAsync({password: data.password, email: data.email});
       localStorage.setItem('authToken', response.data.token);
-      history.push('/myRoutine')
+      history.push('/my-routine')
 
     } catch (err) {
       console.log('my error catch', err)
