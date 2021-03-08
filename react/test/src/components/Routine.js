@@ -104,12 +104,17 @@ export default function Routine() {
   const [routineType, setRoutineType] = React.useState('');
   const [open, setOpen] = React.useState(false);
   const [selectedDate, setSelectedDate] = React.useState(new Date());
-  const [stressIndicator, setStressIndicator] = React.useState('');
-  const [waterIndicator, setWaterIndicator] = React.useState('');
-
   const [indicator, setIndicators] = useState({
     Water: '2', Stress: 'normal', GoToSleep: '', WakeUp: ''
   });
+  const [repeater, setRepeater] = useState({
+    AmountOfWeek: '', EndDate: '', DayOfWeek: {
+      Mon: '', Tue: '', Wed: '', Thu: '', Fri: '', Sat: '', Sun: ''
+    }
+  });
+  const [noteAndPhoto, setNoteAndPhoto] = useState({
+    Note: '', Photos: []
+  })
 
 
   const handleClose = () => {
@@ -179,10 +184,24 @@ export default function Routine() {
           </Select>
         </FormControl>
         <div className={classes.selectDateCalendar}>
+
           <NewBDay value={selectedDate} onChange={(event) => {
             setSelectedDate(event);
           }}/></div>
-        <SetPeriod/>
+
+        <SetPeriod value={repeater} onChangeAmountOfWeek={(event) => {
+
+          setRepeater({AmountOfWeek: event.target.value})
+        }}
+                   onChangeEndDate={(event) => {
+                     setRepeater({EndDate: event})
+                   }}
+                   onChangeDayOfWeek={(event) => {
+                     debugger
+                     setRepeater({...repeater, [event.target.name]: event.target.value})
+                     console.log(repeater.DayOfWeek);
+                   }}
+        />
         <Button className={classes.marginAll} variant="contained"
                 href="#contained-buttons">
           <Typography>Create Custom Product</Typography>
@@ -203,7 +222,7 @@ export default function Routine() {
                      onChangeForWakeUp={(event) => {
                        setIndicators({WakeUp: event.toString()})
                      }}
-                     onChangeForSlider={(event, newValue)=>{
+                     onChangeForSlider={(event, newValue) => {
 
                        setIndicators({Water: newValue});
 
@@ -216,11 +235,30 @@ export default function Routine() {
           />
 
         </Grid>
+
         <div> tady je voda{Number(indicator.Water)}</div>
         <div>je to stress {indicator.Stress}</div>
         <div>je to cas{indicator.GoToSleep}</div>
         <div>je to cas spani{indicator.WakeUp}</div>
-        <NoteAndPhotos/>
+        <div>pocet tydnu je {repeater.AmountOfWeek}</div>
+        <div>konec je {String(repeater.EndDate)}</div>
+        <div>poznamka je {noteAndPhoto.Note}</div>
+        {/*<div>foto {noteAndPhoto.Photos}</div>*/}
+
+
+        <NoteAndPhotos value={noteAndPhoto} onChanngeNote={(event) =>
+          setNoteAndPhoto({Note: event.target.value})
+        }
+                       onChangePhotos={(files) =>{
+
+                         //console.log(files)
+                         setNoteAndPhoto({Photos: files})
+                         console.log(noteAndPhoto.Photos)
+                       }
+
+
+
+                         }/>
       </Grid>
     </>
   );

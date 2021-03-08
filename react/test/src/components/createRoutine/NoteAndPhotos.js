@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
   photoAndNoteGrid: {
     borderColor: 'black',
     margin: theme.spacing(3),
-    padding:theme.spacing(3),
+    padding: theme.spacing(3),
   },
   note: {
     width: '100%',
@@ -28,25 +28,31 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center'
 
   },
-  dropText:{
+  dropText: {
     padding: theme.spacing(1)
   }
 }));
-export default function NoteAndPhotos() {
+export default function NoteAndPhotos(props) {
   const classes = useStyles();
   return (
 
     <Grid className={classes.photoAndNoteGrid} xs={12} lg={12}>
       <DropzoneArea className={classes.dropText}
-        acceptedFiles={['image/*']}
-        dropzoneText={<Typography> Drag and drop an image here or click</Typography>}
-        onChange={(files) => console.log('Files:', files)}
+                    acceptedFiles={['image/*']}
+                    dropzoneText={<Typography> Drag and drop an image here or click</Typography>}
+                    value={props.value.Photos}
+                    onChange={props.onChangePhotos}
       />
       <FormControl className={classes.note}>
-        {/*<div><FormLabel className={classes.noteLabel} component="legend"><Typography>Note</Typography></FormLabel></div>*/}
-        <div className={classes.noteTextField}><TextField id="note" variant="outlined" multiline label={<Typography>Write some note</Typography>}
+        <div><FormLabel className={classes.noteLabel} component="legend"><Typography>Note</Typography></FormLabel></div>
+        <div className={classes.noteTextField}><TextField id="note" variant="outlined" multiline
+                                                          label={<Typography>Write some note</Typography>}
                                                           rows={8}
-                                                          className={classes.noteTextField}/></div>
+                                                          className={classes.noteTextField}
+                                                          value={props.value.noteAndPhoto}
+                                                          onChange={props.onChanngeNote}
+        />
+        </div>
       </FormControl>
     </Grid>
   );

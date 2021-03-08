@@ -119,6 +119,7 @@ export default function Indicator(props) {
             <Typography>Sleeping</Typography>
             <Grid container justify="space-around">
               <KeyboardTimePicker
+
                 margin="normal"
                 id="go-to-sleep"
                 label="Go To Sleep"
@@ -129,8 +130,10 @@ export default function Indicator(props) {
                   'aria-label': 'change time',
                 }}
               />
+
               <KeyboardTimePicker
                 margin="normal"
+
                 id="wake-up"
                 name="WakeUp"
                 value={props.value.WakeUp}

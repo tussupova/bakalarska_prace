@@ -33,7 +33,8 @@ const useStyles = makeStyles((theme) => ({
     padding:theme.spacing(2)
   }
 }));
-export default function SetPeriod() {
+export default function SetPeriod(props) {
+
   const classes = useStyles();
 
   const [open, setOpen] = React.useState(false);
@@ -71,6 +72,9 @@ export default function SetPeriod() {
                 id="name"
                 type="number"
                 fullWidth
+                value={props.value.AmountOfWeek}
+                onChange={props.onChangeAmountOfWeek}
+
               />
             </FormControl>
           </div>
@@ -83,43 +87,50 @@ export default function SetPeriod() {
               <div>
               <FormControl component="fieldset">
                 {/*<FormLabel component="legend">Repeat on</FormLabel>*/}
-                <FormGroup aria-label="position" row>
+                <FormGroup aria-label="position" name="DayOfWeek"  value={props.DayOfWeek} onChange={props.onChangeDayOfWeek} row >
                   <FormControlLabel
-                    value="top"
+                    value="Mon"
                     control={<Checkbox color="primary"/>}
-                    label="M"
+                    name="DayOfWeek"
+                    label="Mon"
                     labelPlacement="top" className={classes.weekCheckBox}
                   />
                   <FormControlLabel
-                    value="top"
+                    value="Tue"
                     control={<Checkbox color="primary"/>}
-                    label="T"
+                    label="Tue"
+                    name="DayOfWeek"
                     labelPlacement="top" className={classes.weekCheckBox}
                   /> <FormControlLabel
-                  value="top"
+                  value="Wed"
                   control={<Checkbox color="primary"/>}
-                  label="W"
+                  label="Wed"
+                  name="DayOfWeek"
                   labelPlacement="top" className={classes.weekCheckBox}
                 />
                   <FormControlLabel
-                    value="top"
+                    value="Thu"
                     control={<Checkbox color="primary"/>}
-                    label="T"
+                    label="Thu"
+                    name="DayOfWeek"
                     labelPlacement="top" className={classes.weekCheckBox}
                   /> <FormControlLabel
-                  value="top"
+                  value="Fri"
                   control={<Checkbox color="primary"/>}
-                  label="F"
+                  label="Fri"
+                  name="DayOfWeek"
                   labelPlacement="top" className={classes.weekCheckBox}
                 /> <FormControlLabel
-                  value="top"
+                  value="Sat"
+                  name="DayOfWeek"
                   control={<Checkbox color="primary"/>}
-                  label="S"
+                  label="Sat"
                   labelPlacement="top" className={classes.weekCheckBox}
                 /> <FormControlLabel
-                  value="top"
+                  value="Sun"
+                  name="DayOfWeek"
                   control={<Checkbox color="primary"/>}
-                  label="S"
+                  label="Sun"
                   labelPlacement="top" className={classes.weekCheckBox}
                 />
                 </FormGroup>
@@ -138,8 +149,8 @@ export default function SetPeriod() {
                     format="MM/dd/yyyy"
                     margin="normal"
                     id="date-picker-inline"
-                    value={selectedDate}
-                    onChange={handleDateChange}
+                    value={props.value.EndDate}
+                    onChange={props.onChangeEndDate}
                     KeyboardButtonProps={{
                       'aria-label': 'change date',
                     }}
