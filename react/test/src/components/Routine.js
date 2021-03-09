@@ -106,21 +106,21 @@ export default function Routine() {
     WakeUp: null,
   });
 
-  console.log('tady je muj indicator', indicator)
+
   const [repeater, setRepeater] = useState({
     AmountOfWeek: "",
-    EndDate: "",
+    EndDate: null,
   });
-  const [dayOfWeek, setDayOfWeek]= useState({
+  const [dayOfWeek, setDayOfWeek] = useState({
     mon: false,
     tue: false,
     wed: false,
-    thu:false,
+    thu: false,
     fri: false,
     sat: false,
-    sun:false
+    sun: false,
   });
-  console.log(repeater)
+  console.log(repeater);
   const [noteAndPhoto, setNoteAndPhoto] = useState({
     Note: "",
     Photos: [],
@@ -136,7 +136,9 @@ export default function Routine() {
   const saveRoutine = (data) => {
     console.log(data);
   };
-
+  console.log("tady je muj indicator", indicator);
+  console.log("dny v tydnu", dayOfWeek);
+  console.log("opakovani", repeater);
   return (
     <>
       <div className={classes.breadcrumbs}>
@@ -228,18 +230,20 @@ export default function Routine() {
           value={repeater}
           valueDayOfWeek={dayOfWeek}
           onChangeAmountOfWeek={(event) => {
-            setRepeater({ AmountOfWeek: event.target.value });
+            setRepeater({ ...repeater, AmountOfWeek: event.target.value });
           }}
           onChangeEndDate={(event) => {
-            setRepeater({ EndDate: event });
+            setRepeater({
+              ...repeater,
+              EndDate: event ? event.toString() : null,
+            });
           }}
           onChangeDayOfWeek={(event) => {
-
             setDayOfWeek({
               ...dayOfWeek,
               [event.target.name]: event.target.checked,
             });
-            console.log(dayOfWeek)
+            console.log(dayOfWeek);
           }}
         />
         <Button
@@ -263,15 +267,21 @@ export default function Routine() {
             }}
             onChangeForGoToSlepp={(event) => {
               setIndicators({
-                ...indicator, GoToSleep: event ? event.toString() : null });
+                ...indicator,
+                GoToSleep: event ? event.toString() : null,
+              });
             }}
             onChangeForWakeUp={(event) => {
               setIndicators({
-                ...indicator, WakeUp: event ? event.toString(): null });
+                ...indicator,
+                WakeUp: event ? event.toString() : null,
+              });
             }}
             onChangeForSlider={(event, newValue) => {
               setIndicators({
-                ...indicator, Water: newValue });
+                ...indicator,
+                Water: newValue,
+              });
             }}
           />
         </Grid>
@@ -283,6 +293,7 @@ export default function Routine() {
         <div>pocet tydnu je {repeater.AmountOfWeek}</div>
         <div>konec je {String(repeater.EndDate)}</div>
         <div>poznamka je {noteAndPhoto.Note}</div>
+
         {/*<div>foto {noteAndPhoto.Photos}</div>*/}
 
         <NoteAndPhotos
