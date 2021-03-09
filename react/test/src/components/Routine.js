@@ -1,5 +1,5 @@
-import React, {Component, useState} from 'react'
-import {Button} from "@material-ui/core";
+import React, { Component, useState } from "react";
+import { Button } from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
@@ -8,7 +8,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 
-import makeAnimated from 'react-select/animated';
+import makeAnimated from "react-select/animated";
 
 import SetPeriod from "./SetPeriod";
 import Indicator from "./createRoutine/Indicator";
@@ -16,60 +16,56 @@ import NoteAndPhotos from "./createRoutine/NoteAndPhotos";
 import ProductsOfRoutine from "./createRoutine/ProductsOfRoutine";
 import Typography from "@material-ui/core/Typography";
 import NewBDay from "./NewBDay";
-import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import Link from "@material-ui/core/Link";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
-import HomeIcon from '@material-ui/icons/Home';
-import {useForm} from "react-hook-form";
-
+import HomeIcon from "@material-ui/icons/Home";
+import { useForm } from "react-hook-form";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
 
-    position: "sticky"
+    position: "sticky",
   },
   paper: {
     padding: theme.spacing(2),
     display: "flex",
     justifyContent: "space-around",
     color: theme.palette.text.secondary,
-    frozen: true
-
+    frozen: true,
   },
   actionGrid: {
-    flexDirection: 'row',
-    [theme.breakpoints.down('xs')]: {
-      flexDirection: 'column',
-      alignContent: 'center'
-    }
-
+    flexDirection: "row",
+    [theme.breakpoints.down("xs")]: {
+      flexDirection: "column",
+      alignContent: "center",
+    },
   },
   selectDateCalendar: {
-    width: '16%',
+    width: "16%",
     margin: theme.spacing(0),
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    [theme.breakpoints.down('xs')]: {
-      width: '80%',
-    }
+    [theme.breakpoints.down("xs")]: {
+      width: "80%",
+    },
   },
   createButton: {
-
     color: theme.palette.getContrastText(theme.palette.error.main),
     background: theme.palette.error.main,
   },
   menuButton: {
     marginRight: theme.spacing(2),
-    marginLeft: theme.spacing(2)
+    marginLeft: theme.spacing(2),
   },
   marginAll: {
     margin: theme.spacing(3),
     backgroundColor: theme.palette.success.main,
-    color: theme.palette.primary.contrastText
+    color: theme.palette.primary.contrastText,
   },
   button: {
-    display: 'block',
+    display: "block",
     marginTop: theme.spacing(2),
   },
   formControl: {
@@ -77,45 +73,58 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 150,
   },
   test: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    [theme.breakpoints.down('xs')]: {
-      flexDirection: 'column'
-    }
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    [theme.breakpoints.down("xs")]: {
+      flexDirection: "column",
+    },
   },
   breadcrumbs: {
     padding: theme.spacing(2),
-
   },
   breadcrumbsFont: {
-    fontSize: theme.spacing(1.5)
-  }
+    fontSize: theme.spacing(1.5),
+  },
 }));
 
 function handleClick(event) {
   event.preventDefault();
-  console.info('You clicked a breadcrumb.');
+  console.info("You clicked a breadcrumb.");
 }
 
 export default function Routine() {
   const classes = useStyles();
 
-  const [routineType, setRoutineType] = React.useState('');
+  const [routineType, setRoutineType] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const [selectedDate, setSelectedDate] = React.useState(new Date());
   const [indicator, setIndicators] = useState({
-    Water: '2', Stress: 'normal', GoToSleep: '', WakeUp: ''
+    Water: "2",
+    Stress: "normal",
+    GoToSleep: null,
+    WakeUp: null,
   });
-  const [repeater, setRepeater] = useState({
-    AmountOfWeek: '', EndDate: '', DayOfWeek: {
-      Mon: '', Tue: '', Wed: '', Thu: '', Fri: '', Sat: '', Sun: ''
-    }
-  });
-  const [noteAndPhoto, setNoteAndPhoto] = useState({
-    Note: '', Photos: []
-  })
 
+  console.log('tady je muj indicator', indicator)
+  const [repeater, setRepeater] = useState({
+    AmountOfWeek: "",
+    EndDate: "",
+  });
+  const [dayOfWeek, setDayOfWeek]= useState({
+    mon: false,
+    tue: false,
+    wed: false,
+    thu:false,
+    fri: false,
+    sat: false,
+    sun:false
+  });
+  console.log(repeater)
+  const [noteAndPhoto, setNoteAndPhoto] = useState({
+    Note: "",
+    Photos: [],
+  });
 
   const handleClose = () => {
     setOpen(false);
@@ -125,20 +134,33 @@ export default function Routine() {
     setOpen(true);
   };
   const saveRoutine = (data) => {
-    console.log(data)
-  }
+    console.log(data);
+  };
 
   return (
     <>
       <div className={classes.breadcrumbs}>
-        <Breadcrumbs separator={<NavigateNextIcon fontSize="inherit"/>} aria-label="breadcrumb">
+        <Breadcrumbs
+          separator={<NavigateNextIcon fontSize="inherit" />}
+          aria-label="breadcrumb"
+        >
           <Link color="inherit" href="/" onClick={handleClick} fontSize>
-            <Typography className={classes.breadcrumbsFont}><HomeIcon/></Typography>
+            <Typography className={classes.breadcrumbsFont}>
+              <HomeIcon />
+            </Typography>
           </Link>
-          <Link color="inherit" href="/getting-started/installation/" onClick={handleClick}>
-            <Typography className={classes.breadcrumbsFont}>My Routine</Typography>
+          <Link
+            color="inherit"
+            href="/getting-started/installation/"
+            onClick={handleClick}
+          >
+            <Typography className={classes.breadcrumbsFont}>
+              My Routine
+            </Typography>
           </Link>
-          <Typography color="textPrimary" className={classes.breadcrumbsFont}>Create Routine</Typography>
+          <Typography color="textPrimary" className={classes.breadcrumbsFont}>
+            Create Routine
+          </Typography>
         </Breadcrumbs>
       </div>
 
@@ -150,23 +172,33 @@ export default function Routine() {
                 <Typography> Create Routine </Typography>
               </grid>
               <grid>
-                <Button className={classes.menuButton} variant="contained" color="primary"
-                        href="#contained-buttons" type="submit">
+                <Button
+                  className={classes.menuButton}
+                  variant="contained"
+                  color="primary"
+                  href="#contained-buttons"
+                  type="submit"
+                >
                   Save
                 </Button>
-                <Button className={classes.menuButton} variant="contained" color="primary"
-                        href="#contained-buttons">
+                <Button
+                  className={classes.menuButton}
+                  variant="contained"
+                  color="primary"
+                  href="#contained-buttons"
+                >
                   Cancel
                 </Button>
               </grid>
             </Paper>
           </Grid>
-
         </Grid>
       </div>
       <Grid container className={classes.actionGrid}>
         <FormControl className={classes.formControl}>
-          <InputLabel id="demo-controlled-open-select-label"><Typography>Routine Type</Typography></InputLabel>
+          <InputLabel id="demo-controlled-open-select-label">
+            <Typography>Routine Type</Typography>
+          </InputLabel>
           <Select
             labelId="demo-controlled-open-select-label"
             id="demo-controlled-open-select"
@@ -184,56 +216,64 @@ export default function Routine() {
           </Select>
         </FormControl>
         <div className={classes.selectDateCalendar}>
+          <NewBDay
+            value={selectedDate}
+            onChange={(event) => {
+              setSelectedDate(event);
+            }}
+          />
+        </div>
 
-          <NewBDay value={selectedDate} onChange={(event) => {
-            setSelectedDate(event);
-          }}/></div>
+        <SetPeriod
+          value={repeater}
+          valueDayOfWeek={dayOfWeek}
+          onChangeAmountOfWeek={(event) => {
+            setRepeater({ AmountOfWeek: event.target.value });
+          }}
+          onChangeEndDate={(event) => {
+            setRepeater({ EndDate: event });
+          }}
+          onChangeDayOfWeek={(event) => {
 
-        <SetPeriod value={repeater} onChangeAmountOfWeek={(event) => {
-
-          setRepeater({AmountOfWeek: event.target.value})
-        }}
-                   onChangeEndDate={(event) => {
-                     setRepeater({EndDate: event})
-                   }}
-                   onChangeDayOfWeek={(event) => {
-                     debugger
-                     setRepeater({...repeater, [event.target.name]: event.target.value})
-                     console.log(repeater.DayOfWeek);
-                   }}
+            setDayOfWeek({
+              ...dayOfWeek,
+              [event.target.name]: event.target.checked,
+            });
+            console.log(dayOfWeek)
+          }}
         />
-        <Button className={classes.marginAll} variant="contained"
-                href="#contained-buttons">
+        <Button
+          className={classes.marginAll}
+          variant="contained"
+          href="#contained-buttons"
+        >
           <Typography>Create Custom Product</Typography>
         </Button>
       </Grid>
       <Grid xs={12}>
         <Grid className={classes.test}>
-          <ProductsOfRoutine/>
-          <Indicator value={indicator} onChange={(event) => {
-
-            setIndicators({...indicator, [event.target.name]: event.target.value});
-
-
-          }}
-                     onChangeForGoToSlepp={(event) => {
-                       setIndicators({GoToSleep: event.toString()})
-                     }}
-                     onChangeForWakeUp={(event) => {
-                       setIndicators({WakeUp: event.toString()})
-                     }}
-                     onChangeForSlider={(event, newValue) => {
-
-                       setIndicators({Water: newValue});
-
-                     }}
-                     onChangeCommitted={(event) => {
-
-                       setIndicators(event.Water.value === '' ? '' : Number(event.Water.value));
-
-                     }}
+          <ProductsOfRoutine />
+          <Indicator
+            value={indicator}
+            onChange={(event) => {
+              setIndicators({
+                ...indicator,
+                [event.target.name]: event.target.value,
+              });
+            }}
+            onChangeForGoToSlepp={(event) => {
+              setIndicators({
+                ...indicator, GoToSleep: event ? event.toString() : null });
+            }}
+            onChangeForWakeUp={(event) => {
+              setIndicators({
+                ...indicator, WakeUp: event ? event.toString(): null });
+            }}
+            onChangeForSlider={(event, newValue) => {
+              setIndicators({
+                ...indicator, Water: newValue });
+            }}
           />
-
         </Grid>
 
         <div> tady je voda{Number(indicator.Water)}</div>
@@ -245,20 +285,17 @@ export default function Routine() {
         <div>poznamka je {noteAndPhoto.Note}</div>
         {/*<div>foto {noteAndPhoto.Photos}</div>*/}
 
-
-        <NoteAndPhotos value={noteAndPhoto} onChanngeNote={(event) =>
-          setNoteAndPhoto({Note: event.target.value})
-        }
-                       onChangePhotos={(files) =>{
-
-                         //console.log(files)
-                         setNoteAndPhoto({Photos: files})
-                         console.log(noteAndPhoto.Photos)
-                       }
-
-
-
-                         }/>
+        <NoteAndPhotos
+          value={noteAndPhoto}
+          onChanngeNote={(event) =>
+            setNoteAndPhoto({ Note: event.target.value })
+          }
+          onChangePhotos={(files) => {
+            console.log(files);
+            setNoteAndPhoto({ Photos: files });
+            console.log(noteAndPhoto.Photos);
+          }}
+        />
       </Grid>
     </>
   );

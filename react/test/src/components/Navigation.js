@@ -48,6 +48,9 @@ export default function Navigation() {
   const onClickShelf=()=>{
     history.push('/shelf')
   }
+  const onClickMyAccount=()=>{
+    history.push('/user')
+  }
 
   return (
     <div className={classes.root}>
@@ -79,7 +82,7 @@ export default function Navigation() {
                   open={Boolean(anchorEl)}
                   onClose={handleClose}
                 >
-                  <MenuItem onClick={handleClose}>My account</MenuItem>
+                  <MenuItem onClick={onClickMyAccount}>My account</MenuItem>
                   <MenuItem onClick={handleClose}>Logout</MenuItem>
                 </Menu>
               </div>

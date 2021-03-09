@@ -11,6 +11,7 @@ import {SignUpPage} from "../pages/SignUp.page";
 import {MyRoutinePage} from "../pages/MyRoutine.page";
 import {AlbumPage} from "../pages/Album.page";
 import {ShelfPage} from "../pages/Shelf.page";
+import {UserPage} from "../pages/User.page";
 
 export const Router = () => {
   return <BrowserRouter>
@@ -22,6 +23,7 @@ export const Router = () => {
       <Route exact path='/my-routine'><MyRoutinePage/></Route>
       <Route exact path='/album'><AlbumPage/></Route>
       <Route exact path='/shelf'><ShelfPage/></Route>
+      <Route exact path='/user'><UserPage/></Route>
       <Route path='*'><NotFoundPage/></Route>
     </Switch>
   </BrowserRouter>

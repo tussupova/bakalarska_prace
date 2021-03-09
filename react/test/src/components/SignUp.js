@@ -162,6 +162,8 @@ export default function SignUp() {
                 fullWidth
                 id="name"
                 label="Name"
+                value="ahoj"
+
                 helperText={nameError}
                 error={Boolean(nameError)}
                 autoFocus inputRef={register}

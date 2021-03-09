@@ -78,21 +78,21 @@ export default function Indicator(props) {
                   value="happy"
                   name="Stress"
                   control={<Radio color="primary"/>}
-                  label={<MoodIcon className={classes.iconSize}></MoodIcon>}
+                  label={<MoodIcon className={classes.iconSize} />}
                   labelPlacement="bottom"
                 />
                 <FormControlLabel
                   value="normal"
                   name="Stress"
                   control={<Radio color="primary"/>}
-                  label={<SentimentSatisfiedIcon className={classes.iconSize}></SentimentSatisfiedIcon>}
+                  label={<SentimentSatisfiedIcon className={classes.iconSize} />}
                   labelPlacement="bottom"
                 />
                 <FormControlLabel
                   value="bad"
                   name="Stress"
                   control={<Radio color="primary"/>}
-                  label={<MoodBadIcon className={classes.iconSize}></MoodBadIcon>}
+                  label={<MoodBadIcon className={classes.iconSize} />}
                   labelPlacement="bottom"
                 />
               </RadioGroup>
