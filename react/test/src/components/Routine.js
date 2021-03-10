@@ -21,6 +21,8 @@ import Link from "@material-ui/core/Link";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import HomeIcon from "@material-ui/icons/Home";
 import { useForm } from "react-hook-form";
+import { signUpAsync } from "../services/UserServices";
+import {createRoutineAsync} from "../services/RoutineServices";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -106,7 +108,6 @@ export default function Routine() {
     WakeUp: null,
   });
 
-
   const [repeater, setRepeater] = useState({
     AmountOfWeek: "",
     EndDate: null,
@@ -136,9 +137,29 @@ export default function Routine() {
   const saveRoutine = (data) => {
     console.log(data);
   };
-  console.log("tady je muj indicator", indicator);
-  console.log("dny v tydnu", dayOfWeek);
-  console.log("opakovani", repeater);
+
+  const createRoutine = async () => {
+    try {
+      console.log(indicator, repeater)
+      const response = await createRoutineAsync({
+        routineType: routineType,
+        note: noteAndPhoto.Note,
+        photos: noteAndPhoto.Photos,
+        stress: indicator.Stress,
+        water: Number(indicator.Water),
+        goToSleep: indicator.GoToSleep ? new Date(indicator.GoToSleep).toISOString(): null,
+        wakeUp: indicator.WakeUp ? new Date(indicator.WakeUp).toISOString() : null,
+        routineDate: new Date(selectedDate).toISOString(),
+        amountOfWeek: Number(repeater.AmountOfWeek),
+        routineEndDate: repeater.EndDate ? new Date(repeater.EndDate).toISOString() : null,
+        dayOfWeek: dayOfWeek,
+      });
+      console.log('odeslano');
+    } catch (err) {
+      console.log('my error catch', err)
+      //setPasswordError('Invalid credentials')
+    }
+  };
   return (
     <>
       <div className={classes.breadcrumbs}>
@@ -180,6 +201,7 @@ export default function Routine() {
                   color="primary"
                   href="#contained-buttons"
                   type="submit"
+                  onClick={createRoutine}
                 >
                   Save
                 </Button>
@@ -188,6 +210,7 @@ export default function Routine() {
                   variant="contained"
                   color="primary"
                   href="#contained-buttons"
+
                 >
                   Cancel
                 </Button>
