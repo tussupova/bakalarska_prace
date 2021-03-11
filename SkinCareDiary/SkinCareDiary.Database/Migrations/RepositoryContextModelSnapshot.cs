@@ -23,8 +23,8 @@ namespace SkinCareDiary.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Date")
-                        .HasColumnType("text");
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime");
 
                     b.Property<int>("IndicatorTypeId")
                         .HasColumnType("int");
@@ -32,8 +32,8 @@ namespace SkinCareDiary.Database.Migrations
                     b.Property<int>("RoutineId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Value")
-                        .HasColumnType("int");
+                    b.Property<float>("Value")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -152,10 +152,7 @@ namespace SkinCareDiary.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("DateId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("RoutineDateId")
+                    b.Property<int>("RoutineDateId")
                         .HasColumnType("int");
 
                     b.Property<int>("TypeOfRoutineId")
@@ -181,8 +178,8 @@ namespace SkinCareDiary.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("End")
-                        .HasColumnType("text");
+                    b.Property<DateTime?>("End")
+                        .HasColumnType("datetime");
 
                     b.Property<bool>("Fri")
                         .HasColumnType("tinyint(1)");
@@ -193,8 +190,8 @@ namespace SkinCareDiary.Database.Migrations
                     b.Property<bool>("Sat")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("Start")
-                        .HasColumnType("text");
+                    b.Property<DateTime>("Start")
+                        .HasColumnType("datetime");
 
                     b.Property<bool>("Sun")
                         .HasColumnType("tinyint(1)");
@@ -281,7 +278,7 @@ namespace SkinCareDiary.Database.Migrations
             modelBuilder.Entity("SkinCareDiary.Database.DB.Note", b =>
                 {
                     b.HasOne("SkinCareDiary.Database.DB.Routine", "Routine")
-                        .WithMany("Nodes")
+                        .WithMany("Notes")
                         .HasForeignKey("RoutineId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -323,7 +320,9 @@ namespace SkinCareDiary.Database.Migrations
                 {
                     b.HasOne("SkinCareDiary.Database.DB.RoutineDate", "RoutineDate")
                         .WithMany("Routines")
-                        .HasForeignKey("RoutineDateId");
+                        .HasForeignKey("RoutineDateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("SkinCareDiary.Database.DB.TypeOfRoutine", "TypeOfRoutine")
                         .WithMany("Routines")
@@ -358,7 +357,7 @@ namespace SkinCareDiary.Database.Migrations
                 {
                     b.Navigation("Indicators");
 
-                    b.Navigation("Nodes");
+                    b.Navigation("Notes");
 
                     b.Navigation("Photos");
 

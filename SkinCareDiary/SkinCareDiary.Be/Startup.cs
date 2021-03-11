@@ -87,7 +87,9 @@ namespace SkinCareDiary.Be
             
             // dependency injection registrace
             services.AddScoped<ILoginHelper, LoginHelper>();
+            services.AddScoped<IRoutineHelper, RoutineHelper>();
             services.AddScoped<IJwtHelper, JwtHelper>();
+            services.AddScoped<IPhotoHelper, PhotoHelper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

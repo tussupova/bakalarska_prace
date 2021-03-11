@@ -163,7 +163,6 @@ export default function SignUp() {
                 id="name"
                 label="Name"
                 value="ahoj"
-
                 helperText={nameError}
                 error={Boolean(nameError)}
                 autoFocus inputRef={register}

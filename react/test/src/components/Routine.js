@@ -1,5 +1,5 @@
-import React, { Component, useState } from "react";
-import { Button } from "@material-ui/core";
+import React, {Component, useState} from "react";
+import {Button} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
@@ -20,15 +20,21 @@ import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import Link from "@material-ui/core/Link";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import HomeIcon from "@material-ui/icons/Home";
-import { useForm } from "react-hook-form";
-import { signUpAsync } from "../services/UserServices";
+import {useForm} from "react-hook-form";
+import {signUpAsync} from "../services/UserServices";
 import {createRoutineAsync} from "../services/RoutineServices";
+import {uploadPhotosAsyc} from "../services/PhotoServices";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
-
+    flexGrow: 1 /*justify="center"
+    alignItems="center"*/,
+    justifyContent: "center",
+    alignItems: "center",
     position: "sticky",
+  },
+  saveAndDelete: {
+    margin: theme.spacing(3),
   },
   paper: {
     padding: theme.spacing(2),
@@ -98,7 +104,7 @@ function handleClick(event) {
 export default function Routine() {
   const classes = useStyles();
 
-  const [routineType, setRoutineType] = React.useState("");
+  const [routineType, setRoutineType] = React.useState("Morning");
   const [open, setOpen] = React.useState(false);
   const [selectedDate, setSelectedDate] = React.useState(new Date());
   const [indicator, setIndicators] = useState({
@@ -137,88 +143,94 @@ export default function Routine() {
   const saveRoutine = (data) => {
     console.log(data);
   };
+  console.log(noteAndPhoto.Photos);
+  const sendPhoto = async () => {
+    try {
+      const res = await uploadPhotosAsyc({
+        photos: noteAndPhoto.Photos,
+      });
+    } catch (e) {
+      console.log(e, "Photos error");
+    }
+  };
 
   const createRoutine = async () => {
     try {
-      console.log(indicator, repeater)
+      console.log(indicator, repeater);
+      sendPhoto();
       const response = await createRoutineAsync({
         routineType: routineType,
         note: noteAndPhoto.Note,
-        photos: noteAndPhoto.Photos,
+        //photos: noteAndPhoto.Photos,
         stress: indicator.Stress,
         water: Number(indicator.Water),
-        goToSleep: indicator.GoToSleep ? new Date(indicator.GoToSleep).toISOString(): null,
-        wakeUp: indicator.WakeUp ? new Date(indicator.WakeUp).toISOString() : null,
+        goToSleep: indicator.GoToSleep
+          ? new Date(indicator.GoToSleep).toISOString()
+          : null,
+        wakeUp: indicator.WakeUp
+          ? new Date(indicator.WakeUp).toISOString()
+          : null,
         routineDate: new Date(selectedDate).toISOString(),
         amountOfWeek: Number(repeater.AmountOfWeek),
-        routineEndDate: repeater.EndDate ? new Date(repeater.EndDate).toISOString() : null,
+        routineEndDate: repeater.EndDate
+          ? new Date(repeater.EndDate).toISOString()
+          : null,
         dayOfWeek: dayOfWeek,
       });
-      console.log('odeslano');
+      console.log("odeslano");
     } catch (err) {
-      console.log('my error catch', err)
+      console.log("my error catch", err);
       //setPasswordError('Invalid credentials')
     }
   };
   return (
     <>
-      <div className={classes.breadcrumbs}>
-        <Breadcrumbs
-          separator={<NavigateNextIcon fontSize="inherit" />}
-          aria-label="breadcrumb"
-        >
-          <Link color="inherit" href="/" onClick={handleClick} fontSize>
-            <Typography className={classes.breadcrumbsFont}>
-              <HomeIcon />
-            </Typography>
-          </Link>
-          <Link
-            color="inherit"
-            href="/getting-started/installation/"
-            onClick={handleClick}
+      <Grid container>
+        <Grid item className={classes.breadcrumbs} xs={12} sm={6}>
+          <Breadcrumbs
+            separator={<NavigateNextIcon fontSize="inherit"/>}
+            aria-label="breadcrumb"
           >
-            <Typography className={classes.breadcrumbsFont}>
-              My Routine
+            <Link color="inherit" href="/" onClick={handleClick} fontSize>
+              <Typography className={classes.breadcrumbsFont}>
+                <HomeIcon/>
+              </Typography>
+            </Link>
+            <Link
+              color="inherit"
+              href="/getting-started/installation/"
+              onClick={handleClick}
+            >
+              <Typography className={classes.breadcrumbsFont}>
+                Routine
+              </Typography>
+            </Link>
+            <Typography color="textPrimary" className={classes.breadcrumbsFont}>
+              Create Routine
             </Typography>
-          </Link>
-          <Typography color="textPrimary" className={classes.breadcrumbsFont}>
-            Create Routine
-          </Typography>
-        </Breadcrumbs>
-      </div>
-
-      <div className={classes.root}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Paper className={classes.paper}>
-              <grid>
-                <Typography> Create Routine </Typography>
-              </grid>
-              <grid>
-                <Button
-                  className={classes.menuButton}
-                  variant="contained"
-                  color="primary"
-                  href="#contained-buttons"
-                  type="submit"
-                  onClick={createRoutine}
-                >
-                  Save
-                </Button>
-                <Button
-                  className={classes.menuButton}
-                  variant="contained"
-                  color="primary"
-                  href="#contained-buttons"
-
-                >
-                  Cancel
-                </Button>
-              </grid>
-            </Paper>
-          </Grid>
+          </Breadcrumbs>
         </Grid>
-      </div>
+        <Grid item className={classes.root} item xs={12} sm={6} container>
+          <Button
+            className={classes.menuButton}
+            variant="contained"
+            color="primary"
+            href="#contained-buttons"
+            type="submit"
+            onClick={createRoutine}
+          >
+            Save
+          </Button>
+          <Button
+            className={classes.menuButton}
+            variant="contained"
+            color="primary"
+            href="#contained-buttons"
+          >
+            Cancel
+          </Button>
+        </Grid>
+      </Grid>
       <Grid container className={classes.actionGrid}>
         <FormControl className={classes.formControl}>
           <InputLabel id="demo-controlled-open-select-label">
@@ -231,6 +243,7 @@ export default function Routine() {
             onClose={handleClose}
             onOpen={handleOpen}
             value={routineType}
+            helperText="ahij"
             onChange={(event) => {
               setRoutineType(event.target.value);
             }}
@@ -253,7 +266,7 @@ export default function Routine() {
           value={repeater}
           valueDayOfWeek={dayOfWeek}
           onChangeAmountOfWeek={(event) => {
-            setRepeater({ ...repeater, AmountOfWeek: event.target.value });
+            setRepeater({...repeater, AmountOfWeek: event.target.value});
           }}
           onChangeEndDate={(event) => {
             setRepeater({
@@ -279,7 +292,7 @@ export default function Routine() {
       </Grid>
       <Grid xs={12}>
         <Grid className={classes.test}>
-          <ProductsOfRoutine />
+          <ProductsOfRoutine/>
           <Indicator
             value={indicator}
             onChange={(event) => {
@@ -322,11 +335,11 @@ export default function Routine() {
         <NoteAndPhotos
           value={noteAndPhoto}
           onChanngeNote={(event) =>
-            setNoteAndPhoto({ Note: event.target.value })
+            setNoteAndPhoto({Note: event.target.value})
           }
           onChangePhotos={(files) => {
             console.log(files);
-            setNoteAndPhoto({ Photos: files });
+            setNoteAndPhoto({Photos: files});
             console.log(noteAndPhoto.Photos);
           }}
         />
