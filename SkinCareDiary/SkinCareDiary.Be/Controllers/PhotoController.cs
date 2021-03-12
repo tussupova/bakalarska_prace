@@ -19,7 +19,7 @@ namespace SkinCareDiary.Be.Controllers
 
         [HttpPost("upload")]
         [ProducesResponseType(typeof(DtoUploadPhoto), StatusCodes.Status200OK)]
-        public IActionResult UploadPhoto(List<DtoUploadPhoto> photos)
+        public IActionResult UploadPhoto([FromForm] DtoUploadPhoto photos)
         {
             return Ok(333);
         }
