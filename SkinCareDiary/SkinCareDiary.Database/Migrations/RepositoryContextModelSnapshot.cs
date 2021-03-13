@@ -86,14 +86,17 @@ namespace SkinCareDiary.Database.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Date")
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("NewName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("OriginalName")
                         .HasColumnType("text");
 
                     b.Property<int>("RoutineId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Url")
-                        .HasColumnType("text");
 
                     b.HasKey("Id");
 

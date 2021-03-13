@@ -37,13 +37,18 @@ namespace SkinCareDiary.Be.Controllers
                         var name = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName;
                         if (name != null)
                         {
-                            var fileName = name.Trim('"');
-                            var fullPath = Path.Combine(pathToSave, fileName);
-                            var dbPath = Path.Combine(folderName, fileName);
+                            var x = Path.GetRandomFileName(); //generate random string
+                            x = x.Replace(".", ""); // remove "."
+                            var fileName =name.Trim('"') ;
+                            var newName= x +fileName;
+                            _photoHelper.UploadPhotos(fileName, newName, photos.UserId, photos.RoutineId, photos.Date  ); //save to db
+                            var fullPath = Path.Combine(pathToSave, newName);
+                            var dbPath = Path.Combine(folderName, newName);
                             using (var stream = new FileStream(fullPath, FileMode.Create))
                             {
                                 file.CopyTo(stream);
                             }
+                            
 
                             /*return Ok(new {dbPath});*/
                         }

@@ -5,6 +5,6 @@ namespace SkinCareDiary.Services.Helpers
 {
     public interface IPhotoHelper
     {
-        DtoUploadPhoto UploadPhotos(DtoUploadPhoto photos);
+        void UploadPhotos(string originalName, string newName, int userId, int routineId, DateTime date);
     }
 }

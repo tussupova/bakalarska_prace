@@ -1,12 +1,26 @@
+using System;
+using SkinCareDiary.Database.DB;
 using SkinCareDiary.Services.Models;
 
 namespace SkinCareDiary.Services.Helpers
 {
-    public class PhotoHelper: IPhotoHelper
+    public class PhotoHelper : IPhotoHelper
     {
-        public DtoUploadPhoto UploadPhotos(DtoUploadPhoto photos)
+        public void UploadPhotos(string originalName, string newName, int userId, int routineId, DateTime date)
         {
-            throw new System.NotImplementedException();
+            using (var db = new RepositoryContext())
+            {
+                var newPhotos = new Photo()
+                {
+                    RoutineId = routineId,
+                    Date = date,
+                    NewName = newName,
+                    OriginalName = originalName,
+                    //Todo add UserId
+                };
+                db.Photos.Add(newPhotos);
+                db.SaveChanges();
+            }
         }
     }
 }

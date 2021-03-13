@@ -1,11 +1,13 @@
-﻿namespace SkinCareDiary.Database.DB
+﻿using System;
+
+namespace SkinCareDiary.Database.DB
 {
     public class Photo
     {
         public int Id { get; set; }
-        public string Url { get; set; }
-        public string Date { get; set; } // +time
-        
+        public string NewName { get; set; }
+        public DateTime Date { get; set; } // +time
+        public string OriginalName { get; set; }
         public int RoutineId { get; set; }
         public Routine Routine { get; set; }
     }
