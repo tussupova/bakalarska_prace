@@ -39,16 +39,17 @@ namespace SkinCareDiary.Be.Controllers
                         {
                             var x = Path.GetRandomFileName(); //generate random string
                             x = x.Replace(".", ""); // remove "."
-                            var fileName =name.Trim('"') ;
-                            var newName= x +fileName;
-                            _photoHelper.UploadPhotos(fileName, newName, photos.UserId, photos.RoutineId, photos.Date  ); //save to db
+                            var fileName = name.Trim('"');
+                            var newName = x + fileName;
+                            _photoHelper.UploadPhotos(fileName, newName, photos.UserId, photos.RoutineId,
+                                photos.Date); //save to db
                             var fullPath = Path.Combine(pathToSave, newName);
                             var dbPath = Path.Combine(folderName, newName);
                             using (var stream = new FileStream(fullPath, FileMode.Create))
                             {
                                 file.CopyTo(stream);
                             }
-                            
+
 
                             /*return Ok(new {dbPath});*/
                         }
@@ -58,6 +59,7 @@ namespace SkinCareDiary.Be.Controllers
                         return BadRequest();
                     }
                 }
+
                 return Ok(123);
             }
             catch (Exception e)
@@ -67,6 +69,13 @@ namespace SkinCareDiary.Be.Controllers
             }
 
             return Ok(111);
+        }
+
+        [HttpGet("getPhotos")]
+        public IActionResult GetPhotos()
+        {
+            _photoHelper.GetPhotos(3);
+            return Ok(777);
         }
     }
 }
