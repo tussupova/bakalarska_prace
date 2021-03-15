@@ -28,13 +28,14 @@ namespace SkinCareDiary.Services.Helpers
         {
             using (var db= new RepositoryContext())
             {
-                var photos = db.Photos.Where(o => o.RoutineId == routineId).ToList();
+                /*var photos = db.Photos.Where(o => o.RoutineId == routineId).ToList();
                 var newGetPhotos = new DtoGetPhotos()
                 {
                     //Date = 
-                }
+                }*/
             }
-            
+
+            return null;
         }
     }
 }

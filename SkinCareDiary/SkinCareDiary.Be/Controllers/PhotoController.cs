@@ -77,5 +77,11 @@ namespace SkinCareDiary.Be.Controllers
             _photoHelper.GetPhotos(3);
             return Ok(777);
         }
+
+        [HttpGet("getPhotosFromId/{photoId}")]
+        public IActionResult GetPhotosFromId(int photoId)
+        {
+            return Ok(photoId);
+        }
     }
 }
