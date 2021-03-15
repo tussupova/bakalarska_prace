@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using SkinCareDiary.Services.Models;
 
 namespace SkinCareDiary.Services.Helpers
@@ -7,6 +8,7 @@ namespace SkinCareDiary.Services.Helpers
     {
         void UploadPhotos(string originalName, string newName, int userId, int routineId, DateTime date);
 
-        DtoGetPhotos GetPhotos(int routineId);
+        DtoGetPhotos GetPhotosFromId(int photoId);
+        public List<DtoPhotosInfo> GetPhotosInfo(int routineId);
     }
 }

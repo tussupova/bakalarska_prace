@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SkinCareDiary.Services.Helpers;
@@ -70,18 +71,21 @@ namespace SkinCareDiary.Be.Controllers
 
             return Ok(111);
         }
-
-        [HttpGet("getPhotos")]
-        public IActionResult GetPhotos()
-        {
-            _photoHelper.GetPhotos(3);
-            return Ok(777);
-        }
-
+        
         [HttpGet("getPhotosFromId/{photoId}")]
-        public IActionResult GetPhotosFromId(int photoId)
+        
+        public  IActionResult DownloadImage(int photoId)
         {
-            return Ok(photoId);
+            var file = this._photoHelper.GetPhotosFromId(photoId);
+
+            return File(file.Data, file.Type, file.Name);
+        }
+ 
+
+        [HttpGet("getPhotosInfo/{routineId}")]
+        public List<DtoPhotosInfo> GetPhotosInfo(int routineId)
+        {
+            return _photoHelper.GetPhotosInfo(routineId);
         }
     }
 }

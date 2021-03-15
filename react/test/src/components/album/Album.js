@@ -84,6 +84,14 @@ export default function Album() {
                   </Button>
                 </Toolbar>
               </AppBar>
+              <Carousel
+                currentIndex={currentImage}
+                views={photos.map(x => ({
+                  ...x,
+                  srcset: x.srcSet,
+                  caption: x.title
+                }))}
+              />
             </Dialog>
           </Modal>
         ) : null}
