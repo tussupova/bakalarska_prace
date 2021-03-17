@@ -23,7 +23,7 @@ import HomeIcon from "@material-ui/icons/Home";
 import {useForm} from "react-hook-form";
 import {signUpAsync} from "../services/UserServices";
 import {createRoutineAsync} from "../services/RoutineServices";
-import {uploadPhotosAsyc} from "../services/PhotoServices";
+import {uploadPhotosAsync} from "../services/PhotoServices";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -146,7 +146,7 @@ export default function Routine() {
   console.log(noteAndPhoto.Photos);
   const sendPhoto = async () => {
     try {
-      const res = await uploadPhotosAsyc({
+      const res = await uploadPhotosAsync({
         photos: noteAndPhoto.Photos,
       });
     } catch (e) {

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
@@ -7,7 +7,7 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import CloseIcon from '@material-ui/icons/Close';
+import CloseIcon from "@material-ui/icons/Close";
 import Gallery from "react-photo-gallery";
 import Carousel, { Modal, ModalGateway } from "react-images";
 import { photos } from "../photos";
@@ -18,7 +18,12 @@ import Dialog from "@material-ui/core/Dialog";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import AppBar from "@material-ui/core/AppBar";
-import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteIcon from "@material-ui/icons/Delete";
+import {
+  downloadPhoto,
+  downloadPhotosInfoAsync,
+  uploadPhotosAsync,
+} from "../../services/PhotoServices";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,6 +47,30 @@ export default function Album() {
 
   const [currentImage, setCurrentImage] = useState(0);
   const [viewerIsOpen, setViewerIsOpen] = useState(false);
+  const [photosWithTitle, setPhotosWithTitle] = useState([]);
+
+  useEffect(() => {
+    // vola se vzdycky pri renderovani a pouze jednou
+    getInfo();
+  }, []);
+
+  const getInfo = async () => {
+    try {
+      const res = await downloadPhotosInfoAsync();
+      const mappedPhotos = res.data.map((x) => {
+        return {
+          title: x.originalName,
+          date: x.date,
+          width: 4,
+          height: 2,
+          src:"https://localhost:5001/photo/getPhotosFromId/" + x.photoId
+        };
+      });
+      setPhotosWithTitle(mappedPhotos);
+    } catch (e) {
+      console.log(e, "Can not download photos info");
+    }
+  };
 
   const openLightbox = useCallback((event, { photo, index }) => {
     setCurrentImage(index);
@@ -59,9 +88,10 @@ export default function Album() {
     setOpen(false);
     closeLightbox();
   };
+
   return (
     <div>
-      <Gallery photos={photos} onClick={openLightbox} />
+      <Gallery photos={photosWithTitle} onClick={openLightbox} />
       <ModalGateway>
         {viewerIsOpen ? (
           <Modal onClose={closeLightbox}>
@@ -80,16 +110,16 @@ export default function Album() {
                     Date
                   </Typography>
                   <Button autoFocus color="inherit" onClick={handleClose}>
-                    <DeleteIcon/>
+                    <DeleteIcon />
                   </Button>
                 </Toolbar>
               </AppBar>
               <Carousel
                 currentIndex={currentImage}
-                views={photos.map(x => ({
+                views={photos.map((x) => ({
                   ...x,
                   srcset: x.srcSet,
-                  caption: x.title
+                  caption: x.title,
                 }))}
               />
             </Dialog>
