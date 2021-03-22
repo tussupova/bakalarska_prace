@@ -53,11 +53,10 @@ export default function Album() {
     // vola se vzdycky pri renderovani a pouze jednou
     getInfo();
   }, []);
-
   const getInfo = async () => {
     try {
       const res = await downloadPhotosInfoAsync();
-      const mappedPhotos = res.data.map((x) => {
+       const mappedPhotos = res.data.map((x) => {
         return {
           title: x.originalName,
           date: x.date,
@@ -77,6 +76,10 @@ export default function Album() {
     setViewerIsOpen(true);
     setOpen(true);
   }, []);
+
+  const openPhoto=()=>{
+
+  }
 
   const closeLightbox = () => {
     setCurrentImage(0);
@@ -116,11 +119,7 @@ export default function Album() {
               </AppBar>
               <Carousel
                 currentIndex={currentImage}
-                views={photos.map((x) => ({
-                  ...x,
-                  srcset: x.srcSet,
-                  caption: x.title,
-                }))}
+                views={photosWithTitle}
               />
             </Dialog>
           </Modal>

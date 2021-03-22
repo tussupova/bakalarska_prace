@@ -9,6 +9,7 @@ namespace SkinCareDiary.Database.DB
 
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
+        public DbSet<AllProducts> AllProducts  { get; set; }
         
         public DbSet<Indicator> Indicators { get; set; }
         public  DbSet<IndicatorType> IndicatorTypes { get; set; }

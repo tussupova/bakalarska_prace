@@ -8,8 +8,8 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 
-import makeAnimated from "react-select/animated";
 
+import makeAnimated from "react-select/animated";
 import SetPeriod from "./SetPeriod";
 import Indicator from "./createRoutine/Indicator";
 import NoteAndPhotos from "./createRoutine/NoteAndPhotos";
@@ -178,6 +178,7 @@ export default function Routine() {
         dayOfWeek: dayOfWeek,
       });
       console.log("odeslano");
+
     } catch (err) {
       console.log("my error catch", err);
       //setPasswordError('Invalid credentials')

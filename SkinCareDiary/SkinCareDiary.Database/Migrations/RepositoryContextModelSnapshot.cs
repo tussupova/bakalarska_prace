@@ -17,6 +17,26 @@ namespace SkinCareDiary.Database.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
                 .HasAnnotation("ProductVersion", "5.0.3");
 
+            modelBuilder.Entity("SkinCareDiary.Database.DB.AllProducts", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Brand")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AllProducts");
+                });
+
             modelBuilder.Entity("SkinCareDiary.Database.DB.Indicator", b =>
                 {
                     b.Property<int>("Id")

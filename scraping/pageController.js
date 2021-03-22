@@ -5,7 +5,9 @@ async function scrapeAll(browserInstance){
   try{
     browser = await browserInstance;
     //await pageScraper.scraper(browser);
-    await writeDataToJson.scraper(browser);
+    //await writeDataToJson.scraper(browser);
+
+
 
   }
   catch(err){
