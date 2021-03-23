@@ -7,8 +7,8 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-
-
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 import makeAnimated from "react-select/animated";
 import SetPeriod from "./SetPeriod";
 import Indicator from "./createRoutine/Indicator";
@@ -24,6 +24,7 @@ import {useForm} from "react-hook-form";
 import {signUpAsync} from "../services/UserServices";
 import {createRoutineAsync} from "../services/RoutineServices";
 import {uploadPhotosAsync} from "../services/PhotoServices";
+import * as theme from "@material-ui/system";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -94,11 +95,18 @@ const useStyles = makeStyles((theme) => ({
   breadcrumbsFont: {
     fontSize: theme.spacing(1.5),
   },
+  widthForSnack:{
+    width:theme.spacing(50)
+  }
 }));
 
 function handleClick(event) {
   event.preventDefault();
   console.info("You clicked a breadcrumb.");
+}
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
 export default function Routine() {
@@ -177,13 +185,25 @@ export default function Routine() {
           : null,
         dayOfWeek: dayOfWeek,
       });
-      console.log("odeslano");
+      alertClick();
 
     } catch (err) {
       console.log("my error catch", err);
       //setPasswordError('Invalid credentials')
     }
   };
+
+  const [alertOpen, setAlertOpen] = useState(false);
+  const alertClick = () => {
+    setAlertOpen(true);
+  }
+  const alertClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setAlertOpen(false);
+  };
+
   return (
     <>
       <Grid container>
@@ -222,6 +242,12 @@ export default function Routine() {
           >
             Save
           </Button>
+          <Snackbar  className={classes.widthForSnack} anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }} open={alertOpen} autoHideDuration={3000} onClose={alertClose}>
+            <Alert style={{width:"100%"}} onClose={alertClose} severity="info"><Typography>Your Routine was saved</Typography></Alert>
+          </Snackbar>
           <Button
             className={classes.menuButton}
             variant="contained"
