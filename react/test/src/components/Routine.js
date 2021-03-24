@@ -1,5 +1,5 @@
-import React, {Component, useState} from "react";
-import {Button} from "@material-ui/core";
+import React, { Component, useState } from "react";
+import { Button } from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
@@ -7,8 +7,8 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
 import makeAnimated from "react-select/animated";
 import SetPeriod from "./SetPeriod";
 import Indicator from "./createRoutine/Indicator";
@@ -20,11 +20,13 @@ import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import Link from "@material-ui/core/Link";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import HomeIcon from "@material-ui/icons/Home";
-import {useForm} from "react-hook-form";
-import {signUpAsync} from "../services/UserServices";
-import {createRoutineAsync} from "../services/RoutineServices";
-import {uploadPhotosAsync} from "../services/PhotoServices";
+import { useForm } from "react-hook-form";
+import { signUpAsync } from "../services/UserServices";
+import { createRoutineAsync } from "../services/RoutineServices";
+import { uploadPhotosAsync } from "../services/PhotoServices";
 import * as theme from "@material-ui/system";
+import { useHistory } from "react-router-dom";
+//import ImageUpload from './ui/imge-upload/ImageUpload';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -95,15 +97,10 @@ const useStyles = makeStyles((theme) => ({
   breadcrumbsFont: {
     fontSize: theme.spacing(1.5),
   },
-  widthForSnack:{
-    width:theme.spacing(50)
-  }
+  widthForSnack: {
+    width: theme.spacing(50),
+  },
 }));
-
-function handleClick(event) {
-  event.preventDefault();
-  console.info("You clicked a breadcrumb.");
-}
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -157,6 +154,7 @@ export default function Routine() {
       const res = await uploadPhotosAsync({
         photos: noteAndPhoto.Photos,
       });
+      console.log("fotka odeslana");
     } catch (e) {
       console.log(e, "Photos error");
     }
@@ -165,7 +163,7 @@ export default function Routine() {
   const createRoutine = async () => {
     try {
       console.log(indicator, repeater);
-      sendPhoto();
+
       const response = await createRoutineAsync({
         routineType: routineType,
         note: noteAndPhoto.Note,
@@ -185,8 +183,8 @@ export default function Routine() {
           : null,
         dayOfWeek: dayOfWeek,
       });
+      await sendPhoto();
       alertClick();
-
     } catch (err) {
       console.log("my error catch", err);
       //setPasswordError('Invalid credentials')
@@ -196,32 +194,41 @@ export default function Routine() {
   const [alertOpen, setAlertOpen] = useState(false);
   const alertClick = () => {
     setAlertOpen(true);
-  }
+  };
   const alertClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
     setAlertOpen(false);
   };
+  const history = useHistory();
 
+  function handleClick(event) {
+    history.push("/my-routine");
+  }
+
+  /*  const PhotosApp = () => {
+      const [files, setFiles] = useState<File[]>([]);
+
+      const onDrop = (acceptedFiles: File[]) => {
+        setFiles(acceptedFiles.map(file => Object.assign(file, {
+          preview: URL.createObjectURL(file)
+        })));
+      }*/
   return (
     <>
       <Grid container>
         <Grid item className={classes.breadcrumbs} xs={12} sm={6}>
           <Breadcrumbs
-            separator={<NavigateNextIcon fontSize="inherit"/>}
+            separator={<NavigateNextIcon fontSize="inherit" />}
             aria-label="breadcrumb"
           >
             <Link color="inherit" href="/" onClick={handleClick} fontSize>
               <Typography className={classes.breadcrumbsFont}>
-                <HomeIcon/>
+                <HomeIcon />
               </Typography>
             </Link>
-            <Link
-              color="inherit"
-              href="/getting-started/installation/"
-              onClick={handleClick}
-            >
+            <Link color="inherit" onClick={handleClick}>
               <Typography className={classes.breadcrumbsFont}>
                 Routine
               </Typography>
@@ -242,11 +249,23 @@ export default function Routine() {
           >
             Save
           </Button>
-          <Snackbar  className={classes.widthForSnack} anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'right',
-          }} open={alertOpen} autoHideDuration={3000} onClose={alertClose}>
-            <Alert style={{width:"100%"}} onClose={alertClose} severity="info"><Typography>Your Routine was saved</Typography></Alert>
+          <Snackbar
+            className={classes.widthForSnack}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            open={alertOpen}
+            autoHideDuration={3000}
+            onClose={alertClose}
+          >
+            <Alert
+              style={{ width: "100%" }}
+              onClose={alertClose}
+              severity="info"
+            >
+              <Typography>Your Routine was saved</Typography>
+            </Alert>
           </Snackbar>
           <Button
             className={classes.menuButton}
@@ -293,7 +312,7 @@ export default function Routine() {
           value={repeater}
           valueDayOfWeek={dayOfWeek}
           onChangeAmountOfWeek={(event) => {
-            setRepeater({...repeater, AmountOfWeek: event.target.value});
+            setRepeater({ ...repeater, AmountOfWeek: event.target.value });
           }}
           onChangeEndDate={(event) => {
             setRepeater({
@@ -319,7 +338,7 @@ export default function Routine() {
       </Grid>
       <Grid xs={12}>
         <Grid className={classes.test}>
-          <ProductsOfRoutine/>
+          <ProductsOfRoutine />
           <Indicator
             value={indicator}
             onChange={(event) => {
@@ -362,12 +381,13 @@ export default function Routine() {
         <NoteAndPhotos
           value={noteAndPhoto}
           onChanngeNote={(event) =>
-            setNoteAndPhoto({Note: event.target.value})
+            setNoteAndPhoto({ Note: event.target.value })
           }
-          onChangePhotos={(files) => {
-            console.log(files);
-            setNoteAndPhoto({Photos: files});
-            console.log(noteAndPhoto.Photos);
+          onChangePhotos={(e) => {
+            console.log("onchange", e);
+            setNoteAndPhoto({ Photos: e });
+
+            console.log("-------", noteAndPhoto.Photos);
           }}
         />
       </Grid>

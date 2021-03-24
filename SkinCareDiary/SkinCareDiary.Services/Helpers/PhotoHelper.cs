@@ -21,7 +21,7 @@ namespace SkinCareDiary.Services.Helpers
                     Date = date,
                     NewName = newName,
                     OriginalName = originalName,
-                    //Todo add UserId
+                    
                 };
                 db.Photos.Add(newPhotos);
                 db.SaveChanges();
