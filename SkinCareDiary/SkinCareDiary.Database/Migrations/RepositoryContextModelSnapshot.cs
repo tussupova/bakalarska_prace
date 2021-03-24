@@ -125,36 +125,6 @@ namespace SkinCareDiary.Database.Migrations
                     b.ToTable("Photos");
                 });
 
-            modelBuilder.Entity("SkinCareDiary.Database.DB.Product", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Brand")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<int>("ProductTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RoutineId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductTypeId");
-
-                    b.HasIndex("RoutineId");
-
-                    b.ToTable("Products");
-                });
-
             modelBuilder.Entity("SkinCareDiary.Database.DB.ProductType", b =>
                 {
                     b.Property<int>("Id")
@@ -231,6 +201,32 @@ namespace SkinCareDiary.Database.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Dates");
+                });
+
+            modelBuilder.Entity("SkinCareDiary.Database.DB.Shelf", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("AllProductsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoutineId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AllProductsId");
+
+                    b.HasIndex("ProductTypeId");
+
+                    b.HasIndex("RoutineId");
+
+                    b.ToTable("Shelves");
                 });
 
             modelBuilder.Entity("SkinCareDiary.Database.DB.TypeOfRoutine", b =>
@@ -320,25 +316,6 @@ namespace SkinCareDiary.Database.Migrations
                     b.Navigation("Routine");
                 });
 
-            modelBuilder.Entity("SkinCareDiary.Database.DB.Product", b =>
-                {
-                    b.HasOne("SkinCareDiary.Database.DB.ProductType", "ProductType")
-                        .WithMany("Products")
-                        .HasForeignKey("ProductTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SkinCareDiary.Database.DB.Routine", "Routine")
-                        .WithMany("Products")
-                        .HasForeignKey("RoutineId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ProductType");
-
-                    b.Navigation("Routine");
-                });
-
             modelBuilder.Entity("SkinCareDiary.Database.DB.Routine", b =>
                 {
                     b.HasOne("SkinCareDiary.Database.DB.RoutineDate", "RoutineDate")
@@ -366,6 +343,38 @@ namespace SkinCareDiary.Database.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("SkinCareDiary.Database.DB.Shelf", b =>
+                {
+                    b.HasOne("SkinCareDiary.Database.DB.AllProducts", "AllProducts")
+                        .WithMany("Shelves")
+                        .HasForeignKey("AllProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SkinCareDiary.Database.DB.ProductType", "ProductType")
+                        .WithMany("Shelves")
+                        .HasForeignKey("ProductTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SkinCareDiary.Database.DB.Routine", "Routine")
+                        .WithMany("Shelves")
+                        .HasForeignKey("RoutineId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AllProducts");
+
+                    b.Navigation("ProductType");
+
+                    b.Navigation("Routine");
+                });
+
+            modelBuilder.Entity("SkinCareDiary.Database.DB.AllProducts", b =>
+                {
+                    b.Navigation("Shelves");
+                });
+
             modelBuilder.Entity("SkinCareDiary.Database.DB.IndicatorType", b =>
                 {
                     b.Navigation("Indicators");
@@ -373,7 +382,7 @@ namespace SkinCareDiary.Database.Migrations
 
             modelBuilder.Entity("SkinCareDiary.Database.DB.ProductType", b =>
                 {
-                    b.Navigation("Products");
+                    b.Navigation("Shelves");
                 });
 
             modelBuilder.Entity("SkinCareDiary.Database.DB.Routine", b =>
@@ -384,7 +393,7 @@ namespace SkinCareDiary.Database.Migrations
 
                     b.Navigation("Photos");
 
-                    b.Navigation("Products");
+                    b.Navigation("Shelves");
                 });
 
             modelBuilder.Entity("SkinCareDiary.Database.DB.RoutineDate", b =>

@@ -15,7 +15,7 @@ namespace SkinCareDiary.Database.DB
         public int RoutineDateId { get; set; }
         public RoutineDate RoutineDate { get; set; }
         
-        public List<Product> Products { get; set; }
+        public List<Shelf> Shelves { get; set; }
         public List<Indicator> Indicators { get; set; }
         public List<Photo> Photos { get; set; }
         public List<Note> Notes { get; set; }

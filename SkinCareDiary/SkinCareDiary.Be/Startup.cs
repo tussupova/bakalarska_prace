@@ -93,6 +93,7 @@ namespace SkinCareDiary.Be
             services.AddScoped<IRoutineHelper, RoutineHelper>();
             services.AddScoped<IJwtHelper, JwtHelper>();
             services.AddScoped<IPhotoHelper, PhotoHelper>();
+            services.AddScoped<IProductHelper, ProductHelper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

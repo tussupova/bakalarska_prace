@@ -7,7 +7,7 @@ namespace SkinCareDiary.Database.DB
         public DbSet<Routine> Routines { get; set; }
         public DbSet<TypeOfRoutine> TypOfRoutines { get; set; }
 
-        public DbSet<Product> Products { get; set; }
+        public DbSet<Shelf> Shelves { get; set; }
         public DbSet<ProductType> ProductTypes { get; set; }
         public DbSet<AllProducts> AllProducts  { get; set; }
         
