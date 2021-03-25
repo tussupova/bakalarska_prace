@@ -4,12 +4,12 @@ function connecting() {
   const con = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "example",
+    password: "kymbat",
     database: "kymbat"
   })
   let product = [];
   con.connect();
-  for (i = 1; i < 354; i++) {
+  for (i = 1; i <50 ; i++) {
     const fileName = 'C:/Users/Kymbat/bp/bakalarska_prace/scraping/products/' + i + '_productsFromPage.json';
     const files = fs.readFileSync(fileName);
     product = JSON.parse(files);
