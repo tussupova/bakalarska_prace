@@ -16,7 +16,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Avatar from "@material-ui/core/Avatar";
 import ListItemText from "@material-ui/core/ListItemText";
 import {downloadPhotosInfoAsync} from "../services/PhotoServices";
-import {getUsersProducts, removeUsersProduct} from "../services/ShelfServices";
+import {getUsersProducts, removeUsersProduct, searchProducts} from "../services/ShelfServices";
 // ISO 3166-1 alpha-2
 // ⚠️ No support for IE 11
 function countryToFlag(isoCode) {
@@ -78,86 +78,110 @@ export default function Shelf() {
     }
   };
   const deleteProduct = async (id) => {
-    try{
-      const deleteProduct= await removeUsersProduct(id);
-     await getProducts();
-    }
-    catch (e) {
+    try {
+      const deleteProduct = await removeUsersProduct(id);
+      await getProducts();
+    } catch (e) {
       console.log(e, "Can not delete product");
     }
+  };
+  const getSearchingProducts = async (chars) => {
+    try {
+      const foundedProducts = await searchProducts(chars);
+      console.log(foundedProducts);
+    } catch (e) {
+      console.log(e, "Can not search product");
+    }
   }
-  useEffect(() => {
-    // vola se vzdycky pri renderovani a pouze jednou
-    getProducts();
-  }, []);
-  const classes = useStyles();
-  const [dense, setDense] = React.useState(false);
 
+useEffect(() => {
+  // vola se vzdycky pri renderovani a pouze jednou
+  getProducts();
+}, []);
+const classes = useStyles();
+const [dense, setDense] = React.useState(false);
+const [open, setOpen] = React.useState(false);
+const [options, setOptions] = React.useState([]);
+const loading = open && options.length === 0;
 
-  return (
-    <Grid container>
-      <Grid item xs={12} lg={6} className={classes.searchItem}>
-        <Autocomplete
-          id="country-select-demo"
-          options={countries}
-          classes={{
-            option: classes.option,
-          }}
-          autoHighlight
-          getOptionLabel={(option) => option.label}
-          renderOption={(option) => (
-            <React.Fragment>
-              <span>{countryToFlag(option.code)}</span>
-              {option.label} ({option.code}) +{option.phone}
-            </React.Fragment>
-          )}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label="Choose a country"
-              variant="outlined"
-              inputProps={{
-                ...params.inputProps,
-                autoComplete: 'new-password', // disable autocomplete and autofill
-              }}
-            />
-          )}
-        />
-      </Grid>
-      <Grid item className={classes.addItem}>
-        <Button variant="contained" color="primary">
-          <Typography>Add Product</Typography>
-        </Button>
-      </Grid>
-      <Grid item xs={12} md={6} className={classes.productItem}>
-        <Typography variant="h6" className={classes.title}>
-          Avatar with text and icon
-        </Typography>
-        <div className={classes.listClass}>
-          <List dense={dense}>
-            {products.map((list) => {
-              return (
-                <ListItem>
-                  <ListItemAvatar>
-                    <img className={classes.productIcon} src={list.img}/>
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={list.name}
-                    secondary={list.brand}
-                  />
-                  <ListItemSecondaryAction>
-                    <IconButton edge="end" aria-label="delete">
-                      <DeleteIcon onClick={()=>deleteProduct(list.id)}/>
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              )
-            })}
-          </List>
-        </div>
-      </Grid>
+return (
+  <Grid container>
+    <Grid item xs={12} lg={6} className={classes.searchItem}>
+      <Autocomplete
+        id="country-select-demo"
+        options={countries}
+        classes={{
+          option: classes.option,
+        }}
+        /*onChange={() => getX()}*/
+
+        onInputChange={async (event, value) =>
+          getSearchingProducts(value)
+        }
+        autoHighlight
+        getOptionLabel={(option) => option.label}
+        renderOption={(option) => (
+          <React.Fragment>
+            <span>{countryToFlag(option.code)}</span>
+            {option.label} ({option.code}) +{option.phone}
+          </React.Fragment>
+        )}
+        renderInput={params => (
+          <TextField
+            {...params}
+            label="onInputChange"
+            variant="outlined"
+            margin="normal"
+            fullWidth
+          />
+        )}
+        /*          renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Choose a country"
+                      variant="outlined"
+                      inputProps={{
+                        ...params.inputProps,
+                        autoComplete: 'new-password', // disable autocomplete and autofill
+                      }}
+                    />
+                  )}*/
+      />
     </Grid>
-  );
+    <Grid item className={classes.addItem}>
+      <Button variant="contained" color="primary">
+        <Typography>Add Product</Typography>
+      </Button>
+    </Grid>
+    <Grid item xs={12} md={6} className={classes.productItem}>
+      <Typography variant="h6" className={classes.title}>
+        Avatar with text and icon
+      </Typography>
+      <div className={classes.listClass}>
+        <List dense={dense}>
+          {products.map((list) => {
+            return (
+              <ListItem>
+                <ListItemAvatar>
+                  <img className={classes.productIcon} src={list.img}/>
+                </ListItemAvatar>
+                <ListItemText
+                  primary={list.name}
+                  secondary={list.brand}
+                />
+                <ListItemSecondaryAction>
+                  <IconButton edge="end" aria-label="delete">
+                    <DeleteIcon onClick={() => deleteProduct(list.id)}/>
+                  </IconButton>
+                </ListItemSecondaryAction>
+              </ListItem>
+            )
+          })}
+        </List>
+      </div>
+    </Grid>
+  </Grid>
+);
 }
 
 // From https://bitbucket.org/atlassian/atlaskit-mk-2/raw/4ad0e56649c3e6c973e226b7efaeb28cb240ccb0/packages/core/select/src/data/countries.js

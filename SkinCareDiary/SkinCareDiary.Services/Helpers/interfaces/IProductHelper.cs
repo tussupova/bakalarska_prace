@@ -7,5 +7,7 @@ namespace SkinCareDiary.Services.Helpers
     {
         List<DtoGetUsersProduct> GetUsersProduct(int userId);
         bool RemoveProduct(int productId);
+
+        List<DtoGetUsersProduct> SearchProducts(string chars);
     }
 }

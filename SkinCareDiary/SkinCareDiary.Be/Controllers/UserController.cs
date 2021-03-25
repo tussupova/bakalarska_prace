@@ -3,7 +3,6 @@ using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Crypto.Tls;
 using SkinCareDiary.Database.DB;
 using SkinCareDiary.Services.Helpers;
 using SkinCareDiary.Services.Models.User;

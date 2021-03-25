@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
@@ -30,15 +31,30 @@ namespace SkinCareDiary.Services.Helpers
             using (var db = new RepositoryContext())
             {
                 var product = db.Shelves.Where(o => o.Id == productId).FirstOrDefault();
-                if (product==null)
+                if (product == null)
                 {
                     return false;
                 }
+
                 db.Shelves.Remove(product);
                 db.SaveChanges();
                 return true;
             }
-            
+        }
+
+        public List<DtoGetUsersProduct> SearchProducts(string chars)
+        {
+            var searchingProducts = new List<DtoGetUsersProduct>();
+            using var db = new RepositoryContext();
+            var products = db.AllProducts.Where(o => o.Brand != null)
+                .Where(o => o.Brand.StartsWith(chars) || o.Name.StartsWith(chars))
+                .OrderBy(q => q.Brand)
+                .ToList();
+
+            searchingProducts = products.Select(x => new DtoGetUsersProduct
+                {Brand = x.Brand, Name = x.Name, Id = x.Id, Img = x.Image}
+            ).ToList();
+            return searchingProducts;
         }
     }
 }

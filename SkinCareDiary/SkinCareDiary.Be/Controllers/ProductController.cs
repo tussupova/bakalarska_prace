@@ -25,6 +25,13 @@ namespace SkinCareDiary.Be.Controllers
             return _productHelper.GetUsersProduct(userId);
           
         }
+        [HttpGet("searchProduct/{chars}")]
+        
+        public  List<DtoGetUsersProduct> GetUsersProduct(string chars)
+        {
+            return _productHelper.SearchProducts(chars);
+          
+        }
         
         [HttpPost("removeUsersProduct/{productId}")]
         [ProducesResponseType(typeof(DtoDeleteUsersProduct), StatusCodes.Status200OK)]

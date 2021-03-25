@@ -5,7 +5,6 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.Extensions.Options;
-using Org.BouncyCastle.Asn1.Pkcs;
 using SkinCareDiary.Database.DB;
 using SkinCareDiary.Services.Settings;
 using System.IdentityModel.Tokens.Jwt;
