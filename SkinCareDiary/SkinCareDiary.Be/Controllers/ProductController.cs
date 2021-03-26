@@ -45,5 +45,19 @@ namespace SkinCareDiary.Be.Controllers
             
             return Conflict();
         }
+        
+        [HttpPost("addProduct")]
+        [ProducesResponseType(typeof(DtoNewProductToShelf), StatusCodes.Status200OK)]
+        public IActionResult AddProduct(DtoNewProductToShelf products)
+        {
+            var x = _productHelper.AddProductToShelf(products);
+            if (x)
+            {
+                return Ok(123456);
+            }
+
+
+            return Conflict();
+        }
     }
 }

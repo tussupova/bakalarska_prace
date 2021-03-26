@@ -9,3 +9,6 @@ export function removeUsersProduct(id){
 export function searchProducts(chars){
   return axios.get("https://localhost:5001/product/searchProduct/"+chars)
 }
+export function addToShelf(id){
+  return axios.post("https://localhost:5001/product/addProduct/", {id})
+}

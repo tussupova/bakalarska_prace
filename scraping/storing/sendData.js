@@ -9,7 +9,11 @@ function connecting() {
   })
   let product = [];
   con.connect();
-  for (i = 1; i <50 ; i++) {
+  for (let i = 1; i < 354; i++) {
+
+    if ([53, 54, 55, 56, 57, 58, 342].includes(i)) {
+      continue;
+    }
     const fileName = 'C:/Users/Kymbat/bp/bakalarska_prace/scraping/products/' + i + '_productsFromPage.json';
     const files = fs.readFileSync(fileName);
     product = JSON.parse(files);
