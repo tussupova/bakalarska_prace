@@ -22,19 +22,7 @@ import {addToShelf, getUsersProducts, removeUsersProduct, searchProducts} from "
 
 
 const useStyles = makeStyles((theme) => ({
-  option: {
-    fontSize: 15,
-    '& > span': {
-      marginRight: 10,
-      fontSize: 18,
-    },
-  },
-  searchItem: {
-    margin: theme.spacing(3),
-  },
-  addItem: {
-    margin: theme.spacing(4)
-  },
+
   productItem: {
     marginLeft: theme.spacing(4),
     marginRight: theme.spacing(4)
@@ -48,17 +36,15 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(4),
     maxWidth: theme.spacing(25)
   },
-  optionIcon: {
-    maxWidth: theme.spacing(10),
-    maxHeight: theme.spacing(10),
-    margin: theme.spacing(1)
-  }
+
 
 }));
 
 
 export default function Shelf() {
   const [products, setProducts] = React.useState([])
+  const [dense, setDense] = React.useState(false);
+
   const getProducts = async () => {
     try {
       const res = await getUsersProducts();
@@ -84,102 +70,18 @@ export default function Shelf() {
       console.log(e, "Can not delete product");
     }
   };
-  const getSearchingProducts = async (chars) => {
-    try {
-      setInputValue(chars);
-      console.log('zacatek hledani', chars)
-      const foundedProducts = await searchProducts(inputValue);
-      console.log('vysledek', foundedProducts.data);
-      const pr = foundedProducts.data.map((e) => {
-        return {
-          name: e.brand + ' ' + e.name,
-          img: e.img,
-          id: e.id
-        }
-      });
-      setOptions(pr);
-      console.log('pr', pr);
-    } catch (e) {
-      console.log(e, "Can not search product");
-    }
-  }
-  const addProduct = async () => {
-    console.log('onChange', selectedProduct.id);
-    try {
-      const res = await addToShelf({
-       productId: selectedProduct.id,
-        routineId: 5,
-      })
-    } catch (e) {
-    console.log(e, "Can not add product to Shelf")
-    }
-  }
+
 
   useEffect(() => {
     // vola se vzdycky pri renderovani a pouze jednou
     getProducts();
   }, []);
   const classes = useStyles();
-  const [dense, setDense] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
-  const [options, setOptions] = React.useState([]);
-  const [inputValue, setInputValue] = React.useState('');
-  const loading = open && options.length === 0;
-  const [selectedProduct, setSelectedProduct]=React.useState('');
+
+
 
   return (
     <Grid container>
-      <Grid item xs={12} lg={6} className={classes.searchItem}>
-        <Autocomplete
-          {...options}
-
-          getOptionLabel={(options) => options.name}
-          id="country-select-demo"
-          options={options}
-          classes={{
-            option: classes.option,
-          }}
-          onChange={(event, value) => setSelectedProduct(value)}
-          onInputChange={(event, newInputValue) => {
-            getSearchingProducts(newInputValue)
-          }}
-          autoHighlight
-          renderOption={(options) => (
-            <React.Fragment>
-              {<img className={classes.optionIcon} src={options.img}/>} {options.name}
-            </React.Fragment>
-          )}
-          renderInput={params => (
-            <TextField
-              {...params}
-              label="Find products"
-              variant="outlined"
-              margin="normal"
-              fullWidth
-              inputProps={{
-                ...params.inputProps,
-                // disable autocomplete and autofill
-              }}
-            />
-          )}
-          /*          renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Choose a country"
-                        variant="outlined"
-                        inputProps={{
-                          ...params.inputProps,
-                          autoComplete: 'new-password', // disable autocomplete and autofill
-                        }}
-                      />
-                    )}*/
-        />
-      </Grid>
-      <Grid item className={classes.addItem}>
-        <Button variant="contained" color="primary" onClick={()=>addProduct()}>
-          <Typography>Add Product</Typography>
-        </Button>
-      </Grid>
       <Grid item xs={12} md={6} className={classes.productItem}>
         <Typography variant="h6" className={classes.title}>
           Avatar with text and icon

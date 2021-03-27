@@ -10,22 +10,23 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import makeAnimated from "react-select/animated";
-import SetPeriod from "./SetPeriod";
-import Indicator from "./createRoutine/Indicator";
-import NoteAndPhotos from "./createRoutine/NoteAndPhotos";
-import ProductsOfRoutine from "./createRoutine/ProductsOfRoutine";
+import SetPeriod from "../SetPeriod";
+import Indicator from "./Indicator";
+import NoteAndPhotos from "./NoteAndPhotos";
+import ProductsOfRoutine from "./ProductsOfRoutine";
 import Typography from "@material-ui/core/Typography";
-import NewBDay from "./NewBDay";
+import NewBDay from "../NewBDay";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import Link from "@material-ui/core/Link";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import HomeIcon from "@material-ui/icons/Home";
 import { useForm } from "react-hook-form";
-import { signUpAsync } from "../services/UserServices";
-import { createRoutineAsync } from "../services/RoutineServices";
-import { uploadPhotosAsync } from "../services/PhotoServices";
+import { signUpAsync } from "../../services/UserServices";
+import { createRoutineAsync } from "../../services/RoutineServices";
+import { uploadPhotosAsync } from "../../services/PhotoServices";
 import * as theme from "@material-ui/system";
 import { useHistory } from "react-router-dom";
+import AddToShelf from "./AddToShelf";
 //import ImageUpload from './ui/imge-upload/ImageUpload';
 
 const useStyles = makeStyles((theme) => ({
@@ -206,6 +207,9 @@ export default function Routine() {
   function handleClick(event) {
     history.push("/my-routine");
   }
+  function openAddProductDialog(){
+
+  }
 
   /*  const PhotosApp = () => {
       const [files, setFiles] = useState<File[]>([]);
@@ -328,13 +332,15 @@ export default function Routine() {
             console.log(dayOfWeek);
           }}
         />
-        <Button
+{/*        <Button
           className={classes.marginAll}
           variant="contained"
           href="#contained-buttons"
+          onClick={()=>{openAddProductDialog()}}
         >
-          <Typography>Create Custom Product</Typography>
-        </Button>
+          <Typography>Add Product To Shelf</Typography>
+        </Button>*/}
+        <AddToShelf/>
       </Grid>
       <Grid xs={12}>
         <Grid className={classes.test}>
