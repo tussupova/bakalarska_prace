@@ -21,12 +21,15 @@ namespace SkinCareDiary.Be.Controllers
         [ProducesResponseType(typeof(DtoNewRoutine), StatusCodes.Status200OK)]
         public IActionResult CreateRoutine(DtoNewRoutine newRoutine)
         {
-            var x = int.Parse(User.Identity.Name ?? throw new InvalidOperationException());
-
-            var routineDto = _routineHelper.CreateRoutine(newRoutine, x);
-            if (routineDto != null)
+            if (User.Identity != null)
             {
-                return Ok(routineDto);
+                var x = int.Parse(User.Identity.Name ?? throw new InvalidOperationException());
+
+                var routineDto = _routineHelper.CreateRoutine(newRoutine, x);
+                if (routineDto != null)
+                {
+                    return Ok(routineDto);
+                }
             }
 
             return Conflict();

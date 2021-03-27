@@ -107,7 +107,7 @@ export default function SignUp() {
   const history = useHistory()
 
   const signUp = async (data) => {
-    if (data.password.length < 5) {
+    if (data.password.length < 6) {
       setPasswordError('Password is too short')
     }
     else if (data.password.length>25){
@@ -162,7 +162,7 @@ export default function SignUp() {
                 fullWidth
                 id="name"
                 label="Name"
-                value="ahoj"
+
                 helperText={nameError}
                 error={Boolean(nameError)}
                 autoFocus inputRef={register}

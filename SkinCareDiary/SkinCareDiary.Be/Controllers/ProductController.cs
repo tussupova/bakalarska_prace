@@ -24,11 +24,13 @@ namespace SkinCareDiary.Be.Controllers
         
         public  List<DtoGetUsersProduct> GetUsersProduct()
         {
-
-            var x = int.Parse(User.Identity.Name ?? throw new InvalidOperationException());
+            if (User.Identity != null)
+            {
+                var x = int.Parse(User.Identity.Name ?? throw new InvalidOperationException());
            
-            return _productHelper.GetUsersProduct(x);
-          
+                return _productHelper.GetUsersProduct(x);
+            }
+            return null;
         }
         [HttpGet("searchProduct/{chars}")]
         
