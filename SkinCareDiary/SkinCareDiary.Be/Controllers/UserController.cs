@@ -24,6 +24,7 @@ namespace SkinCareDiary.Be.Controllers
         [ProducesResponseType(typeof(DtoUserResponse), StatusCodes.Status200OK)]
         public IActionResult SignUp(DtoUserSignIUp user)
         {
+            
             var userDto = _loginHelper.CreateAccount(user);
             if (userDto != null)
             {

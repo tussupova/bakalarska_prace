@@ -11,7 +11,7 @@ namespace SkinCareDiary.Services.Helpers
 {
     public class PhotoHelper : IPhotoHelper
     {
-        public void UploadPhotos(string originalName, string newName, int userId, int routineId, DateTime date)
+        public void UploadPhotos(string originalName, string newName, int routineId, DateTime date)
         {
             using (var db = new RepositoryContext())
             {
@@ -21,6 +21,7 @@ namespace SkinCareDiary.Services.Helpers
                     Date = date,
                     NewName = newName,
                     OriginalName = originalName,
+                    
                     
                 };
                 db.Photos.Add(newPhotos);

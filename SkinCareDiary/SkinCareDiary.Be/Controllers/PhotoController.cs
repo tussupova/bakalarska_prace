@@ -42,7 +42,9 @@ namespace SkinCareDiary.Be.Controllers
                             x = x.Replace(".", ""); // remove "."
                             var fileName = name.Trim('"');
                             var newName = x + fileName;
-                            _photoHelper.UploadPhotos(fileName, newName, photos.UserId, photos.RoutineId,
+                            //var userId = int.Parse(User.Identity.Name ?? throw new InvalidOperationException());
+
+                            _photoHelper.UploadPhotos(fileName, newName, photos.RoutineId,
                                 photos.Date); //save to db
                             var fullPath = Path.Combine(pathToSave, newName);
                             var dbPath = Path.Combine(folderName, newName);

@@ -4,6 +4,6 @@ namespace SkinCareDiary.Services.Helpers
 {
     public interface IRoutineHelper
     {
-        DtoNewRoutine CreateRoutine(DtoNewRoutine routine);
+        DtoNewRoutine CreateRoutine(DtoNewRoutine routine, int userId);
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using SkinCareDiary.Services.Helpers;
@@ -20,11 +21,12 @@ namespace SkinCareDiary.Be.Controllers
         [ProducesResponseType(typeof(DtoNewRoutine), StatusCodes.Status200OK)]
         public IActionResult CreateRoutine(DtoNewRoutine newRoutine)
         {
-            
-            var routineDto = _routineHelper.CreateRoutine(newRoutine);
+            var x = int.Parse(User.Identity.Name ?? throw new InvalidOperationException());
+
+            var routineDto = _routineHelper.CreateRoutine(newRoutine, x);
             if (routineDto != null)
             {
-                return Ok(123);
+                return Ok(routineDto);
             }
 
             return Conflict();

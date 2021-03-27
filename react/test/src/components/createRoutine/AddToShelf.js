@@ -89,7 +89,7 @@ export default function AddToShelf() {
     try {
       const res = await addToShelf({
         productId: selectedProduct.id,
-        routineId: 5,
+        routineId: 7,
       });
       alertClick();
     } catch (e) {

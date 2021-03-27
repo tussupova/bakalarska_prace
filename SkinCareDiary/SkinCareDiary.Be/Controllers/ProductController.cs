@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SkinCareDiary.Services.Helpers;
@@ -18,11 +20,14 @@ namespace SkinCareDiary.Be.Controllers
             _productHelper = productHelper;
         }
         
-        [HttpGet("getUsersProducts/{userId}")]
+        [HttpGet("getUsersProducts")]
         
-        public  List<DtoGetUsersProduct> GetUsersProduct(int userId)
+        public  List<DtoGetUsersProduct> GetUsersProduct()
         {
-            return _productHelper.GetUsersProduct(userId);
+
+            var x = int.Parse(User.Identity.Name ?? throw new InvalidOperationException());
+           
+            return _productHelper.GetUsersProduct(x);
           
         }
         [HttpGet("searchProduct/{chars}")]
@@ -37,6 +42,7 @@ namespace SkinCareDiary.Be.Controllers
         [ProducesResponseType(typeof(DtoDeleteUsersProduct), StatusCodes.Status200OK)]
         public IActionResult DeleteProduct(int productId)
         {
+            //todo musi porovnat i Id uzivatele
             var product = _productHelper.RemoveProduct(productId);
             if (product)
             {

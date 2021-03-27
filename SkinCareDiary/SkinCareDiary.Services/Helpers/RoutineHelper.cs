@@ -8,7 +8,7 @@ namespace SkinCareDiary.Services.Helpers
 {
     public class RoutineHelper : IRoutineHelper
     {
-        public DtoNewRoutine CreateRoutine(DtoNewRoutine routine)
+        public DtoNewRoutine CreateRoutine(DtoNewRoutine routine, int userId)
         {
             using (var context = new RepositoryContext())
             {
@@ -60,7 +60,7 @@ namespace SkinCareDiary.Services.Helpers
                 newRoutine.TypeOfRoutineId = IdTypeOfId;
                 newRoutine.Notes = new List<Note>();
                 newRoutine.Notes.Add(newNote);
-                newRoutine.UserId = 8;
+                newRoutine.UserId = userId;
                 newRoutine.RoutineDate = newRoutineDate;
                 newRoutine.Indicators = new List<Indicator>();
                 newRoutine.Indicators.Add(waterIndicator);

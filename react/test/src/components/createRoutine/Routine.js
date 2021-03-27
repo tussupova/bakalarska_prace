@@ -393,7 +393,6 @@ export default function Routine() {
             console.log("onchange", e);
             setNoteAndPhoto({ Photos: e });
 
-            console.log("-------", noteAndPhoto.Photos);
           }}
         />
       </Grid>
