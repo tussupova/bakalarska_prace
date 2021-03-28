@@ -26,7 +26,6 @@ import { createRoutineAsync } from "../../services/RoutineServices";
 import { uploadPhotosAsync } from "../../services/PhotoServices";
 import * as theme from "@material-ui/system";
 import { useHistory } from "react-router-dom";
-import AddToShelf from "./AddToShelf";
 //import ImageUpload from './ui/imge-upload/ImageUpload';
 
 const useStyles = makeStyles((theme) => ({
@@ -340,7 +339,6 @@ export default function Routine() {
         >
           <Typography>Add Product To Shelf</Typography>
         </Button>*/}
-        <AddToShelf/>
       </Grid>
       <Grid xs={12}>
         <Grid className={classes.test}>

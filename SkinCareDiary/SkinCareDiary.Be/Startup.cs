@@ -45,17 +45,17 @@ namespace SkinCareDiary.Be
                         .AllowAnyMethod();
                 });
             });
-            
+
             // settings
             services.Configure<JwtSettings>(Configuration.GetSection(nameof(JwtSettings)));
-            
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "SkinCareDiary.Be", Version = "v1"});
             });
-            
-            
+
+
             // JWT autentizace
             var jwtSettings = Configuration.GetSection("JwtSettings").Get<JwtSettings>();
             var encodedKey =
@@ -86,14 +86,15 @@ namespace SkinCareDiary.Be
                         };
                     }
                 );
-                
-            
+
+
             // dependency injection registrace
             services.AddScoped<ILoginHelper, LoginHelper>();
             services.AddScoped<IRoutineHelper, RoutineHelper>();
             services.AddScoped<IJwtHelper, JwtHelper>();
             services.AddScoped<IPhotoHelper, PhotoHelper>();
             services.AddScoped<IProductHelper, ProductHelper>();
+            services.AddScoped<ICalendarHelper, CalendarHelper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -115,7 +116,7 @@ namespace SkinCareDiary.Be
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
-            
+
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions()
             {

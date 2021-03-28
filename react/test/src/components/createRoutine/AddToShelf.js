@@ -1,3 +1,4 @@
+/*
 import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -132,6 +133,7 @@ export default function AddToShelf() {
           <DialogContentText>
             <Grid item xs={12} lg={12} className={classes.searchItem}>
               <Autocomplete
+                multiple
                 {...options}
                 getOptionLabel={(options) => options.name}
                 id="country-select-demo"
@@ -201,3 +203,4 @@ export default function AddToShelf() {
     </div>
   );
 }
+*/

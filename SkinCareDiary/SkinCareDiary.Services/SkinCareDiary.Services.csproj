@@ -11,6 +11,7 @@
     <ItemGroup>
       <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.3" />
       <PackageReference Include="Microsoft.AspNetCore.Cryptography.KeyDerivation" Version="5.0.3" />
+      <PackageReference Include="SharpZipLib.NETStandard" Version="1.0.7" />
     </ItemGroup>
 
 </Project>

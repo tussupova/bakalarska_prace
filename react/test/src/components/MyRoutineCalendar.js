@@ -83,6 +83,16 @@ export default function Routine() {
                   href="#contained-buttons" onClick={onClickCreateRoutine}>
             <Typography>Create Routine</Typography>
           </Button>
+          <Button
+
+            variant="contained"
+            color="primary"
+            href="#contained-buttons"
+            type="submit"
+
+          >
+            Export
+          </Button>
         </div>
       </Grid>
     </>

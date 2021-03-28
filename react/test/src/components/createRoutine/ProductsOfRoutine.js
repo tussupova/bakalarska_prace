@@ -5,99 +5,285 @@ import Grid from "@material-ui/core/Grid";
 import React from "react";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import makeAnimated from "react-select/animated/dist/react-select.esm";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+import TextField from "@material-ui/core/TextField";
+import {searchProducts} from "../../services/ShelfServices";
+import {Typography} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
-
+  option: {
+    fontSize: 15,
+    "& > span": {
+      marginRight: 10,
+      fontSize: 18,
+    },
+  },
   multiSelectGrid: {
-    borderColor: 'black',
+    borderColor: "black",
     /*width: theme.spacing(150),*/
     margin: theme.spacing(3),
     padding: theme.spacing(3),
-    border: '2px solid'
-
+    border: "2px solid",
   },
   multiSelectItem: {
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'row'
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+  },
+  optionIcon: {
+    maxWidth: theme.spacing(10),
+    maxHeight: theme.spacing(10),
+    margin: theme.spacing(1),
   },
   multiSelectInput: {
-    width: '80%',
-    padding: theme.spacing(2)
+    width: "80%",
   },
   multiSelectLabel: {
     width: theme.spacing(13),
     padding: theme.spacing(1),
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
   },
+
 }));
 export default function ProductsOfRoutine() {
   const classes = useStyles();
-  const options = [
-    {value: 'blues', label: 'Blues'},
-    {value: 'rock', label: 'Rock'},
-    {value: 'jazz', label: 'Jazz'},
-    {value: 'orchestra', label: 'Orchestra'},
-    {value: 'tom', label: 'Tom'},
-    {value: 'kymbat', label: 'Kymbat'},
-  ];
+  const [options, setOptions] = React.useState([]);
+  const [inputValue, setInputValue] = React.useState("");
+  const [selectedProduct, setSelectedProduct] = React.useState("");
+  const [open, setOpen] = React.useState(false);
+  const loading = open && options.length === 0;
+
+  const getSearchingProducts = async (chars) => {
+    try {
+      setInputValue(chars);
+      console.log("zacatek hledani", chars);
+      const foundedProducts = await searchProducts(inputValue);
+      console.log("vysledek", foundedProducts.data);
+      const pr = foundedProducts.data.map((e) => {
+        return {
+          name: e.brand + " " + e.name,
+          img: e.img,
+          id: e.id,
+        };
+      });
+      setOptions(pr);
+      console.log("pr", pr);
+    } catch (e) {
+      console.log(e, "Can not search product");
+    }
+  };
   const animatedComponents = makeAnimated();
   return (
     <Grid className={classes.multiSelectGrid} xs={12} lg={8}>
       <FormControl className={classes.multiSelectItem}>
-        <div>
-          <FormLabel className={classes.multiSelectLabel} component="legend">Cleansing</FormLabel></div>
-        <div className={classes.multiSelectInput}>
-          <MultiSelect
-            closeMenuOnSelect={false}
-            components={animatedComponents}
-            isMulti
+        <Grid item>
+          <FormLabel className={classes.multiSelectLabel} component="legend">
+            <Typography>Cleansing</Typography>
+          </FormLabel>
+        </Grid>
+        <Grid item xs={12} lg={12}>
+          <Autocomplete
+            multiple
+            {...options}
+            getOptionLabel={(options) => options.name}
             options={options}
-          /></div>
+            classes={{
+              option: classes.option,
+            }}
+            onChange={(event, value) => setSelectedProduct(value)}
+            onInputChange={(event, newInputValue) => {
+              getSearchingProducts(newInputValue);
+            }}
+            autoHighlight
+            renderOption={(options) => (
+              <React.Fragment>
+                {<img className={classes.optionIcon} src={options.img}/>}{" "}
+                {options.name}
+              </React.Fragment>
+            )}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Find products"
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                inputProps={{
+                  ...params.inputProps,
+                  // disable autocomplete and autofill
+                }}
+              />
+            )}
+          />
+        </Grid>
       </FormControl>
       <FormControl className={classes.multiSelectItem}>
-        <div>
-          <FormLabel className={classes.multiSelectLabel} component="legend">Treatment</FormLabel></div>
-        <div className={classes.multiSelectInput}>
-          <MultiSelect
-            closeMenuOnSelect={false}
-            components={animatedComponents}
-            isMulti
+        <Grid item>
+          <FormLabel className={classes.multiSelectLabel} component="legend">
+            <Typography> Treatment </Typography>
+          </FormLabel>
+        </Grid>
+        <Grid item xs={12} lg={12}>
+          <Autocomplete
+            multiple
+            {...options}
+            getOptionLabel={(options) => options.name}
             options={options}
-          /></div>
+            classes={{
+              option: classes.option,
+            }}
+            onChange={(event, value) => setSelectedProduct(value)}
+            onInputChange={(event, newInputValue) => {
+              getSearchingProducts(newInputValue);
+            }}
+            autoHighlight
+            renderOption={(options) => (
+              <React.Fragment>
+                {<img className={classes.optionIcon} src={options.img}/>}{" "}
+                {options.name}
+              </React.Fragment>
+            )}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Find products"
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                inputProps={{
+                  ...params.inputProps,
+                  // disable autocomplete and autofill
+                }}
+              />
+            )}
+          />
+        </Grid>
       </FormControl>
       <FormControl className={classes.multiSelectItem}>
-        <div>
-          <FormLabel className={classes.multiSelectLabel} component="legend">Moisturizer</FormLabel></div>
-        <div className={classes.multiSelectInput}>
-          <MultiSelect
-            closeMenuOnSelect={false}
-            components={animatedComponents}
-            isMulti
+        <Grid item>
+          <FormLabel className={classes.multiSelectLabel} component="legend">
+            <Typography> Moisturizer</Typography>
+          </FormLabel>
+        </Grid>
+        <Grid item xs={12} lg={12}>
+          <Autocomplete
+            multiple
+            {...options}
+            getOptionLabel={(options) => options.name}
             options={options}
-          /></div>
+            classes={{
+              option: classes.option,
+            }}
+            onChange={(event, value) => setSelectedProduct(value)}
+            onInputChange={(event, newInputValue) => {
+              getSearchingProducts(newInputValue);
+            }}
+            autoHighlight
+            renderOption={(options) => (
+              <React.Fragment>
+                {<img className={classes.optionIcon} src={options.img}/>}{" "}
+                {options.name}
+              </React.Fragment>
+            )}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Find products"
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                inputProps={{
+                  ...params.inputProps,
+                  // disable autocomplete and autofill
+                }}
+              />
+            )}
+          />
+        </Grid>
       </FormControl>
       <FormControl className={classes.multiSelectItem}>
-        <div>
-          <FormLabel className={classes.multiSelectLabel} component="legend">Sunscreen</FormLabel></div>
-        <div className={classes.multiSelectInput}>
-          <MultiSelect
-            closeMenuOnSelect={false}
-            components={animatedComponents}
-            isMulti
+        <Grid item>
+          <FormLabel className={classes.multiSelectLabel} component="legend">
+            <Typography>Sunscreen</Typography>
+          </FormLabel>
+        </Grid>
+        <Grid item xs={12} lg={12}>
+          <Autocomplete
+            multiple
+            {...options}
+            getOptionLabel={(options) => options.name}
             options={options}
-          /></div>
+            classes={{
+              option: classes.option,
+            }}
+            onChange={(event, value) => setSelectedProduct(value)}
+            onInputChange={(event, newInputValue) => {
+              getSearchingProducts(newInputValue);
+            }}
+            autoHighlight
+            renderOption={(options) => (
+              <React.Fragment>
+                {<img className={classes.optionIcon} src={options.img}/>}{" "}
+                {options.name}
+              </React.Fragment>
+            )}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Find products"
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                inputProps={{
+                  ...params.inputProps,
+                  // disable autocomplete and autofill
+                }}
+              />
+            )}
+          />
+        </Grid>
       </FormControl>
       <FormControl className={classes.multiSelectItem}>
-        <div>
-          <FormLabel className={classes.multiSelectLabel} component="legend">Other</FormLabel></div>
-        <div className={classes.multiSelectInput}>
-          <MultiSelect
-            closeMenuOnSelect={false}
-            components={animatedComponents}
-            isMulti
+        <Grid item>
+          <FormLabel className={classes.multiSelectLabel} component="legend">
+            <Typography> Other</Typography>
+          </FormLabel>
+        </Grid>
+        <Grid item xs={12} lg={12}>
+          <Autocomplete
+            multiple
+            {...options}
+            getOptionLabel={(options) => options.name}
             options={options}
-          /></div>
+            classes={{
+              option: classes.option,
+            }}
+            onChange={(event, value) => setSelectedProduct(value)}
+            onInputChange={(event, newInputValue) => {
+              getSearchingProducts(newInputValue);
+            }}
+            autoHighlight
+            renderOption={(options) => (
+              <React.Fragment>
+                {<img className={classes.optionIcon} src={options.img}/>}{" "}
+                {options.name}
+              </React.Fragment>
+            )}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Find products"
+                variant="outlined"
+                margin="normal"
+                fullWidth
+                inputProps={{
+                  ...params.inputProps,
+                  // disable autocomplete and autofill
+                }}
+              />
+            )}
+          />
+        </Grid>
       </FormControl>
     </Grid>
   );
