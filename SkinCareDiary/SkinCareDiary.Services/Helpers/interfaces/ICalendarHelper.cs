@@ -6,6 +6,9 @@ namespace SkinCareDiary.Services.Helpers
     public interface ICalendarHelper
     {
         List<ExportingData> ExportToExcel(int userId);
-        void SaveToZip();
+        List<DtoGetPhotos> GetPhotos(int userId);
+        byte[] GetZipArchive(List<DtoGetPhotos> files);
+        List<DtoGetUsersRoutine> RenderCalendar(int userId);
+
     }
 }

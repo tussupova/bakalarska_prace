@@ -9,6 +9,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 import {searchProducts} from "../../services/ShelfServices";
 import {Typography} from "@material-ui/core";
+import Paper from "@material-ui/core/Paper";
 
 const useStyles = makeStyles((theme) => ({
   option: {
@@ -19,11 +20,9 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   multiSelectGrid: {
-    borderColor: "black",
-    /*width: theme.spacing(150),*/
-    margin: theme.spacing(3),
     padding: theme.spacing(3),
-    border: "2px solid",
+    marginLeft:theme.spacing(5),
+
   },
   multiSelectItem: {
     width: "100%",
@@ -43,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     marginTop: theme.spacing(2),
   },
+  paper:{
+    padding: theme.spacing(4),
+  }
 
 }));
 export default function ProductsOfRoutine() {
@@ -75,6 +77,7 @@ export default function ProductsOfRoutine() {
   const animatedComponents = makeAnimated();
   return (
     <Grid className={classes.multiSelectGrid} xs={12} lg={8}>
+      <Paper className={classes.paper}>
       <FormControl className={classes.multiSelectItem}>
         <Grid item>
           <FormLabel className={classes.multiSelectLabel} component="legend">
@@ -285,6 +288,7 @@ export default function ProductsOfRoutine() {
           />
         </Grid>
       </FormControl>
+      </Paper>
     </Grid>
   );
 }

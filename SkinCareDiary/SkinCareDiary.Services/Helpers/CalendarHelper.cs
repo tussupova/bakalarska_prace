@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Security.Policy;
 using ICSharpCode.SharpZipLib.Zip;
@@ -14,11 +15,18 @@ namespace SkinCareDiary.Services.Helpers
 {
     public class CalendarHelper : ICalendarHelper
     {
+        private readonly IPhotoHelper _photoHelper;
+
+        public CalendarHelper(IPhotoHelper photoHelper)
+        {
+            _photoHelper = photoHelper;
+        }
+
         public List<ExportingData> ExportToExcel(int userId)
         {
             //2021-03-27 14:32:17.254000
             var data = new List<ExportingData>();
-            var dateTime = new DateTime(2021,3,27,14,32,17);
+            var dateTime = new DateTime(2021, 3, 27, 14, 32, 17);
             //27.03.2021  14:32:17
 
             using (var db = new RepositoryContext())
@@ -27,8 +35,8 @@ namespace SkinCareDiary.Services.Helpers
                     .Include(o => o.TypeOfRoutine)
                     .Include(o => o.Shelves)
                     .ThenInclude(o => o.AllProducts)
-                    .Include(o=>o.Indicators)
-                    .ThenInclude(o=>o.IndicatorType)
+                    .Include(o => o.Indicators)
+                    .ThenInclude(o => o.IndicatorType)
                     .Where(o => o.UserId == userId).ToList();
                 data = routines.Select(x => new ExportingData
                 {
@@ -59,48 +67,74 @@ namespace SkinCareDiary.Services.Helpers
                         x.Shelves.Where(o => o.ProductTypeId == 5)
                             .Select(o => $"{o.AllProducts.Brand} {o.AllProducts.Name}")
                     ),
-                    Stress = x.Indicators.Where(o=>o.IndicatorTypeId==2).Select(o=>o.Value),
-                    Water = x.Indicators.Where(o=>o.IndicatorTypeId==1).Select(o=>o.Value),
+                    Stress = x.Indicators.Where(o => o.IndicatorTypeId == 2).Select(o => o.Value),
+                    Water = x.Indicators.Where(o => o.IndicatorTypeId == 1).Select(o => o.Value),
                 }).ToList();
-                
-                
+
+
                 return data;
             }
         }
 
-        public void SaveToZip()
+        public List<DtoGetPhotos> GetPhotos(int userId)
         {
-            /*string DirectoryPath = "";
-            string[] filenames = Directory.GetFiles(DirectoryPath);
-            string OutputFilePath = "";
-
-            // 'using' statements guarantee the stream is closed properly which is a big source
-            // of problems otherwise.  Its exception safe as well which is great.
-            using (ZipOutputStream outputStream = new ZipOutputStream(System.IO.File.Create(OutputFilePath)))
+            using (var db = new RepositoryContext())
             {
-                outputStream.SetLevel(9);
-                byte[] buffer = new byte[4096];
-                var ImageList = new List<string>();
-                ImageList.Add("https://cdn.notinoimg.com/list_2k/eucerin/4005800264665_01-o__2.jpg");
-                ImageList.Add("https://cdn.notinoimg.com/list_2k/eucerin/4005800168376_01-o__15.jpg");
-                for (int i = 0; i < ImageList.Count; i++)
+                var photos = db.Routines
+                    .Include(o => o.Photos)
+                    .Where(o => o.UserId == userId)
+                    .SelectMany(o => o.Photos).ToList();
+
+                var dtoPhotos = new List<DtoGetPhotos>();
+                foreach (var photo in photos)
                 {
-                    ZipEntry entry = new ZipEntry(Path.GetFileName(ImageList[i]));
-                    entry.DateTime = DateTime.Now;
-                    entry.IsUnicodeText = true;
-                    outputStream.PutNextEntry(entry);
-                    using (FileStream oFileStream = System.IO.File.OpenRead(ImageList[i]))
+                    var x = _photoHelper.GetPhotosFromId(photo.Id);
+                    dtoPhotos.Add(x);
+                }
+
+                return dtoPhotos;
+            }
+        }
+
+        public byte[] GetZipArchive(List<DtoGetPhotos> files)
+        {
+            byte[] archiveFile;
+            using (var archiveStream = new MemoryStream())
+            {
+                using (var archive = new ZipArchive(archiveStream, ZipArchiveMode.Create, true))
+                {
+                    foreach (var file in files)
                     {
-                        int sourceByte;
-                        do
-                        {
-                            sourceByte = oFileStream.Read(buffer, 0, buffer.Length);
-                            outputStream.Write(buffer, 0, sourceByte);
-                        } while (sourceByte > 0);
+                        var zipArchiveEntry = archive.CreateEntry(file.Name, CompressionLevel.Fastest);
+                        using (var zipStream = zipArchiveEntry.Open())
+                            zipStream.Write(file.Data, 0, file.Data.Length);
                     }
                 }
+
+                archiveFile = archiveStream.ToArray();
+            }
+
+            return archiveFile;
+        }
+
+        public List<DtoGetUsersRoutine> RenderCalendar(int userId)
+        {
+            var calendarRoutines = new List<DtoGetUsersRoutine>();
+            using (var db = new RepositoryContext())
+            {
+                var routines = db.Routines.Include(o => o.TypeOfRoutine)
+                    .Include(o=>o.RoutineDate)
+                    .Where(o => o.UserId == userId).ToList();
                 
-            }*/
+                calendarRoutines = routines.Select(x => new DtoGetUsersRoutine
+                {
+                    RoutineType = x.TypeOfRoutine.Name,
+                    RoutineId = x.Id,
+                    Date = x.RoutineDate.Start,
+                }).ToList();
+
+                return calendarRoutines;
+            }
         }
     }
 }

@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using ClosedXML.Excel;
 using Microsoft.AspNetCore.Mvc;
 using SkinCareDiary.Services.Helpers;
+using SkinCareDiary.Services.Models;
 
 namespace SkinCareDiary.Be.Controllers
 {
@@ -40,21 +42,8 @@ namespace SkinCareDiary.Be.Controllers
                     worksheet.Cell(1,6 ).Value = "Sunscreen";
                     worksheet.Cell(1,7 ).Value = "Other Products";
                     worksheet.Cell(1,8 ).Value = "Stress";
-                    /*
-                    worksheet.Cell(1,9 ).Value = "Water";
-                    worksheet.Cell(1,10 ).Value = "Go to Sleep";
-                    worksheet.Cell(1,11 ).Value = "Wake up";
-                    worksheet.Cell(1,12 ).Value = "Note";*/
-
+  
                     var myList = _calendarHelper.ExportToExcel(3);
-                    
-                    /*worksheet.Cell(2, 1).Value = "aaa";*/
-                    /*foreach (var user in users)
-                    {
-                        currentRow++;
-                        worksheet.Cell(currentRow, 1).Value = user.Id;
-                        worksheet.Cell(currentRow, 2).Value = user.Username;
-                    }*/
                     var row = 1;
                     foreach (var i in myList)
                     {
@@ -83,5 +72,21 @@ namespace SkinCareDiary.Be.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpPost("exportImages")]
+        public IActionResult ExportUsersImageToZip()
+        {
+            var x = _calendarHelper.GetPhotos(3);
+           
+            return new FileContentResult( _calendarHelper.GetZipArchive(x), "application/zip") { FileDownloadName = "Photos.zip" };
+            
+        }
+
+        [HttpGet("getRoutines")]
+        public List<DtoGetUsersRoutine> GetUsersRoutine()
+        {
+            return _calendarHelper.RenderCalendar(3);
+        }
+        
     }
 }

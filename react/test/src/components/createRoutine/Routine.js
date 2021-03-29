@@ -48,6 +48,8 @@ const useStyles = makeStyles((theme) => ({
   },
   actionGrid: {
     flexDirection: "row",
+    paddingLeft: theme.spacing(6),
+    paddingTop: theme.spacing(3),
     [theme.breakpoints.down("xs")]: {
       flexDirection: "column",
       alignContent: "center",
@@ -71,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(2),
   },
   marginAll: {
-    margin: theme.spacing(3),
+    paddingLeft: theme.spacing(5),
     backgroundColor: theme.palette.success.main,
     color: theme.palette.primary.contrastText,
   },
@@ -331,14 +333,6 @@ export default function Routine() {
             console.log(dayOfWeek);
           }}
         />
-{/*        <Button
-          className={classes.marginAll}
-          variant="contained"
-          href="#contained-buttons"
-          onClick={()=>{openAddProductDialog()}}
-        >
-          <Typography>Add Product To Shelf</Typography>
-        </Button>*/}
       </Grid>
       <Grid xs={12}>
         <Grid className={classes.test}>
