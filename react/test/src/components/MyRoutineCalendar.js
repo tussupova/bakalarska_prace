@@ -61,20 +61,6 @@ export default function Routine() {
     history.push('/create-routine');
   }
   const [event, setEvent] = React.useState([]);
-  const events = [
-    {
-      id: 0,
-      title: 'Board meeting',
-      start: new Date(2021, 2, 29, 0, 0, 0),
-      end: new Date(2021, 2, 29, 8, 0, 0),
-
-    }, {
-      id: 1,
-      title: 'Other',
-      start: new Date(2021, 2, 29, 16, 0, 0),
-      end: new Date(2021, 2, 29, 23, 59, 0),
-
-    },]
 
   const getRoutines = async () => {
     try {
@@ -140,6 +126,8 @@ export default function Routine() {
             timeslots={3}
             events={event}
             onSelectEvent={event => alert(event.title)}
+            label={event.title}
+
 
             formats={{
               timeGutterFormat: (date, culture, localizer) => {

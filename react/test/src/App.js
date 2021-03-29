@@ -3,12 +3,10 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import DateFnsUtils from "@date-io/date-fns";
 import {Router} from "./components/Router";
+import "./App.css"
 
 
 class App extends React.Component {
-  state = {
-    name: 'Tom'
-  }
 
   render() {
     return (
