@@ -4,16 +4,31 @@ import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import DateFnsUtils from "@date-io/date-fns";
 import {Router} from "./components/Router";
 import "./App.css"
+import { createMuiTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/styles';
 
 
+const theme = createMuiTheme({
+  //theme.palette.success.main,
+  palette: {
+    primary: {
+      main: '#4C779E'
+    },
+    success:{
+      main: '#91D75F'
+    }
+  }
+});
 class App extends React.Component {
 
   render() {
     return (
+      <ThemeProvider theme={theme}>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <CssBaseline/>
         <Router/>
       </MuiPickersUtilsProvider>
+      </ThemeProvider>
     );
   }
 }

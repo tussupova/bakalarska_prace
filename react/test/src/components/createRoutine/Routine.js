@@ -48,11 +48,12 @@ const useStyles = makeStyles((theme) => ({
   },
   actionGrid: {
     flexDirection: "row",
-    paddingLeft: theme.spacing(6),
+    paddingLeft: theme.spacing(11),
     paddingTop: theme.spacing(3),
     [theme.breakpoints.down("xs")]: {
       flexDirection: "column",
       alignContent: "center",
+      paddingLeft: theme.spacing(0),
     },
   },
   selectDateCalendar: {
@@ -72,6 +73,10 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
     marginLeft: theme.spacing(2),
   },
+  saveColor:{
+    backgroundColor: theme.palette.success.main,
+    color: theme.palette.primary.contrastText,
+  },
   marginAll: {
     paddingLeft: theme.spacing(5),
     backgroundColor: theme.palette.success.main,
@@ -86,9 +91,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 150,
   },
   test: {
-    display: "flex",
     flexDirection: "row",
-    justifyContent: "space-between",
     [theme.breakpoints.down("xs")]: {
       flexDirection: "column",
     },
@@ -245,7 +248,8 @@ export default function Routine() {
         </Grid>
         <Grid item className={classes.root} item xs={12} sm={6} container>
           <Button
-            className={classes.menuButton}
+            //`${this.state.className} ${this.props.content.divClassName}`
+            className={`${classes.menuButton} ${classes.saveColor}`}
             variant="contained"
             color="primary"
             href="#contained-buttons"
@@ -335,7 +339,7 @@ export default function Routine() {
         />
       </Grid>
       <Grid xs={12}>
-        <Grid className={classes.test}>
+        <Grid container className={classes.test}>
           <ProductsOfRoutine />
           <Indicator
             value={indicator}
@@ -365,17 +369,16 @@ export default function Routine() {
             }}
           />
         </Grid>
-
+{/*
         <div> tady je voda{Number(indicator.Water)}</div>
         <div>je to stress {indicator.Stress}</div>
         <div>je to cas{indicator.GoToSleep}</div>
         <div>je to cas spani{indicator.WakeUp}</div>
         <div>pocet tydnu je {repeater.AmountOfWeek}</div>
         <div>konec je {String(repeater.EndDate)}</div>
-        <div>poznamka je {noteAndPhoto.Note}</div>
+        <div>poznamka je {noteAndPhoto.Note}</div>*/}
 
-        {/*<div>foto {noteAndPhoto.Photos}</div>*/}
-
+      <Grid container>
         <NoteAndPhotos
           value={noteAndPhoto}
           onChanngeNote={(event) =>
@@ -387,6 +390,7 @@ export default function Routine() {
 
           }}
         />
+      </Grid>
       </Grid>
     </>
   );

@@ -19,10 +19,13 @@ const useStyles = makeStyles((theme) => ({
 
 
   paper: {
-    width: '90%',
+    width: '98%',
     padding: theme.spacing(2),
     textAlign: 'center',
     color: theme.palette.text.secondary,
+    [theme.breakpoints.down("xs")]: {
+      width: '90%',
+    },
   },
   iconSize: {
     fontSize: theme.spacing(4),
@@ -67,7 +70,7 @@ export default function Indicator(props) {
   const classes = useStyles();
 
   return (
-    <Grid container className={classes.mainGrid} xs={12} lg={6}>
+    <Grid container className={classes.mainGrid} xs={12} lg={4}>
       <Grid item>
         <Paper className={classes.paper}>
           <div>

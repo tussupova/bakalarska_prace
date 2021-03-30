@@ -10,8 +10,12 @@ import { Typography } from "@material-ui/core";
 const useStyles = makeStyles((theme) => ({
   photoAndNoteGrid: {
     borderColor: "black",
-    margin: theme.spacing(3),
-    padding: theme.spacing(3),
+    margin: theme.spacing(10),
+    [theme.breakpoints.down("xs")]: {
+      margin: theme.spacing(0),
+
+    },
+
   },
   note: {
     width: "100%",
@@ -32,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
 export default function NoteAndPhotos(props) {
   const classes = useStyles();
   return (
-    <Grid className={classes.photoAndNoteGrid} xs={12} lg={12}>
+    <Grid container className={classes.photoAndNoteGrid} xs={12} lg={12}>
       <DropzoneArea
         className={classes.dropText}
         acceptedFiles={["image/*"]}

@@ -21,8 +21,10 @@ const useStyles = makeStyles((theme) => ({
   },
   multiSelectGrid: {
     padding: theme.spacing(3),
-    marginLeft:theme.spacing(5),
-
+    marginLeft:theme.spacing(6),
+    [theme.breakpoints.down("xs")]: {
+      marginLeft: theme.spacing(0),
+    },
   },
   multiSelectItem: {
     width: "100%",
@@ -76,7 +78,7 @@ export default function ProductsOfRoutine() {
   };
   const animatedComponents = makeAnimated();
   return (
-    <Grid className={classes.multiSelectGrid} xs={12} lg={8}>
+    <Grid className={classes.multiSelectGrid} xs={12} lg={7}>
       <Paper className={classes.paper}>
       <FormControl className={classes.multiSelectItem}>
         <Grid item>

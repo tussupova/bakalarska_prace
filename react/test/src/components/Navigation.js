@@ -51,6 +51,9 @@ export default function Navigation() {
   const onClickMyAccount=()=>{
     history.push('/user')
   }
+  const onClickHome=()=>{
+    history.push('/home')
+  }
 
   return (
     <div className={classes.root}>
@@ -58,7 +61,7 @@ export default function Navigation() {
         <Toolbar>
           <div style={{width: '100%'}}>
             <Box display="flex" p={1}>
-              <Box p={1} flexGrow={1}>
+              <Box p={1} flexGrow={1}  onClick={onClickHome}>
                 LOGO
               </Box>
               <Button className={classes.menuButton} color="inherit" p={1} onClick={onClickRoutine}>

@@ -10,7 +10,6 @@ import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
 import CardActionArea from "@material-ui/core/CardActionArea";
 
-
 const useStyles = makeStyles((theme) => ({
   mainGrid: {
     justifyContent: "space-evenly",
@@ -27,14 +26,17 @@ const useStyles = makeStyles((theme) => ({
   actualitiesGrid: {
     flexDirection: "column",
   },
-  articlesGrid:{
+  articlesGrid: {
     flexDirection: "row",
-    justifyContent: "space-evenly"
+    justifyContent: "space-evenly",
   },
   root: {
-    maxWidth: theme.spacing(45),
-    marginBottom: theme.spacing(3)
-
+    maxWidth: theme.spacing(52),
+    marginBottom: theme.spacing(3),
+    //for phone
+    [theme.breakpoints.down("xs")]: {
+      maxWidth: theme.spacing(35),
+    },
   },
   media: {
     height: 140,
@@ -89,7 +91,12 @@ export default function Home() {
             <h2>Actualities</h2>
           </Typography>
         </Grid>
-        <Grid container alignItems="center" justify="center" className={classes.articlesGrid}>
+        <Grid
+          container
+          alignItems="center"
+          justify="center"
+          className={classes.articlesGrid}
+        >
           <Grid item>
             <Card className={classes.root}>
               <CardActionArea>
@@ -102,10 +109,14 @@ export default function Home() {
                   <Typography gutterBottom variant="h5" component="h2">
                     Lorem Ipsum
                   </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p">
-                    Lorem Ipsum is simply dummy text of the printing
-                    and typesetting industry. Lorem Ipsum has been the
-                    industry's standard dummy text ever since the 1500s,
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    component="p"
+                  >
+                    Lorem Ipsum is simply dummy text of the printing and
+                    typesetting industry. Lorem Ipsum has been the industry's
+                    standard dummy text ever since the 1500s,
                   </Typography>
                 </CardContent>
               </CardActionArea>
@@ -128,10 +139,14 @@ export default function Home() {
                   <Typography gutterBottom variant="h5" component="h2">
                     Lorem Ipsum
                   </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p">
-                    Lorem Ipsum is simply dummy text of the printing
-                    and typesetting industry. Lorem Ipsum has been the
-                    industry's standard dummy text ever since the 1500s,
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    component="p"
+                  >
+                    Lorem Ipsum is simply dummy text of the printing and
+                    typesetting industry. Lorem Ipsum has been the industry's
+                    standard dummy text ever since the 1500s,
                   </Typography>
                 </CardContent>
               </CardActionArea>
@@ -154,10 +169,14 @@ export default function Home() {
                   <Typography gutterBottom variant="h5" component="h2">
                     Lorem Ipsum
                   </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p">
-                    Lorem Ipsum is simply dummy text of the printing
-                    and typesetting industry. Lorem Ipsum has been the
-                    industry's standard dummy text ever since the 1500s,
+                  <Typography
+                    variant="body2"
+                    color="textSecondary"
+                    component="p"
+                  >
+                    Lorem Ipsum is simply dummy text of the printing and
+                    typesetting industry. Lorem Ipsum has been the industry's
+                    standard dummy text ever since the 1500s,
                   </Typography>
                 </CardContent>
               </CardActionArea>
