@@ -50,7 +50,6 @@ export default function Album() {
   const [photosWithTitle, setPhotosWithTitle] = useState([]);
 
   useEffect(() => {
-    // vola se vzdycky pri renderovani a pouze jednou
     getInfo();
   }, []);
   const getInfo = async () => {

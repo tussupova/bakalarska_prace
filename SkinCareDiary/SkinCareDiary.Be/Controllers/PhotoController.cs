@@ -87,7 +87,13 @@ namespace SkinCareDiary.Be.Controllers
         [HttpGet("getPhotosInfo/{routineId}")]
         public List<DtoPhotosInfo> GetPhotosInfo(int routineId)
         {
-            return _photoHelper.GetPhotosInfo(routineId);
+            if (User.Identity != null)
+            {
+                var userId = int.Parse(User.Identity.Name ?? throw new InvalidOperationException());
+                return _photoHelper.GetPhotosInfo(userId);
+            }
+
+            return null;
         }
     }
 }

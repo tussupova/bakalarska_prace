@@ -10,6 +10,7 @@ import TextField from "@material-ui/core/TextField";
 import {searchProducts} from "../../services/ShelfServices";
 import {Typography} from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
+import RadioGroup from "@material-ui/core/RadioGroup";
 
 const useStyles = makeStyles((theme) => ({
   option: {
@@ -49,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
   }
 
 }));
-export default function ProductsOfRoutine() {
+export default function ProductsOfRoutine(props) {
   const classes = useStyles();
   const [options, setOptions] = React.useState([]);
   const [inputValue, setInputValue] = React.useState("");
@@ -77,6 +78,10 @@ export default function ProductsOfRoutine() {
     }
   };
   const animatedComponents = makeAnimated();
+  const testFun=(value)=>{
+    setSelectedProduct(value)
+    console.log('selected', selectedProduct)
+  }
   return (
     <Grid className={classes.multiSelectGrid} xs={12} lg={7}>
       <Paper className={classes.paper}>
@@ -95,7 +100,8 @@ export default function ProductsOfRoutine() {
             classes={{
               option: classes.option,
             }}
-            onChange={(event, value) => setSelectedProduct(value)}
+            //onChange={props.onChange}
+            onChange={ (event, value) => props.onChangeCleanser(event, value) }
             onInputChange={(event, newInputValue) => {
               getSearchingProducts(newInputValue);
             }}
@@ -137,7 +143,7 @@ export default function ProductsOfRoutine() {
             classes={{
               option: classes.option,
             }}
-            onChange={(event, value) => setSelectedProduct(value)}
+            onChange={(event, value) => props.onChangeTreatment(event, value)}
             onInputChange={(event, newInputValue) => {
               getSearchingProducts(newInputValue);
             }}
@@ -179,7 +185,7 @@ export default function ProductsOfRoutine() {
             classes={{
               option: classes.option,
             }}
-            onChange={(event, value) => setSelectedProduct(value)}
+            onChange={(event, value) => props.onChangeMoisturizer(event, value)}
             onInputChange={(event, newInputValue) => {
               getSearchingProducts(newInputValue);
             }}
@@ -221,7 +227,7 @@ export default function ProductsOfRoutine() {
             classes={{
               option: classes.option,
             }}
-            onChange={(event, value) => setSelectedProduct(value)}
+            onChange={(event, value) => props.onChangeSunscreen(event, value)}
             onInputChange={(event, newInputValue) => {
               getSearchingProducts(newInputValue);
             }}
@@ -263,7 +269,7 @@ export default function ProductsOfRoutine() {
             classes={{
               option: classes.option,
             }}
-            onChange={(event, value) => setSelectedProduct(value)}
+            onChange={(event, value) => props.onChangeOther(event, value)}
             onInputChange={(event, newInputValue) => {
               getSearchingProducts(newInputValue);
             }}

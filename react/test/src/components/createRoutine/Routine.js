@@ -123,7 +123,13 @@ export default function Routine() {
     GoToSleep: null,
     WakeUp: null,
   });
-
+  const[prod, setProd]=useState({
+    Cleanser: [],
+    Treatment: [],
+    Moisturizer: [],
+    Sunscreen: [],
+    Other: []
+  })
   const [repeater, setRepeater] = useState({
     AmountOfWeek: "",
     EndDate: null,
@@ -171,7 +177,6 @@ export default function Routine() {
   const createRoutine = async () => {
     try {
       console.log(indicator, repeater);
-
       const response = await createRoutineAsync({
         routineType: routineType,
         note: noteAndPhoto.Note,
@@ -190,6 +195,11 @@ export default function Routine() {
           ? new Date(repeater.EndDate).toISOString()
           : null,
         dayOfWeek: dayOfWeek,
+        cleanser: prod.Cleanser,
+        treatment: prod.Treatment,
+        moisturizer: prod.Moisturizer,
+        sunscreen: prod.Sunscreen,
+        other: prod.Other
       });
       await sendPhoto(response.data);
       alertClick();
@@ -213,6 +223,11 @@ export default function Routine() {
 
   function handleClick(event) {
     history.push("/my-routine");
+  }
+  const testXX=(event, value)=>{
+
+    console.log('ALL PROD', prod)
+    console.log('Cleanser Id', prod.Cleanser[0])
   }
 
   function openAddProductDialog() {}
@@ -342,7 +357,46 @@ export default function Routine() {
       </Grid>
       <Grid xs={12}>
         <Grid container className={classes.test}>
-          <ProductsOfRoutine />
+          <ProductsOfRoutine
+            onChangeCleanser={(event, value)=>{
+              testXX(event, value);
+              setProd({
+                ...prod,
+                Cleanser: value
+              })
+
+            }}
+            onChangeTreatment={(event, value)=>{
+              testXX(event, value);
+              setProd({
+                ...prod,
+                Treatment: value
+              })
+            }}
+            onChangeMoisturizer={(event, value)=>{
+              testXX(event, value);
+              setProd({
+                ...prod,
+                Moisturizer: value
+              })
+            }}
+            onChangeSunscreen={(event, value)=>{
+              testXX(event, value);
+              setProd({
+                ...prod,
+                Sunscreen: value
+              })
+            }}
+            onChangeOther={(event, value)=>{
+              testXX(event, value);
+              setProd({
+                ...prod,
+                Other: value
+              })
+            }}
+
+
+          />
           <Indicator
             value={indicator}
             onChange={(event) => {

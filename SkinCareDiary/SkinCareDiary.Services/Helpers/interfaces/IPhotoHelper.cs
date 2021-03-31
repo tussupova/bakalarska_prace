@@ -9,6 +9,6 @@ namespace SkinCareDiary.Services.Helpers
         void UploadPhotos(string originalName, string newName, int routineId, DateTime date);
 
         DtoGetPhotos GetPhotosFromId(int photoId);
-        public List<DtoPhotosInfo> GetPhotosInfo(int routineId);
+        public List<DtoPhotosInfo> GetPhotosInfo(int userId);
     }
 }

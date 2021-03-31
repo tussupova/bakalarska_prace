@@ -12,6 +12,11 @@ export function createRoutineAsync({
   amountOfWeek,
   routineEndDate,
   dayOfWeek,
+  cleanser,
+  treatment,
+  moisturizer,
+  sunscreen,
+  other
 }) {
   return axios.post(
     "https://localhost:5001/routine/createRoutine",
@@ -27,6 +32,11 @@ export function createRoutineAsync({
       amountOfWeek,
       routineEndDate,
       dayOfWeek,
+      cleanser,
+      treatment,
+      moisturizer,
+      sunscreen,
+      other
     },
     {
       headers: {

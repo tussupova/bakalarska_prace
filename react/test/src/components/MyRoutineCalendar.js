@@ -175,7 +175,7 @@ export default function Routine() {
             <Typography>Create Routine</Typography>
           </Button>
           <Button
-            color="primary"
+            color="secondary"
             className={classes.exportButton}
             variant="contained"
             href="#contained-buttons"
@@ -195,7 +195,7 @@ export default function Routine() {
             label={event.title}
             eventPropGetter={(event) => ({
               style: {
-                backgroundColor: "#F4966C",
+                backgroundColor: "#FE7960",
                 border: "none",
               },
             })}

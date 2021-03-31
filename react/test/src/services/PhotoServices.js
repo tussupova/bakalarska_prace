@@ -25,11 +25,7 @@ export function downloadPhotosInfoAsync() {
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       },
-    } /*{
-    params:{
-      routineId: 3
     }
-  }*/
   );
 }
 //todo change photo id

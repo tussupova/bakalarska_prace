@@ -31,19 +31,45 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
   },
   productIcon: {
-    maxHeight: theme.spacing(25),
-    marginLeft: theme.spacing(4),
-    marginRight: theme.spacing(4),
-    maxWidth: theme.spacing(25)
+    maxHeight: theme.spacing(20),
+    marginLeft: theme.spacing(3),
+    marginRight: theme.spacing(3),
+    maxWidth: theme.spacing(20)
   },
+  iconDelete:{
+    padding:theme.spacing(4),
 
+    [theme.breakpoints.down("xs")]: {
+      padding:theme.spacing(3),
+
+    },
+  },
+  productsItem:{
+    flexDirection: "row",
+    padding: theme.spacing(6),
+    [theme.breakpoints.down("xs")]: {
+      flexDirection: "column",
+    },
+  },
+  itemText: {
+    maxWidth: theme.spacing(30),
+    [theme.breakpoints.down("xs")]: {
+      maxWidth: theme.spacing(20),
+    },
+  },
+  gridItemProduct:{
+    padding:theme.spacing(2)
+  },
+  title:{
+    paddingTop: theme.spacing(5)
+  }
 
 }));
 
 
 export default function Shelf() {
   const [products, setProducts] = React.useState([])
-  const [dense, setDense] = React.useState(false);
+  const [dense, setDense] = React.useState(true);
 
   const getProducts = async () => {
     try {
@@ -81,15 +107,20 @@ export default function Shelf() {
 
 
   return (
-    <Grid container>
-      <Grid item xs={12} md={6} className={classes.productItem}>
-        <Typography variant="h6" className={classes.title}>
-          Avatar with text and icon
+    <Grid container direction="column"
+          alignItems="center"
+          justify="center">
+      <Grid item>
+        <Typography variant="h4" className={classes.title} >
+          My Shelf
         </Typography>
-        <div className={classes.listClass}>
-          <List dense={dense}>
+      </Grid>
+
+          <List  dense={dense}>
+            <Grid container className={classes.productsItem} >
             {products.map((list) => {
               return (
+                <Grid item xs="12" lg="4" sm="4" className={classes.gridItemProduct}>
                 <ListItem>
                   <ListItemAvatar>
                     <img className={classes.productIcon} src={list.img}/>
@@ -97,18 +128,20 @@ export default function Shelf() {
                   <ListItemText
                     primary={list.name}
                     secondary={list.brand}
+                    className={classes.itemText}
                   />
                   <ListItemSecondaryAction>
-                    <IconButton edge="end" aria-label="delete">
+                    <IconButton edge="end" aria-label="delete" className={classes.iconDelete}>
                       <DeleteIcon onClick={() => deleteProduct(list.id)}/>
                     </IconButton>
                   </ListItemSecondaryAction>
                 </ListItem>
+                </Grid>
               )
             })}
+            </Grid>
           </List>
-        </div>
-      </Grid>
+
     </Grid>
   );
 }

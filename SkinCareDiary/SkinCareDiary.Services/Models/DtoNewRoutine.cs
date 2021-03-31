@@ -16,6 +16,12 @@ namespace SkinCareDiary.Services.Models
         public DateTime? RoutineEndDate { get; set; }
         public Dictionary<string, bool> DayOfWeek { get; set; }
         public int AmountOfWeek { get; set; }
+        
+        public List<DtoProductsFromNewRoutine> Cleanser { get; set; }
+        public List<DtoProductsFromNewRoutine> Treatment { get; set; }
+        public List<DtoProductsFromNewRoutine> Moisturizer { get; set; }
+        public List<DtoProductsFromNewRoutine> SunScreen { get; set; }
+        public List<DtoProductsFromNewRoutine> Other { get; set; }
 
     }
 }
