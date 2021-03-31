@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using SkinCareDiary.Database.DB;
 using SkinCareDiary.Services.Models;
 
@@ -66,15 +67,40 @@ namespace SkinCareDiary.Services.Helpers
                 newRoutine.Indicators.Add(waterIndicator);
                 newRoutine.Indicators.Add(stressIndicator);
                 newRoutine.Indicators.Add(sleepingIndicator);
-                
-
                 context.Routines.Add(newRoutine);
                 context.SaveChanges();
+                AddProduct(routine.Cleanser, 1, newRoutine.Id);
+                AddProduct(routine.Treatment, 2, newRoutine.Id);
+                AddProduct(routine.Moisturizer, 3, newRoutine.Id);
+                AddProduct(routine.SunScreen, 4, newRoutine.Id);
+                AddProduct(routine.Other, 5, newRoutine.Id);
                 return newRoutine.Id;
+                
             }
         }
 
- 
+        public void AddProduct(List<DtoProductsFromNewRoutine> products, int productTypeId, int routineId)
+        {
+            if (products == null) return;
+            using (var db = new RepositoryContext())
+            {
+                foreach (var product in products)
+                {
+                    var x = db.Shelves.Where(o => o.AllProductsId == product.Id).Any();
+                    if (!x)
+                    {
+                        var newProduct = new Shelf();
+                        newProduct.AllProductsId = product.Id;
+                        newProduct.RoutineId = routineId;
+                        newProduct.ProductTypeId = productTypeId;
+                        db.Shelves.Add(newProduct);
+                        db.SaveChanges();
+                    }
+
+                }
+            }
+        }
+
 
         public DtoNewRoutine MapRoutineToDtoCreateRoutine(Routine routine)
         {

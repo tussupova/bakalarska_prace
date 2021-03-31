@@ -12,5 +12,6 @@ namespace SkinCareDiary.Services.Helpers
         List<DtoGetUsersProduct> SearchProducts(string chars);
 
         bool AddProductToShelf(DtoNewProductToShelf products);
+        
     }
 }

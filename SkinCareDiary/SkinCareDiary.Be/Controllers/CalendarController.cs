@@ -22,13 +22,14 @@ namespace SkinCareDiary.Be.Controllers
         [HttpPost("exportData")]
         public IActionResult ExportUsersData()
         {
-            if (User.Identity != null)
-            {
-                var userId = int.Parse(User.Identity.Name ?? throw new InvalidOperationException());
-            
+            /*if (User.Identity == null)
+            {*/
+                //var userId = int.Parse(User.Identity.Name ?? throw new InvalidOperationException());
+                //userId = 4;
 
                 try
                 {
+                    var userId = 4;
                     using (var workbook = new XLWorkbook())
                     {
                         IXLWorksheet worksheet = workbook.Worksheets.Add("Routine");
@@ -60,9 +61,14 @@ namespace SkinCareDiary.Be.Controllers
                         {
                             workbook.SaveAs(stream);
                             var content = stream.ToArray();
-                            return File(content,
+                            /*return File(content,
                                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                                "routine.xlsx");
+                                "routine.xlsx");*/
+                            
+                            var x = _calendarHelper.GetPhotos(userId);
+           
+                            return new FileContentResult( _calendarHelper.GetZipArchive(x, stream), "application/zip") { FileDownloadName = "Photos.zip" };
+
                         }
                     }
                 }
@@ -70,7 +76,7 @@ namespace SkinCareDiary.Be.Controllers
                 {
                     return BadRequest();
                 }
-            }
+            
 
             return BadRequest();
         }
@@ -83,8 +89,8 @@ namespace SkinCareDiary.Be.Controllers
 
             var x = _calendarHelper.GetPhotos(id);
            
-            return new FileContentResult( _calendarHelper.GetZipArchive(x), "application/zip") { FileDownloadName = "Photos.zip" };
-
+            //return new FileContentResult( _calendarHelper.GetZipArchive(x), "application/zip") { FileDownloadName = "Photos.zip" };
+            return Ok(1);
         }
 
         [HttpGet("getRoutines")]

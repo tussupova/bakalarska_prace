@@ -7,7 +7,7 @@ import { Button, Typography } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import { sendData } from "../services/UserServices";
 import { useHistory } from "react-router-dom";
-import { getUsersRoutine } from "../services/CalendarServices";
+import {exportData, getUsersRoutine} from "../services/CalendarServices";
 
 BigCalendar.momentLocalizer(moment);
 /*
@@ -74,7 +74,14 @@ export default function Routine() {
     history.push("/create-routine");
   };
   const [event, setEvent] = React.useState([]);
+const exportUsersData=async ()=>{
+  try {
+    const res=await exportData();
 
+  }catch (e) {
+    console.log("Export error", e)
+  }
+}
   const getRoutines = async () => {
     try {
       debugger
@@ -179,9 +186,10 @@ export default function Routine() {
             className={classes.exportButton}
             variant="contained"
             href="#contained-buttons"
-            onClick={onClickCreateRoutine}
+            onClick={exportUsersData}
           >
             <Typography>Export</Typography>
+
           </Button>
         </Grid>
         <Grid item className={classes.calendarGrid}>
