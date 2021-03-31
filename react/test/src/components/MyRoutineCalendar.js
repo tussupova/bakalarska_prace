@@ -77,14 +77,8 @@ export default function Routine() {
 
   const getRoutines = async () => {
     try {
-      //27.03.2021 20:28:14
-      //Mon Mar 29 2021 16:00:00 GMT+0200 (Středoevropský letní čas)
+      debugger
       const res = await getUsersRoutine();
-      console.log("Calendar ", res.data);
-      var a = res.data[1].date;
-      var b = new Date(a);
-      var test = new Date(b.getFullYear(), b.getMonth(), b.getDate(), 0, 0, 0);
-      console.log("------", test);
       const x = res.data.map((e) => {
         console.log(e.routineType);
         if (e.routineType === "Morning") {
@@ -110,6 +104,7 @@ export default function Routine() {
             ),
           };
         } else if (e.routineType === "Evening") {
+
           var evening = new Date(e.date);
           return {
             id: e.routineId,

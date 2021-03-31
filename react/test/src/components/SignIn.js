@@ -77,6 +77,9 @@ export default function SignIn() {
       setPasswordVisibility('password')
     }
   }
+  const openSignUp=()=>{
+    history.push('/sign-up')
+  }
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline/>
@@ -136,7 +139,7 @@ export default function SignIn() {
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="#" variant="body2" onClick={openSignUp}>
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>

@@ -1,12 +1,13 @@
 import axios from "axios";
 
-export function uploadPhotosAsync(photos) {
+export function uploadPhotosAsync(photos, {routineId}) {
   const formData = new FormData();
   for (const f of photos.photos) {
     formData.append("files", f);
   }
+  debugger
   //todo change routineId
-  formData.append("routineId", 7);
+  formData.append("routineId", routineId);
   formData.append("date", new Date().toISOString());
   const config = {
     headers: {
@@ -20,7 +21,7 @@ export function uploadPhotosAsync(photos) {
 //todo change routine ID
 export function downloadPhotosInfoAsync() {
   return axios.get(
-    "https://localhost:5001/photo/getPhotosInfo/7",{
+    "https://localhost:5001/photo/getPhotosInfo/9",{
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       },

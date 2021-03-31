@@ -105,6 +105,9 @@ export default function SignUp() {
   const [emailError, setEmailError]= useState('');
 
   const history = useHistory()
+  const openSignIn=()=>{
+    history.push('/sign-in')
+  }
 
   const signUp = async (data) => {
     if (data.password.length < 6) {
@@ -229,7 +232,7 @@ export default function SignUp() {
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="#" variant="body2" onClick={openSignIn}>
                 Already have an account? Sign in
               </Link>
             </Grid>

@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
     marginLeft: theme.spacing(2),
   },
-  saveColor:{
+  saveColor: {
     backgroundColor: theme.palette.success.main,
     color: theme.palette.primary.contrastText,
   },
@@ -154,12 +154,15 @@ export default function Routine() {
     console.log(data);
   };
   console.log(noteAndPhoto.Photos);
-  const sendPhoto = async () => {
+  const sendPhoto = async (routineId) => {
     try {
-      const res = await uploadPhotosAsync({
-        photos: noteAndPhoto.Photos,
-      });
-      console.log("fotka odeslana");
+      const res = await uploadPhotosAsync(
+        {
+          photos: noteAndPhoto.Photos,
+        },
+        { routineId: routineId }
+      );
+      console.log("Photo was send");
     } catch (e) {
       console.log(e, "Photos error");
     }
@@ -188,7 +191,7 @@ export default function Routine() {
           : null,
         dayOfWeek: dayOfWeek,
       });
-      await sendPhoto();
+      await sendPhoto(response.data);
       alertClick();
     } catch (err) {
       console.log("my error catch", err);
@@ -211,9 +214,8 @@ export default function Routine() {
   function handleClick(event) {
     history.push("/my-routine");
   }
-  function openAddProductDialog(){
 
-  }
+  function openAddProductDialog() {}
 
   /*  const PhotosApp = () => {
       const [files, setFiles] = useState<File[]>([]);
@@ -369,7 +371,7 @@ export default function Routine() {
             }}
           />
         </Grid>
-{/*
+        {/*
         <div> tady je voda{Number(indicator.Water)}</div>
         <div>je to stress {indicator.Stress}</div>
         <div>je to cas{indicator.GoToSleep}</div>
@@ -378,19 +380,18 @@ export default function Routine() {
         <div>konec je {String(repeater.EndDate)}</div>
         <div>poznamka je {noteAndPhoto.Note}</div>*/}
 
-      <Grid container>
-        <NoteAndPhotos
-          value={noteAndPhoto}
-          onChanngeNote={(event) =>
-            setNoteAndPhoto({ Note: event.target.value })
-          }
-          onChangePhotos={(e) => {
-            console.log("onchange", e);
-            setNoteAndPhoto({ Photos: e });
-
-          }}
-        />
-      </Grid>
+        <Grid container>
+          <NoteAndPhotos
+            value={noteAndPhoto}
+            onChanngeNote={(event) =>
+              setNoteAndPhoto({ Note: event.target.value })
+            }
+            onChangePhotos={(e) => {
+              console.log("onchange", e);
+              setNoteAndPhoto({ Photos: e });
+            }}
+          />
+        </Grid>
       </Grid>
     </>
   );
