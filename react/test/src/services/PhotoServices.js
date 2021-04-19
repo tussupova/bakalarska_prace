@@ -6,7 +6,6 @@ export function uploadPhotosAsync(photos, {routineId}) {
     formData.append("files", f);
   }
   debugger
-  //todo change routineId
   formData.append("routineId", routineId);
   formData.append("date", new Date().toISOString());
   const config = {
@@ -21,18 +20,18 @@ export function uploadPhotosAsync(photos, {routineId}) {
 //todo change routine ID
 export function downloadPhotosInfoAsync() {
   return axios.get(
-    "https://localhost:5001/photo/getPhotosInfo/9",{
+    "https://localhost:5001/photo/getPhotosInfo",{
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       },
     }
   );
 }
-//todo change photo id
-export function downloadPhoto() {
-  return axios.get("https://localhost:5001/photo/getPhotosFromId/1", {
+
+/*export function downloadPhoto() {
+  return axios.get("https://localhost:5001/photo/getPhotosFromId", {
     headers: {
       'Authorization': `Bearer ${localStorage.getItem('authToken')}`
     },
   });
-}
+}*/

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Net.Mime;
 using System.Security.Policy;
 using ICSharpCode.SharpZipLib.Zip;
 using Microsoft.EntityFrameworkCore;
@@ -78,6 +79,7 @@ namespace SkinCareDiary.Services.Helpers
 
         public List<DtoGetPhotos> GetPhotos(int userId)
         {
+            var s = ExportToExcel(4);
             using (var db = new RepositoryContext())
             {
                 var photos = db.Routines
@@ -96,23 +98,26 @@ namespace SkinCareDiary.Services.Helpers
             }
         }
 
-        public byte[] GetZipArchive(List<DtoGetPhotos> files)
+        public byte[] GetZipArchive(List<DtoGetPhotos> files, MemoryStream stream)
         {
             byte[] archiveFile;
-            using (var archiveStream = new MemoryStream())
+            using var archiveStream = new MemoryStream();
+            using (var archive = new ZipArchive(archiveStream, ZipArchiveMode.Create, true))
             {
-                using (var archive = new ZipArchive(archiveStream, ZipArchiveMode.Create, true))
+                foreach (var file in files)
                 {
-                    foreach (var file in files)
-                    {
-                        var zipArchiveEntry = archive.CreateEntry(file.Name, CompressionLevel.Fastest);
-                        using (var zipStream = zipArchiveEntry.Open())
-                            zipStream.Write(file.Data, 0, file.Data.Length);
-                    }
+                    var zipArchiveEntry = archive.CreateEntry(file.Name, CompressionLevel.Fastest);
+                    using var zipStream = zipArchiveEntry.Open();
+                    zipStream.Write(file.Data, 0, file.Data.Length);
                 }
-
-                archiveFile = archiveStream.ToArray();
+                
+                var excel = archive.CreateEntry("routine.xlsx", CompressionLevel.Fastest);
+                using var excelStream = excel.Open();
+                var excelData = stream.ToArray();
+                excelStream.Write(excelData, 0, excelData.Length);
             }
+            
+            archiveFile = archiveStream.ToArray();
 
             return archiveFile;
         }
@@ -123,9 +128,9 @@ namespace SkinCareDiary.Services.Helpers
             using (var db = new RepositoryContext())
             {
                 var routines = db.Routines.Include(o => o.TypeOfRoutine)
-                    .Include(o=>o.RoutineDate)
+                    .Include(o => o.RoutineDate)
                     .Where(o => o.UserId == userId).ToList();
-                
+
                 calendarRoutines = routines.Select(x => new DtoGetUsersRoutine
                 {
                     RoutineType = x.TypeOfRoutine.Name,

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SkinCareDiary.Services.Helpers;
@@ -22,6 +23,7 @@ namespace SkinCareDiary.Be.Controllers
         }
 
         [HttpPost("upload")]
+        [Authorize]
         [ProducesResponseType(typeof(DtoUploadPhoto), StatusCodes.Status200OK)]
         public IActionResult UploadPhoto([FromForm] DtoUploadPhoto photos)
         {
@@ -84,8 +86,9 @@ namespace SkinCareDiary.Be.Controllers
         }
  
 
-        [HttpGet("getPhotosInfo/{routineId}")]
-        public List<DtoPhotosInfo> GetPhotosInfo(int routineId)
+        [HttpGet("getPhotosInfo")]
+        
+        public List<DtoPhotosInfo> GetPhotosInfo()
         {
             if (User.Identity != null)
             {

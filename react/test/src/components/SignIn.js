@@ -97,6 +97,7 @@ export default function SignIn() {
             label="Email Address"
             name="email"
             autoComplete="email"
+            data-cy="email"
             autoFocus inputRef={register}
             helperText={passwordError}
             error={Boolean(passwordError)}
@@ -110,6 +111,7 @@ export default function SignIn() {
             label="Password"
             type={passwordVisibility}
             id="password"
+            data-cy="password"
             autoComplete="current-password" inputRef={register}
             helperText={passwordError}
             error={Boolean(passwordError)}
@@ -128,6 +130,7 @@ export default function SignIn() {
             fullWidth
             variant="contained"
             color="primary"
+            data-cy="submitButton"
             className={classes.submit}
           >
             Sign In

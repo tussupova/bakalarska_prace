@@ -30,12 +30,12 @@ namespace SkinCareDiary.Be.Controllers
             {
                 return Ok(userDto);
             }
-
-
+            
             return Conflict();
         }
 
         [HttpPost("login")]
+        
         [ProducesResponseType(typeof(DtoUserResponse), StatusCodes.Status200OK)]
         public IActionResult Login(DtoLoginUser user)
         {
@@ -49,6 +49,7 @@ namespace SkinCareDiary.Be.Controllers
         }
 
         [HttpPost("token")]
+        
         [ProducesResponseType(typeof(DtoUserResponse), StatusCodes.Status200OK)]
         public IActionResult Token(DtoLoginUser user)
         {

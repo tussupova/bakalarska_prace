@@ -135,6 +135,7 @@ export default function SignUp() {
         });
         history.push('/my-routine')
       } catch (err) {
+        setEmailError('User with this email already exist')
         console.log('my error catch', err)
 
         //setPasswordError('Invalid credentials')
@@ -165,7 +166,7 @@ export default function SignUp() {
                 fullWidth
                 id="name"
                 label="Name"
-
+                data-cy="name"
                 helperText={nameError}
                 error={Boolean(nameError)}
                 autoFocus inputRef={register}
@@ -180,6 +181,7 @@ export default function SignUp() {
                 id="email"
                 label="Email Address"
                 name="email"
+                data-cy="email"
                 autoComplete="email" inputRef={register}
                 helperText={emailError}
                 error={Boolean(emailError)}
@@ -199,33 +201,13 @@ export default function SignUp() {
                 autoComplete="current-password" inputRef={register}
               />
             </Grid>
-            <Grid item xs={12} container justify="space-around">
-              <FormControl inputRef={register} component="fieldset">
-                <FormLabel component="legend">Gender</FormLabel>
-                <RadioGroup defaultValue="false" aria-label="gender" name="gender" value={"gender"} inputRef={register}>
-                  <div>
-                    <FormControlLabel value="female" control={<StyledRadio inputRef={register}/>} label="Female"/>
-                    <FormControlLabel value="male" control={<StyledRadio inputRef={register}/>} label="Male"/>
-                    <FormControlLabel value="other" control={<StyledRadio nputRef={register}/>} label="Other"/>
-                  </div>
-                </RadioGroup>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-              <NewBDay/>
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary"/>}
-                label="I want to receive inspiration, marketing promotions and updates via email."
-              />
-            </Grid>
           </Grid>
           <Button
             type="submit"
             fullWidth
             variant="contained"
             color="primary"
+            id="submitButton"
             className={classes.submit}
           >
             Sign Up

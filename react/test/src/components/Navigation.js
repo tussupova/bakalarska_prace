@@ -67,10 +67,10 @@ export default function Navigation() {
               <Button className={classes.menuButton} color="inherit" p={1} onClick={onClickRoutine}>
                 Routine
               </Button>
-              <Button className={classes.menuButton} color="inherit" p={1} onClick={onClickAlbum}>
+              <Button className={classes.menuButton} color="inherit" p={1} data-cy="album-navigation" onClick={onClickAlbum}>
                 Album
               </Button>
-              <Button className={classes.menuButton} color="inherit" p={1} onClick={onClickShelf}>
+              <Button className={classes.menuButton} color="inherit" p={1} data-cy="shelf-navigation" onClick={onClickShelf}>
                 Shelf
               </Button>
               <div>

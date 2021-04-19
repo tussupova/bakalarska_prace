@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SkinCareDiary.Services.Helpers;
@@ -21,7 +22,7 @@ namespace SkinCareDiary.Be.Controllers
         }
         
         [HttpGet("getUsersProducts")]
-        
+        [Authorize]
         public  List<DtoGetUsersProduct> GetUsersProduct()
         {
             if (User.Identity != null)
@@ -33,7 +34,7 @@ namespace SkinCareDiary.Be.Controllers
             return null;
         }
         [HttpGet("searchProduct/{chars}")]
-        
+        [Authorize]
         public  List<DtoGetUsersProduct> GetUsersProduct(string chars)
         {
             return _productHelper.SearchProducts(chars);
@@ -63,8 +64,6 @@ namespace SkinCareDiary.Be.Controllers
             {
                 return Ok(123456);
             }
-
-
             return Conflict();
         }
     }

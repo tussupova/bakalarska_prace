@@ -93,6 +93,7 @@ export default function ProductsOfRoutine(props) {
         </Grid>
         <Grid item xs={12} lg={12}>
           <Autocomplete
+            data-cy="cleanser-autocomplete"
             multiple
             {...options}
             getOptionLabel={(options) => options.name}
@@ -119,6 +120,7 @@ export default function ProductsOfRoutine(props) {
                 variant="outlined"
                 margin="normal"
                 fullWidth
+                data-cy="cleanser"
                 inputProps={{
                   ...params.inputProps,
                   // disable autocomplete and autofill

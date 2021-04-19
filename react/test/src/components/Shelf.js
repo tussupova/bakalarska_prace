@@ -90,8 +90,13 @@ export default function Shelf() {
   };
   const deleteProduct = async (id) => {
     try {
-      const deleteProduct = await removeUsersProduct(id);
-      await getProducts();
+
+      var x= window.confirm("Do you really want to remove this product?")
+      if(x==true){
+        const deleteProduct = await removeUsersProduct(id);
+        await getProducts();
+      }
+
     } catch (e) {
       console.log(e, "Can not delete product");
     }
@@ -132,7 +137,7 @@ export default function Shelf() {
                   />
                   <ListItemSecondaryAction>
                     <IconButton edge="end" aria-label="delete" className={classes.iconDelete}>
-                      <DeleteIcon onClick={() => deleteProduct(list.id)}/>
+                      <DeleteIcon data-cy="delete-icon" onClick={() => deleteProduct(list.id)}/>
                     </IconButton>
                   </ListItemSecondaryAction>
                 </ListItem>

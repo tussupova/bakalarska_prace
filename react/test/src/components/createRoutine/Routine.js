@@ -310,7 +310,7 @@ export default function Routine() {
           </InputLabel>
           <Select
             labelId="demo-controlled-open-select-label"
-            id="demo-controlled-open-select"
+            id="select-routine"
             open={open}
             onClose={handleClose}
             onOpen={handleOpen}
@@ -320,9 +320,9 @@ export default function Routine() {
               setRoutineType(event.target.value);
             }}
           >
-            <MenuItem value={"Morning"}>Morning Routine</MenuItem>
-            <MenuItem value={"Evening"}>Evening Routine</MenuItem>
-            <MenuItem value={"Other"}>Other</MenuItem>
+            <MenuItem id="morning-routine" value={"Morning"}>Morning Routine</MenuItem>
+            <MenuItem id="evening-routine" value={"Evening"}>Evening Routine</MenuItem>
+            <MenuItem id="other-routine" value={"Other"}>Other</MenuItem>
           </Select>
         </FormControl>
         <div className={classes.selectDateCalendar}>
@@ -358,6 +358,7 @@ export default function Routine() {
       <Grid xs={12}>
         <Grid container className={classes.test}>
           <ProductsOfRoutine
+            id="products-of-routine"
             onChangeCleanser={(event, value)=>{
               testXX(event, value);
               setProd({

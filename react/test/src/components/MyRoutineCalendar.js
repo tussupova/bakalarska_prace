@@ -47,6 +47,9 @@ const useStyles = makeStyles((theme) => ({
     },
   }
 }));
+const openRoutine=(event)=>{
+
+}
 const getRoutineType = (date, culture, localizer) => {
   if (date.getHours() === 0) {
     return "Morning";
@@ -82,9 +85,9 @@ const exportUsersData=async ()=>{
     console.log("Export error", e)
   }
 }
+
   const getRoutines = async () => {
     try {
-      debugger
       const res = await getUsersRoutine();
       const x = res.data.map((e) => {
         console.log(e.routineType);
@@ -178,6 +181,7 @@ const exportUsersData=async ()=>{
             variant="contained"
             href="#contained-buttons"
             onClick={onClickCreateRoutine}
+            id="idCreateRoutineButton"
           >
             <Typography>Create Routine</Typography>
           </Button>
@@ -195,11 +199,11 @@ const exportUsersData=async ()=>{
         <Grid item className={classes.calendarGrid}>
           <BigCalendar
             //vybirani casu
-            selectable
+            //selectable={}
             step={160}
             timeslots={3}
             events={event}
-            onSelectEvent={(event) => alert(event.title)}
+            onSelectEvent={(event) => openRoutine(event)}
             label={event.title}
             eventPropGetter={(event) => ({
               style: {

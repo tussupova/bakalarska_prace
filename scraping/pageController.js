@@ -7,8 +7,6 @@ async function scrapeAll(browserInstance){
     //await pageScraper.scraper(browser);
     //await writeDataToJson.scraper(browser);
 
-
-
   }
   catch(err){
     console.log("Could not resolve the browser instance => ", err);

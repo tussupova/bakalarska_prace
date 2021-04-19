@@ -36,7 +36,7 @@ namespace SkinCareDiary.Be
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
-            services.AddCors(options =>
+           services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
                 {
@@ -45,6 +45,7 @@ namespace SkinCareDiary.Be
                         .AllowAnyMethod();
                 });
             });
+            
 
             // settings
             services.Configure<JwtSettings>(Configuration.GetSection(nameof(JwtSettings)));

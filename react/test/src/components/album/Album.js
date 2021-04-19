@@ -57,6 +57,7 @@ export default function Album() {
       const res = await downloadPhotosInfoAsync();
        const mappedPhotos = res.data.map((x) => {
         return {
+          id: x.photoId,
           title: x.originalName,
           date: x.date,
           width: 4,
@@ -74,10 +75,14 @@ export default function Album() {
     setCurrentImage(index);
     setViewerIsOpen(true);
     setOpen(true);
+    setPhotosId(index);
+    console.log('indeeeeex', index)
   }, []);
 
-  const openPhoto=()=>{
-
+  const deletePhoto=()=>{
+    var x= window.confirm(photosId)
+    //todo mazani fotek
+    //console.log(photo)
   }
 
   const closeLightbox = () => {
@@ -85,6 +90,7 @@ export default function Album() {
     setViewerIsOpen(false);
   };
   const [open, setOpen] = React.useState(false);
+  const [photosId, setPhotosId]=React.useState();
 
   const handleClose = () => {
     setOpen(false);
@@ -92,8 +98,8 @@ export default function Album() {
   };
 
   return (
-    <div>
-      <Gallery photos={photosWithTitle} onClick={openLightbox} />
+    <div data-cy="gallery">
+      <Gallery photos={photosWithTitle}  onClick={openLightbox} />
       <ModalGateway>
         {viewerIsOpen ? (
           <Modal onClose={closeLightbox}>
@@ -112,7 +118,7 @@ export default function Album() {
                     Date
                   </Typography>
                   <Button autoFocus color="inherit" onClick={handleClose}>
-                    <DeleteIcon />
+                    <DeleteIcon onClick={() => deletePhoto()} />
                   </Button>
                 </Toolbar>
               </AppBar>

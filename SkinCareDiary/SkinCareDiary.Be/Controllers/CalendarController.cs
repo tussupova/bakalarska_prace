@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using ClosedXML.Excel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SkinCareDiary.Services.Helpers;
 using SkinCareDiary.Services.Models;
@@ -20,6 +21,7 @@ namespace SkinCareDiary.Be.Controllers
         }
 
         [HttpPost("exportData")]
+        [Authorize]
         public IActionResult ExportUsersData()
         {
             /*if (User.Identity == null)
@@ -67,7 +69,7 @@ namespace SkinCareDiary.Be.Controllers
                             
                             var x = _calendarHelper.GetPhotos(userId);
            
-                            return new FileContentResult( _calendarHelper.GetZipArchive(x, stream), "application/zip") { FileDownloadName = "Photos.zip" };
+                            return new FileContentResult( _calendarHelper.GetZipArchive(x, stream), "application/zip") { FileDownloadName = "MyData.zip" };
 
                         }
                     }
@@ -82,6 +84,7 @@ namespace SkinCareDiary.Be.Controllers
         }
 
         [HttpPost("exportImages")]
+        [Authorize]
         public IActionResult ExportUsersImageToZip()
         {
             if (User.Identity == null) return null;
@@ -94,6 +97,7 @@ namespace SkinCareDiary.Be.Controllers
         }
 
         [HttpGet("getRoutines")]
+        [Authorize]
         public List<DtoGetUsersRoutine> GetUsersRoutine()
         {
             if (User.Identity == null) return null;
