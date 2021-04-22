@@ -60,7 +60,7 @@ export default function SetPeriod(props) {
     <>
       <Button
         variant="contained"
-        color="primary"
+        color="secondary"
         onClick={handleClickOpen}
         className={classes.setButton}
       >

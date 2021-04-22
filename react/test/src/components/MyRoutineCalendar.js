@@ -207,7 +207,7 @@ const exportUsersData=async ()=>{
             label={event.title}
             eventPropGetter={(event) => ({
               style: {
-                backgroundColor: "#FE7960",
+                backgroundColor: "#E9816E",
                 border: "none",
               },
             })}

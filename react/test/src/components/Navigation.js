@@ -7,6 +7,7 @@ import Box from "@material-ui/core/Box";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import {useHistory} from "react-router-dom";
+import {Avatar} from "@material-ui/core";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -62,7 +63,7 @@ export default function Navigation() {
           <div style={{width: '100%'}}>
             <Box display="flex" p={1}>
               <Box p={1} flexGrow={1}  onClick={onClickHome}>
-                LOGO
+                <img src="./logo.png"/>
               </Box>
               <Button className={classes.menuButton} color="inherit" p={1} onClick={onClickRoutine}>
                 Routine
@@ -73,22 +74,10 @@ export default function Navigation() {
               <Button className={classes.menuButton} color="inherit" p={1} data-cy="shelf-navigation" onClick={onClickShelf}>
                 Shelf
               </Button>
-              <div>
                 <Button className={classes.menuButton} color="inherit" p={1} aria-controls="simple-menu"
                         aria-haspopup="true" onClick={handleClick}>
-                  User
+                  Logout
                 </Button>
-                <Menu
-                  id="simple-menu"
-                  anchorEl={anchorEl}
-                  keepMounted
-                  open={Boolean(anchorEl)}
-                  onClose={handleClose}
-                >
-                  <MenuItem onClick={onClickMyAccount}>My account</MenuItem>
-                  <MenuItem onClick={handleClose}>Logout</MenuItem>
-                </Menu>
-              </div>
             </Box>
           </div>
         </Toolbar>

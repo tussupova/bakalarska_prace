@@ -135,7 +135,7 @@ export default function SignUp() {
         });
         history.push('/my-routine')
       } catch (err) {
-        setEmailError('User with this email already exist')
+        //setEmailError('User with this email already exist')
         console.log('my error catch', err)
 
         //setPasswordError('Invalid credentials')
