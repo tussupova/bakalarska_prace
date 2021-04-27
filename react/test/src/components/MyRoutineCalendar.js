@@ -8,6 +8,8 @@ import Grid from "@material-ui/core/Grid";
 import { sendData } from "../services/UserServices";
 import { useHistory } from "react-router-dom";
 import {exportData, getUsersRoutine} from "../services/CalendarServices";
+import Tooltip from '@material-ui/core/Tooltip';
+
 
 BigCalendar.momentLocalizer(moment);
 /*
@@ -185,6 +187,7 @@ const exportUsersData=async ()=>{
           >
             <Typography>Create Routine</Typography>
           </Button>
+          <Tooltip title="All info about routine will download ">
           <Button
             color="secondary"
             className={classes.exportButton}
@@ -192,9 +195,10 @@ const exportUsersData=async ()=>{
             href="#contained-buttons"
             onClick={exportUsersData}
           >
-            <Typography>Export</Typography>
+            <Typography>Export All My Routine</Typography>
 
           </Button>
+          </Tooltip>
         </Grid>
         <Grid item className={classes.calendarGrid}>
           <BigCalendar

@@ -65,6 +65,9 @@ const useStyles = makeStyles((theme) => ({
       width: "80%",
     },
   },
+  titleRoutine:{
+    color: theme.palette.primary.main
+  },
   createButton: {
     color: theme.palette.getContrastText(theme.palette.error.main),
     background: theme.palette.error.main,
@@ -100,7 +103,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
   },
   breadcrumbsFont: {
-    fontSize: theme.spacing(1.5),
+    fontSize: theme.spacing(1.8),
   },
   widthForSnack: {
     width: theme.spacing(50),
@@ -243,7 +246,7 @@ export default function Routine() {
   return (
     <>
       <Grid container>
-        <Grid item className={classes.breadcrumbs} xs={12} sm={6}>
+        <Grid item className={classes.breadcrumbs} xs={12} sm={4}>
           <Breadcrumbs
             separator={<NavigateNextIcon fontSize="inherit" />}
             aria-label="breadcrumb"
@@ -263,7 +266,10 @@ export default function Routine() {
             </Typography>
           </Breadcrumbs>
         </Grid>
-        <Grid item className={classes.root} item xs={12} sm={6} container>
+        <Grid item className={classes.root} item xs={12} sm={4} container>
+         <Typography> <h2 className={classes.titleRoutine}>Create Daily Routine </h2></Typography>
+        </Grid>
+        <Grid item className={classes.root} item xs={12} sm={4} container>
           <Button
             //`${this.state.className} ${this.props.content.divClassName}`
             className={`${classes.menuButton} ${classes.saveColor}`}
