@@ -18,6 +18,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SkinCareDiary.Database.DB;
 using SkinCareDiary.Services.Helpers;
 using SkinCareDiary.Services.Settings;
 
@@ -96,6 +97,7 @@ namespace SkinCareDiary.Be
             services.AddScoped<IPhotoHelper, PhotoHelper>();
             services.AddScoped<IProductHelper, ProductHelper>();
             services.AddScoped<ICalendarHelper, CalendarHelper>();
+            services.AddScoped<RepositoryContext, RepositoryContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

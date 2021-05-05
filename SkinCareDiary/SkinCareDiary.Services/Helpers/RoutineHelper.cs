@@ -9,10 +9,16 @@ namespace SkinCareDiary.Services.Helpers
 {
     public class RoutineHelper : IRoutineHelper
     {
+        private readonly RepositoryContext _context;
+
+        public RoutineHelper(RepositoryContext context)
+        {
+            _context = context;
+        }
         public int CreateRoutine(DtoNewRoutine routine, int userId)
         {
-            using (var context = new RepositoryContext())
-            {
+            var context = _context;
+            
                 int IdTypeOfId = routine.RoutineType switch
                 {
                     "Morning" => 1,
@@ -22,18 +28,26 @@ namespace SkinCareDiary.Services.Helpers
 
                 var newNote = new Note();
                 newNote.Text = routine.Note;
-
                 var newRoutineDate = new RoutineDate();
-                newRoutineDate.Start = routine.RoutineDate;
-                newRoutineDate.End = routine.RoutineEndDate;
-                newRoutineDate.Mon = routine.DayOfWeek["mon"];
-                newRoutineDate.Tue = routine.DayOfWeek["tue"];
-                newRoutineDate.Wed = routine.DayOfWeek["wed"];
-                newRoutineDate.Thu = routine.DayOfWeek["thu"];
-                newRoutineDate.Fri = routine.DayOfWeek["fri"];
-                newRoutineDate.Sat = routine.DayOfWeek["sat"];
-                newRoutineDate.Sun = routine.DayOfWeek["sun"];
+                if (routine.DayOfWeek != null)
+                {
+                    
+                    newRoutineDate.Start = routine.RoutineDate;
+                    newRoutineDate.End = routine.RoutineEndDate;
+                    newRoutineDate.Mon = routine.DayOfWeek["mon"];
+                    newRoutineDate.Tue = routine.DayOfWeek["tue"];
+                    newRoutineDate.Wed = routine.DayOfWeek["wed"];
+                    newRoutineDate.Thu = routine.DayOfWeek["thu"];
+                    newRoutineDate.Fri = routine.DayOfWeek["fri"];
+                    newRoutineDate.Sat = routine.DayOfWeek["sat"];
+                    newRoutineDate.Sun = routine.DayOfWeek["sun"];
+                }
+                else
+                {
+                    newRoutineDate = null;
+                }
 
+               
                 var waterIndicator = new Indicator();
                 waterIndicator.Date = routine.RoutineDate;
                 waterIndicator.Value = routine.Water;
@@ -66,7 +80,12 @@ namespace SkinCareDiary.Services.Helpers
                 newRoutine.Indicators = new List<Indicator>();
                 newRoutine.Indicators.Add(waterIndicator);
                 newRoutine.Indicators.Add(stressIndicator);
-                newRoutine.Indicators.Add(sleepingIndicator);
+                if (sleepingIndicator != null)
+                {
+                    newRoutine.Indicators.Add(sleepingIndicator);
+                    
+                }
+                
                 context.Routines.Add(newRoutine);
                 context.SaveChanges();
                 AddProduct(routine.Cleanser, 1, newRoutine.Id);
@@ -76,7 +95,7 @@ namespace SkinCareDiary.Services.Helpers
                 AddProduct(routine.Other, 5, newRoutine.Id);
                 return newRoutine.Id;
                 
-            }
+            
         }
 
         public void AddProduct(List<DtoProductsFromNewRoutine> products, int productTypeId, int routineId)
@@ -115,6 +134,26 @@ namespace SkinCareDiary.Services.Helpers
                 Nodes = routine.Notes*/
             };
             return dtoRoutine;
+        }
+
+        public DtoGetRoutine GetEditRoutine(string routineType, DateTime routineDate, int userId)
+        {
+            int routineTypeId = routineType switch
+            {
+                "Morning" => 1,
+                "Evening" => 2,
+                _ => 3
+            };
+            var x= _context.Routines
+                .Where(o => o.UserId == userId)
+                .Where(o=>o.TypeOfRoutineId==routineTypeId)
+                .Where(o => o.RoutineDate.Start >= routineDate)
+                .Where(o => o.RoutineDate.End <= routineDate)
+                .ToList();
+            
+            
+            
+            return null; //todo dodelat
         }
     }
 }

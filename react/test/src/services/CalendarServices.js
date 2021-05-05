@@ -5,6 +5,8 @@ export function exportData() {
     headers: {
       'Authorization': `Bearer ${localStorage.getItem('authToken')}`
     },
+    responseType: 'blob',
+
   })
 }
 export function getUsersRoutine(){

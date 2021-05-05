@@ -1,5 +1,6 @@
 import axios from "axios";
 
+
 export function createRoutineAsync({
   routineType,
   note,
@@ -44,4 +45,16 @@ export function createRoutineAsync({
       },
     }
   );
+}
+
+export function getEditRoutine({routineType, date}){
+  return axios.get("https://localhost:5001/routine/editRoutine", {
+    params: {
+      routineType: routineType,
+      routineDate: date
+    },
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+    },
+  })
 }

@@ -13,6 +13,7 @@ import {AlbumPage} from "../pages/Album.page";
 import {ShelfPage} from "../pages/Shelf.page";
 import {UserPage} from "../pages/User.page";
 import {HomePage} from "../pages/Home.Page";
+import {EditRoutinePage} from "../pages/EditRoutine.page"
 
 export const Router = () => {
   return <BrowserRouter>
@@ -26,6 +27,7 @@ export const Router = () => {
       <Route exact path='/album'><AlbumPage/></Route>
       <Route exact path='/shelf'><ShelfPage/></Route>
       <Route exact path='/user'><UserPage/></Route>
+      <Route path='/edit-routine/:routineType/:date'><EditRoutinePage/></Route>
       <Route path='*'><NotFoundPage/></Route>
     </Switch>
   </BrowserRouter>

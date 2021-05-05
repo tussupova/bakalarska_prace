@@ -81,8 +81,22 @@ export default function Routine() {
   const [event, setEvent] = React.useState([]);
 const exportUsersData=async ()=>{
   try {
-    const res=await exportData();
 
+
+    let anchor=document.createElement("a");
+    document.body.appendChild(anchor);
+    let file="https://localhost:5001/calendar/exportData";
+    let headers=new Headers();
+    headers.append('Authorization', `Bearer ${localStorage.getItem('authToken')}`);
+
+    fetch(file, {method: 'POST', headers}).then(res=>res.blob())
+      .then(blobby=>{
+        let objectUrl=window.URL.createObjectURL(blobby);
+        anchor.href=objectUrl;
+        anchor.download = 'data.zip';
+        anchor.click();
+        window.URL.revokeObjectURL(objectUrl);
+      })
   }catch (e) {
     console.log("Export error", e)
   }
@@ -168,7 +182,19 @@ const exportUsersData=async ()=>{
       console.log(e, "Get routines in calendar error");
     }
   };
+  const openEdit=(title, start)=>{
+    var routineMonth=start.getMonth()+1;
+    var day=start.getDate();
+    if(day<10){
+      day='0'+day;
+    }
+    if(routineMonth<10){
+      routineMonth='0'+routineMonth;
+    }
+    var x = start.getFullYear()+'-'+routineMonth+'-'+day;
 
+    history.push('/edit-routine/'+title+'/'+x)
+  }
   useEffect(() => {
     // vola se vzdycky pri renderovani a pouze jednou
     getRoutines();
@@ -207,8 +233,9 @@ const exportUsersData=async ()=>{
             step={160}
             timeslots={3}
             events={event}
-            onSelectEvent={(event) => openRoutine(event)}
+            onSelectEvent={(event) => openEdit(event.title, event.start)}
             label={event.title}
+
             eventPropGetter={(event) => ({
               style: {
                 backgroundColor: "#E9816E",

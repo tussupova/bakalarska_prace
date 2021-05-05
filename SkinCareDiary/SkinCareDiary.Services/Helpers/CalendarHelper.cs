@@ -79,7 +79,7 @@ namespace SkinCareDiary.Services.Helpers
 
         public List<DtoGetPhotos> GetPhotos(int userId)
         {
-            var s = ExportToExcel(4);
+            var s = ExportToExcel(userId);
             using (var db = new RepositoryContext())
             {
                 var photos = db.Routines
@@ -94,6 +94,7 @@ namespace SkinCareDiary.Services.Helpers
                     dtoPhotos.Add(x);
                 }
 
+                var z = dtoPhotos;
                 return dtoPhotos;
             }
         }
@@ -110,13 +111,13 @@ namespace SkinCareDiary.Services.Helpers
                     using var zipStream = zipArchiveEntry.Open();
                     zipStream.Write(file.Data, 0, file.Data.Length);
                 }
-                
+
                 var excel = archive.CreateEntry("routine.xlsx", CompressionLevel.Fastest);
                 using var excelStream = excel.Open();
                 var excelData = stream.ToArray();
                 excelStream.Write(excelData, 0, excelData.Length);
             }
-            
+
             archiveFile = archiveStream.ToArray();
 
             return archiveFile;
@@ -124,22 +125,51 @@ namespace SkinCareDiary.Services.Helpers
 
         public List<DtoGetUsersRoutine> RenderCalendar(int userId)
         {
+            using var db = new RepositoryContext();
+            var routines = db.Routines
+                .Include(o => o.TypeOfRoutine)
+                .Include(o => o.RoutineDate)
+                .Where(o => o.UserId == userId)
+                .ToList();
+
             var calendarRoutines = new List<DtoGetUsersRoutine>();
-            using (var db = new RepositoryContext())
+
+            foreach (var r in routines)
             {
-                var routines = db.Routines.Include(o => o.TypeOfRoutine)
-                    .Include(o => o.RoutineDate)
-                    .Where(o => o.UserId == userId).ToList();
+                var now = r.RoutineDate.Start;
 
-                calendarRoutines = routines.Select(x => new DtoGetUsersRoutine
+                while (now <= r.RoutineDate.End)
                 {
-                    RoutineType = x.TypeOfRoutine.Name,
-                    RoutineId = x.Id,
-                    Date = x.RoutineDate.Start,
-                }).ToList();
+                    if (IsCorrectDate(now, r.RoutineDate))
+                    {
+                        calendarRoutines.Add(new DtoGetUsersRoutine
+                        {
+                            RoutineType = r.TypeOfRoutine.Name,
+                            RoutineId = r.Id,
+                            Date = now,
+                        });
+                    }
 
-                return calendarRoutines;
+                    now = now.AddDays(1);
+                }
             }
+
+            return calendarRoutines;
+        }
+
+        private static bool IsCorrectDate(DateTime now, RoutineDate routineDate)
+        {
+            return now.DayOfWeek switch
+            {
+                DayOfWeek.Sunday => routineDate.Sun,
+                DayOfWeek.Monday => routineDate.Mon,
+                DayOfWeek.Tuesday => routineDate.Tue,
+                DayOfWeek.Wednesday => routineDate.Wed,
+                DayOfWeek.Thursday => routineDate.Thu,
+                DayOfWeek.Friday => routineDate.Fri,
+                DayOfWeek.Saturday => routineDate.Sat,
+                _ => throw new ArgumentOutOfRangeException()
+            };
         }
     }
 }

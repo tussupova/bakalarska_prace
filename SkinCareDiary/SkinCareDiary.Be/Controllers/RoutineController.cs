@@ -1,4 +1,5 @@
 using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using SkinCareDiary.Services.Helpers;
@@ -33,6 +34,21 @@ namespace SkinCareDiary.Be.Controllers
             }
 
             return Conflict();
+        }
+        
+        [HttpGet("editRoutine")]
+        [Authorize]
+        public DtoGetRoutine EditRoutine([FromQuery]string routineType, DateTime routineDate)
+        {
+            if (User.Identity != null)
+            {
+                var userId = int.Parse(User.Identity.Name ?? throw new InvalidOperationException());
+                
+                var z= _routineHelper.GetEditRoutine(routineType, routineDate, userId);
+            }
+           
+
+            return null;
         }
     }
 }

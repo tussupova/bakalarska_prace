@@ -20,6 +20,9 @@ namespace SkinCareDiary.Database.DB
         public DbSet<RoutineDate> Dates { get; set; }
         public DbSet<Note> Notes { get; set; }
         public DbSet<Photo> Photos { get; set; }
+        
+        public RepositoryContext(): base() {}
+        public RepositoryContext(DbContextOptions options): base(options){}
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

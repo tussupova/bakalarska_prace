@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using SkinCareDiary.Services.Models;
 
@@ -7,6 +8,6 @@ namespace SkinCareDiary.Services.Helpers
     {
         int CreateRoutine(DtoNewRoutine routine, int userId);
         void AddProduct(List<DtoProductsFromNewRoutine> products, int productTypeId,int routineId);
-
+        public DtoGetRoutine GetEditRoutine(string routineType, DateTime routineDate, int userId);
     }
 }

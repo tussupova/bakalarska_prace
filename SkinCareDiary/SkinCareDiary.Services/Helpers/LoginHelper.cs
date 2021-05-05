@@ -7,16 +7,18 @@ namespace SkinCareDiary.Services.Helpers
     public class LoginHelper: ILoginHelper
     {
         private readonly IJwtHelper _jwtHelper;
+        private readonly RepositoryContext _context;
 
-        public LoginHelper(IJwtHelper jwtHelper)
+        public LoginHelper(IJwtHelper jwtHelper, RepositoryContext context)
         {
             _jwtHelper = jwtHelper;
+            _context = context;
         }
 
         public DtoUserResponse Login(string login, string password)
         {
-            using (var db = new RepositoryContext())
-            {
+            var db = _context;
+            
                 var x = db.Users.Where(o => o.Email == login).FirstOrDefault();
                 if (x == null)
                 {
@@ -31,10 +33,10 @@ namespace SkinCareDiary.Services.Helpers
                 }
 
                 return null;
-            }
+            
         }
 
-        public DtoUserResponse MapUserToDtoUserResponse(User user)
+        private DtoUserResponse MapUserToDtoUserResponse(User user)
         {
             //ony for user, not for admin
             var dtoUser = new DtoUserResponse
@@ -55,8 +57,7 @@ namespace SkinCareDiary.Services.Helpers
         //for new user - SignIn
         public DtoUserResponse CreateAccount(DtoUserSignIUp customer)
         {
-            using (var context = new RepositoryContext())
-            {
+            var context = _context;
                 var salt = _jwtHelper.GenerateSalt();
                 var newUser = new User()
                 {
@@ -78,14 +79,14 @@ namespace SkinCareDiary.Services.Helpers
                 context.SaveChanges();
                 return MapUserToDtoUserResponse(newUser);
             }
-        }
+        
 
         public bool IsUserExist(User user)
         {
-            using (var db = new RepositoryContext())
-            {
+            var db = _context;
+            
                 return db.Users.Any(o => o.Email == user.Email);
-            }
+            
         }
     }
 }

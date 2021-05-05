@@ -11,10 +11,16 @@ namespace SkinCareDiary.Services.Helpers
     public class ProductHelper : IProductHelper
 
     {
+        private readonly RepositoryContext _context;
+
+        public ProductHelper(RepositoryContext context)
+        {
+            _context = context;
+        }
         public List<DtoGetUsersProduct> GetUsersProduct(int userId)
         {
             var newProducts = new List<DtoGetUsersProduct>();
-            using var db = new RepositoryContext();
+            using var db = _context;
             var products = db.Shelves
                 .Include(o => o.AllProducts)
                 .Where(o => o.Routine.UserId == userId)
@@ -29,8 +35,8 @@ namespace SkinCareDiary.Services.Helpers
 
         public bool RemoveProduct(int productId)
         {
-            using (var db = new RepositoryContext())
-            {
+            var db = _context;
+            
                 var product = db.Shelves.Where(o => o.Id == productId).FirstOrDefault();
                 if (product == null)
                 {
@@ -40,13 +46,13 @@ namespace SkinCareDiary.Services.Helpers
                 db.Shelves.Remove(product);
                 db.SaveChanges();
                 return true;
-            }
+            
         }
 
         public List<DtoGetUsersProduct> SearchProducts(string chars)
         {
             var searchingProducts = new List<DtoGetUsersProduct>();
-            using var db = new RepositoryContext();
+            using var db = _context;
             var products = db.AllProducts.Where(o => o.Brand != null)
                 .Where(o => o.Brand.StartsWith(chars) || o.Name.StartsWith(chars))
                 .OrderBy(q => q.Brand).Take(5)
@@ -60,8 +66,8 @@ namespace SkinCareDiary.Services.Helpers
 
         public bool AddProductToShelf(DtoNewProductToShelf products)
         {
-            using (var db=new RepositoryContext())
-            {
+            var db = _context;
+            
                 var product = db.AllProducts.Where(o => o.Id == products.ProductId).FirstOrDefault();
                 var newProduct = new Shelf();
                 if (product != null) newProduct.AllProductsId = product.Id;
@@ -70,8 +76,7 @@ namespace SkinCareDiary.Services.Helpers
                 db.Shelves.Add(newProduct);
                 db.SaveChanges();
                 return true;
-            }
-            
+
         }
     }
 }
