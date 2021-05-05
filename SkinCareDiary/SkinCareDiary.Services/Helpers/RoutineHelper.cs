@@ -29,11 +29,23 @@ namespace SkinCareDiary.Services.Helpers
                 var newNote = new Note();
                 newNote.Text = routine.Note;
                 var newRoutineDate = new RoutineDate();
+                newRoutineDate.Start = routine.RoutineDate;
+                if (routine.RoutineEndDate == null)
+                {
+                    newRoutineDate.End=routine.RoutineDate;
+                }
+
+                if (routine.RoutineEndDate != null)
+                {
+                    newRoutineDate.End = routine.RoutineEndDate.Value;
+                }
+
+                
+
+
                 if (routine.DayOfWeek != null)
                 {
                     
-                    newRoutineDate.Start = routine.RoutineDate;
-                    newRoutineDate.End = routine.RoutineEndDate;
                     newRoutineDate.Mon = routine.DayOfWeek["mon"];
                     newRoutineDate.Tue = routine.DayOfWeek["tue"];
                     newRoutineDate.Wed = routine.DayOfWeek["wed"];
@@ -144,12 +156,46 @@ namespace SkinCareDiary.Services.Helpers
                 "Evening" => 2,
                 _ => 3
             };
-            var x= _context.Routines
+            var x = _context.Routines
                 .Where(o => o.UserId == userId)
-                .Where(o=>o.TypeOfRoutineId==routineTypeId)
-                .Where(o => o.RoutineDate.Start >= routineDate)
-                .Where(o => o.RoutineDate.End <= routineDate)
+                .Where(o => o.TypeOfRoutineId == routineTypeId)
+                .FirstOrDefault(o => o.RoutineDate.Start <= routineDate || o.RoutineDate.End >= routineDate);
+
+
+            var note = _context.Notes.Where(o => o.RoutineId == x.Id).Select(o=>o.Text);
+            var stress = _context.Indicators.Where(o => o.IndicatorTypeId == 2)
+                .Where(o => o.Date == routineDate).Select(o=>o.Value).FirstOrDefault();
+            var water = _context.Indicators.Where(o => o.IndicatorTypeId == 1)
+                .Where(o => o.Date == routineDate).Select(o=>o.Value).FirstOrDefault();
+            /*var sleep = _context.Indicators.Where(o => o.IndicatorTypeId == 3)
+                .Where(o => o.Date == routineDate).Select(o=>o.Value).FirstOrDefault();*/
+            var dbCleanser = _context.Shelves
+                .Where(o => o.RoutineId == x.Id)
+                .Where(o => o.ProductTypeId == 1)
                 .ToList();
+            var cleanser = new List<DtoProductsFromNewRoutine>();
+            
+            foreach (var product in dbCleanser)
+            {
+                var newProduct = new DtoProductsFromNewRoutine()
+                {
+                    Name = product.AllProducts.Brand +' '+ product.AllProducts.Name,
+                    Id = product.AllProducts.Id
+                };
+                cleanser.Add(newProduct);
+            }
+            
+
+
+            var routine = new DtoGetRoutine()
+            {
+                RoutineType = routineType,
+                Note = note.ToString(),
+                Stress = stress.ToString(CultureInfo.InvariantCulture),
+                Water = water,
+
+
+            };
             
             
             

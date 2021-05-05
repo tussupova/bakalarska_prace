@@ -7,7 +7,6 @@ namespace SkinCareDiary.Services.Models
     {
         public string RoutineType { get; set; }
         public string Note { get; set; }
-        public List<string> Photos { get; set; }
         public string Stress { get; set; }
         public float Water { get; set; }
         public DateTime? GoToSleep { get; set; }

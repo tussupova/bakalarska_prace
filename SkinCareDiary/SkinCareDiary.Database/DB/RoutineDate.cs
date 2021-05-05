@@ -7,7 +7,7 @@ namespace SkinCareDiary.Database.DB
     {
         public int Id { get; set; } //TODO change to date
         public DateTime Start { get; set;  }
-        public DateTime? End { get; set; }
+        public DateTime End { get; set; }
         public bool Mon { get; set; }
         public bool Tue { get; set; }
         public bool Wed { get; set; }

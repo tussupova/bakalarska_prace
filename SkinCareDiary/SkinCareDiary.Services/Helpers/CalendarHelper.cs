@@ -137,21 +137,31 @@ namespace SkinCareDiary.Services.Helpers
             foreach (var r in routines)
             {
                 var now = r.RoutineDate.Start;
-
-                while (now <= r.RoutineDate.End)
+                if (r.RoutineDate.End != r.RoutineDate.Start)
                 {
-                    if (IsCorrectDate(now, r.RoutineDate))
+                    
+                    while (now <= r.RoutineDate.End)
                     {
-                        calendarRoutines.Add(new DtoGetUsersRoutine
+                        if (IsCorrectDate(now, r.RoutineDate))
                         {
-                            RoutineType = r.TypeOfRoutine.Name,
-                            RoutineId = r.Id,
-                            Date = now,
-                        });
-                    }
+                            calendarRoutines.Add(new DtoGetUsersRoutine
+                            {
+                                RoutineType = r.TypeOfRoutine.Name,
+                                RoutineId = r.Id,
+                                Date = now,
+                            });
+                        }
 
-                    now = now.AddDays(1);
+                        now = now.AddDays(1);
+                    }
                 }
+                calendarRoutines.Add(new DtoGetUsersRoutine
+                {
+                    RoutineType = r.TypeOfRoutine.Name,
+                    RoutineId = r.Id,
+                    Date = now,
+                });
+             
             }
 
             return calendarRoutines;
