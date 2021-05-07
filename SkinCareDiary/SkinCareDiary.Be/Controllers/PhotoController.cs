@@ -98,5 +98,19 @@ namespace SkinCareDiary.Be.Controllers
 
             return null;
         }
+
+        [HttpDelete("{photoId:int}")]
+        public IActionResult DeletePhotos(int photoId)
+        {
+            
+                if (_photoHelper.RemovePhoto(photoId))
+                {
+                    return Ok(1);
+                }
+            
+
+            return Conflict();
+            }
+        
     }
 }

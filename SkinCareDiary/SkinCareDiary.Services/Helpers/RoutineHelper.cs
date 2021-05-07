@@ -4,6 +4,8 @@ using System.Globalization;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using SkinCareDiary.Database.DB;
+using SkinCareDiary.Services.Exceptions;
+using SkinCareDiary.Services.Helpers.interfaces;
 using SkinCareDiary.Services.Models;
 
 namespace SkinCareDiary.Services.Helpers
@@ -19,9 +21,7 @@ namespace SkinCareDiary.Services.Helpers
 
         public int CreateRoutine(DtoNewRoutine routine, int userId)
         {
-            var context = _context;
-
-            int IdTypeOfId = routine.RoutineType switch
+            var idTypeOfId = routine.RoutineType switch
             {
                 "Morning" => 1,
                 "Evening" => 2,
@@ -84,7 +84,7 @@ namespace SkinCareDiary.Services.Helpers
             sleepingIndicator.IndicatorTypeId = 3;
 
             var newRoutine = new Routine();
-            newRoutine.TypeOfRoutineId = IdTypeOfId;
+            newRoutine.TypeOfRoutineId = idTypeOfId;
             newRoutine.Notes = new List<Note>();
             newRoutine.Notes.Add(newNote);
             newRoutine.UserId = userId;
@@ -92,13 +92,10 @@ namespace SkinCareDiary.Services.Helpers
             newRoutine.Indicators = new List<Indicator>();
             newRoutine.Indicators.Add(waterIndicator);
             newRoutine.Indicators.Add(stressIndicator);
-            if (sleepingIndicator != null)
-            {
-                newRoutine.Indicators.Add(sleepingIndicator);
-            }
+            newRoutine.Indicators.Add(sleepingIndicator);
 
-            context.Routines.Add(newRoutine);
-            context.SaveChanges();
+            _context.Routines.Add(newRoutine);
+            _context.SaveChanges();
             AddProduct(routine.Cleanser, 1, newRoutine.Id);
             AddProduct(routine.Treatment, 2, newRoutine.Id);
             AddProduct(routine.Moisturizer, 3, newRoutine.Id);
@@ -114,32 +111,34 @@ namespace SkinCareDiary.Services.Helpers
             {
                 foreach (var product in products)
                 {
-                    
-                        var newProduct = new Shelf();
-                        newProduct.AllProductsId = product.Id;
-                        newProduct.RoutineId = routineId;
-                        newProduct.ProductTypeId = productTypeId;
-                        db.Shelves.Add(newProduct);
-                        db.SaveChanges();
-                    
+                    var newProduct = new Shelf();
+                    newProduct.AllProductsId = product.Id;
+                    newProduct.RoutineId = routineId;
+                    newProduct.ProductTypeId = productTypeId;
+                    db.Shelves.Add(newProduct);
+                    db.SaveChanges();
                 }
             }
         }
 
-
-        public DtoNewRoutine MapRoutineToDtoCreateRoutine(Routine routine)
+        private void EditProduct(List<DtoProductsFromNewRoutine> products, int productTypeId, int routineId)
         {
-            var dtoRoutine = new DtoNewRoutine()
+            if (products == null) return;
+            var existingProducts = _context.Shelves
+                .Where(o => o.RoutineId == routineId)
+                .Where(o => o.ProductTypeId == productTypeId)
+                .ToList();
+            
+            _context.Shelves.RemoveRange(existingProducts);
+            
+            foreach (var product in products)
             {
-                /*User = routine.User,
-                TypeOfRoutine = routine.TypeOfRoutine,
-                RoutineDate = routine.RoutineDate,
-                Products = routine.Products,
-                Indicators = routine.Indicators,
-                Photos = routine.Photos,
-                Nodes = routine.Notes*/
-            };
-            return dtoRoutine;
+                var newProduct = new Shelf();
+                newProduct.AllProductsId = product.Id;
+                newProduct.RoutineId = routineId;
+                newProduct.ProductTypeId = productTypeId;
+                _context.Shelves.Add(newProduct);
+            }
         }
 
         public DtoGetRoutine GetEditRoutine(string routineType, DateTime routineDate, int userId)
@@ -154,6 +153,7 @@ namespace SkinCareDiary.Services.Helpers
 
             var x = _context.Routines
                 .Where(o => o.UserId == userId)
+                .Where(o => o.TypeOfRoutineId == routineTypeId)
                 .Where(o => (o.RoutineDate.Start == o.RoutineDate.End &&
                              (o.RoutineDate.Start >= routineDate && o.RoutineDate.End <= newDate))
                             || (o.RoutineDate.Start <= routineDate && o.RoutineDate.End >= newDate))
@@ -167,7 +167,7 @@ namespace SkinCareDiary.Services.Helpers
             var water = _context.Indicators.Where(o => o.IndicatorTypeId == 1)
                 .Where(o => o.Date <= newDate && o.Date >= routineDate).Select(o => o.Value).FirstOrDefault();
             var sleep = _context.Indicators.Where(o => o.IndicatorTypeId == 3)
-                .Where(o => o.Date <= newDate && o.Date >= routineDate).Select(o=>o.Value).FirstOrDefault();
+                .Where(o => o.Date <= newDate && o.Date >= routineDate).Select(o => o.Value).FirstOrDefault();
             var stressType = stress switch
             {
                 1 => "happy",
@@ -179,36 +179,41 @@ namespace SkinCareDiary.Services.Helpers
                 .Where(o => o.RoutineId == x.Id)
                 .Where(o => o.ProductTypeId == 1)
                 .ToList();
-            var dbTreatment=_context.Shelves
+            var dbTreatment = _context.Shelves
                 .Include(o => o.AllProducts)
                 .Where(o => o.RoutineId == x.Id)
                 .Where(o => o.ProductTypeId == 2)
                 .ToList();
-            var dbMoisturizer=_context.Shelves                
+            var dbMoisturizer = _context.Shelves
                 .Include(o => o.AllProducts)
                 .Where(o => o.RoutineId == x.Id)
                 .Where(o => o.ProductTypeId == 3)
                 .ToList();
-            var dbSunscreen=_context.Shelves
+            var dbSunscreen = _context.Shelves
                 .Include(o => o.AllProducts)
                 .Where(o => o.RoutineId == x.Id)
                 .Where(o => o.ProductTypeId == 4)
                 .ToList();
-            var dbOther=_context.Shelves                
+            var dbOther = _context.Shelves
                 .Include(o => o.AllProducts)
                 .Where(o => o.RoutineId == x.Id)
                 .Where(o => o.ProductTypeId == 5)
                 .ToList();
-            
+
             List<DtoProductsFromNewRoutine> cleanser = null;
-            if(dbCleanser.Count!=0){            
-               cleanser = dbCleanser
-                    .Select(product => new DtoProductsFromNewRoutine() 
-                        {Name = product.AllProducts.Brand + ' ' 
-                                                          + product.AllProducts.Name, 
-                            Id = product.AllProducts.Id}).ToList();
+            if (dbCleanser.Count != 0)
+            {
+                cleanser = dbCleanser
+                    .Select(product => new DtoProductsFromNewRoutine()
+                    {
+                        Name = product.AllProducts.Brand + ' '
+                                                         + product.AllProducts.Name,
+                        Id = product.AllProducts.Id
+                    }).ToList();
             }
-            List<DtoProductsFromNewRoutine> moisturizer= null;;
+
+            List<DtoProductsFromNewRoutine> moisturizer = null;
+            ;
             if (dbMoisturizer.Count != 0)
             {
                 moisturizer = dbMoisturizer.Select(product => new DtoProductsFromNewRoutine()
@@ -217,7 +222,9 @@ namespace SkinCareDiary.Services.Helpers
                     })
                     .ToList();
             }
-            List<DtoProductsFromNewRoutine> treatment= null;;
+
+            List<DtoProductsFromNewRoutine> treatment = null;
+            ;
             if (dbTreatment.Count != 0)
             {
                 treatment = dbTreatment.Select(product => new DtoProductsFromNewRoutine()
@@ -226,7 +233,9 @@ namespace SkinCareDiary.Services.Helpers
                     })
                     .ToList();
             }
-            List<DtoProductsFromNewRoutine> sunScreen= null;;
+
+            List<DtoProductsFromNewRoutine> sunScreen = null;
+            ;
             if (dbSunscreen.Count != 0)
             {
                 sunScreen = dbSunscreen.Select(product => new DtoProductsFromNewRoutine()
@@ -235,7 +244,8 @@ namespace SkinCareDiary.Services.Helpers
                     })
                     .ToList();
             }
-            List<DtoProductsFromNewRoutine> other= null;;
+
+            List<DtoProductsFromNewRoutine> other = null;
             if (dbOther.Count != 0)
             {
                 other = dbOther.Select(product => new DtoProductsFromNewRoutine()
@@ -245,28 +255,133 @@ namespace SkinCareDiary.Services.Helpers
                     .ToList();
             }
 
-            var routine = new DtoGetRoutine()
+            var routine = new DtoGetRoutine
             {
+                RoutineId = x.Id,
                 RoutineType = routineType,
                 Note = note,
                 Stress = stressType,
                 Water = water,
                 RoutineDate = routineDate,
-                Cleanser =  cleanser,
+                Cleanser = cleanser,
                 Treatment = treatment,
                 Moisturizer = moisturizer,
                 SunScreen = sunScreen,
                 Other = other,
                 Sleep = sleep,
-
             };
 
-
-            return routine; 
+            return routine;
         }
 
-        private void AddToList(List<DtoProductsFromNewRoutine> list)
+        public int EditRoutine(int routineId, DtoEditRoutine newRoutine, int userId)
         {
+            var routineExists = _context.Routines
+                .Where(o => o.UserId == userId)
+                .Any(o => o.Id == routineId);
+
+            if (!routineExists)
+            {
+                throw new NotFoundException();
+            }
+            
+            var newDate = newRoutine.RoutineDate.AddDays(1);
+            var note = _context.Notes
+                .Where(o => o.Date >= newRoutine.RoutineDate)
+                .Where(o => o.Date < newDate)
+                .FirstOrDefault(o => o.RoutineId == routineId);
+
+            if (note != null)
+            {
+                note.Text = newRoutine.Note;
+            }
+            else
+            {
+                var newNote = new Note();
+                newNote.Text = newRoutine.Note;
+                newNote.Date = newRoutine.RoutineDate;
+                newNote.RoutineId = routineId;
+                _context.Add(newNote);
+            }
+
+            var indicators = _context.Indicators
+                .Where(o => o.RoutineId == routineId)
+                .Where(o => o.Date >= newRoutine.RoutineDate)
+                .Where(o => o.Date < newDate)
+                .ToList();
+
+            var oldWater = indicators
+                .FirstOrDefault(o => o.IndicatorTypeId == 1);
+
+            if (oldWater != null)
+            {
+                oldWater.Value = newRoutine.Water;
+            }
+            else
+            {
+                var waterIndicator = new Indicator();
+                waterIndicator.Date = newRoutine.RoutineDate;
+                waterIndicator.Value = newRoutine.Water;
+                waterIndicator.IndicatorTypeId = 1;
+                waterIndicator.RoutineId = routineId;
+                _context.Add(waterIndicator);
+            }
+
+            var oldStress = indicators
+                .FirstOrDefault(o => o.IndicatorTypeId == 2);
+
+            if (oldStress != null)
+            {
+                oldStress.Value = newRoutine.Stress switch
+                {
+                    "bad" => 3,
+                    "normal" => 2,
+                    _ => 1
+                };
+            }
+            else
+            {
+                var stressIndicator = new Indicator();
+                stressIndicator.RoutineId = routineId;
+                stressIndicator.Date = newRoutine.RoutineDate;
+                stressIndicator.Value = newRoutine.Stress switch
+                {
+                    "bad" => 3,
+                    "normal" => 2,
+                    _ => 1
+                };
+                stressIndicator.IndicatorTypeId = 2;
+                _context.Add(stressIndicator);
+            }
+
+            var oldSleeping = indicators
+                .FirstOrDefault(o => o.IndicatorTypeId == 3);
+
+            
+            var x = newRoutine.WakeUp - newRoutine.GoToSleep;
+            var sleeping = x?.TotalHours != null? (float) x.Value.TotalHours : 0;
+            if (oldSleeping != null)
+            {
+                oldSleeping.Value = sleeping;
+            }
+            else
+            {
+                var sleepingIndicator = new Indicator();
+                sleepingIndicator.RoutineId = routineId;
+                sleepingIndicator.Date = newRoutine.RoutineDate;
+                sleepingIndicator.Value = sleeping;
+                sleepingIndicator.IndicatorTypeId = 3;
+                _context.Add(sleepingIndicator);
+            }
+
+            EditProduct(newRoutine.Cleanser, 1, routineId);
+            EditProduct(newRoutine.Treatment, 2, routineId);
+            EditProduct(newRoutine.Moisturizer, 3, routineId);
+            EditProduct(newRoutine.SunScreen, 4, routineId);
+            EditProduct(newRoutine.Other, 5, routineId);
+            _context.SaveChanges();
+
+            return routineId;
         }
     }
 }

@@ -15,12 +15,18 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import NewBDay from "../NewBDay";
 import SetPeriod from "../SetPeriod";
-import { getEditRoutine } from "../../services/RoutineServices";
+import {
+  createRoutineAsync,
+  editRoutineAsync,
+  getEditRoutine,
+} from "../../services/RoutineServices";
 import ProductsOfRoutine from "../createRoutine/ProductsOfRoutine";
 import Indicator from "../createRoutine/Indicator";
 import Note from "../editRoutine/Note";
 import EditIndicator from "./EditIndicator";
 import EditProducts from "./EditProducts";
+import { uploadPhotosAsync } from "../../services/PhotoServices";
+import MuiAlert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
   breadcrumbs: {
@@ -74,11 +80,25 @@ const useStyles = makeStyles((theme) => ({
       flexDirection: "column",
     },
   },
+  widthForSnack: {
+    width: theme.spacing(50),
+  },
 }));
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 export default function EditRoutine() {
   const classes = useStyles();
   const history = useHistory();
+  const [prod, setProd] = useState({
+    Cleanser: [],
+    Treatment: [],
+    Moisturizer: [],
+    Sunscreen: [],
+    Other: [],
+  });
 
   function handleClick(event) {
     history.push("/my-routine");
@@ -92,26 +112,21 @@ export default function EditRoutine() {
     Stress: "",
     Sleep: "",
   });
-  const [note, setNote] = useState();
+  const [note, setNote] = useState('');
+  const [routineId, setRoutineId] = useState(0)
   const { routineType, date } = useParams();
-  const [products, setProducts] = useState({
-    Cleanser: [],
-    Treatment: [],
-    Moisturizer: [],
-    SunScreen: [],
-    Other: [],
-  });
+
   const getRoutines = async () => {
     try {
       const res = await getEditRoutine({ routineType, date });
       setNote(res.data.note);
-
+      setRoutineId(res.data.routineId)
       setIndicators({
         Water: res.data.water,
         Stress: res.data.stress,
         Sleep: res.data.sleep,
       });
-      setProducts({
+      setProd({
         Cleanser: res.data.cleanser,
         Treatment: res.data.treatment,
         Moisturizer: res.data.moisturizer,
@@ -120,6 +135,56 @@ export default function EditRoutine() {
       });
     } catch (err) {
       console.log(err);
+    }
+  };
+  const sendPhoto = async (routineId) => {
+    try {
+      const res = await uploadPhotosAsync(
+        {
+          photos: [],
+        },
+        { routineId: routineId }
+      );
+      console.log("Photo was send");
+    } catch (e) {
+      console.log(e, "Photos error");
+    }
+  };
+  const [alertOpen, setAlertOpen] = useState(false);
+  const alertClick = () => {
+    setAlertOpen(true);
+  };
+  const alertClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setAlertOpen(false);
+  };
+
+  const editRoutine = async () => {
+    try {
+      const response = await editRoutineAsync({
+        routineId: routineId,
+        note: note,
+        stress: indicator.Stress,
+        water: Number(indicator.Water),
+        goToSleep: indicator.GoToSleep
+          ? new Date(indicator.GoToSleep).toISOString()
+          : null,
+        wakeUp: indicator.WakeUp
+          ? new Date(indicator.WakeUp).toISOString()
+          : null,
+        routineDate: date,
+        cleanser: prod.Cleanser,
+        treatment: prod.Treatment,
+        moisturizer: prod.Moisturizer,
+        sunscreen: prod.Sunscreen,
+        other: prod.Other,
+      });
+      // await sendPhoto(response.data);
+      alertClick();
+    } catch (err) {
+      console.log("my error catch", err);
     }
   };
 
@@ -157,20 +222,19 @@ export default function EditRoutine() {
             </Typography>
           </Breadcrumbs>
         </Grid>
-        <Grid item className={classes.root} item xs={12} sm={4} container>
+        <Grid className={classes.root} item xs={12} sm={4} container>
           <Typography>
             {" "}
             <h2 className={classes.titleRoutine}>Edit Daily Routine </h2>
           </Typography>
         </Grid>
-        <Grid item className={classes.root} item xs={12} sm={4} container>
+        <Grid className={classes.root} item xs={12} sm={4} container>
           <Button
-            //`${this.state.className} ${this.props.content.divClassName}`
             className={`${classes.menuButton} ${classes.saveColor}`}
             variant="contained"
             color="primary"
-            href="#contained-buttons"
             type="submit"
+            onClick={() => editRoutine()}
           >
             Save
           </Button>
@@ -185,6 +249,20 @@ export default function EditRoutine() {
           </Button>
         </Grid>
       </Grid>
+      <Snackbar
+        className={classes.widthForSnack}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        open={alertOpen}
+        autoHideDuration={3000}
+        onClose={alertClose}
+      >
+        <Alert style={{ width: "100%" }} onClose={alertClose} severity="info">
+          <Typography>Your Routine was saved</Typography>
+        </Alert>
+      </Snackbar>
       <Grid container className={classes.actionGrid}>
         <Typography className={classes.titlePadding}>
           <h3 className={classes.titleRoutine}>Routine Type: {routineType} </h3>
@@ -196,20 +274,76 @@ export default function EditRoutine() {
       </Grid>
       <Grid xs={12}>
         <Grid container className={classes.test}>
-          <EditProducts value={products} />
-          <EditIndicator value={indicator}></EditIndicator>
-        </Grid>
-        {/*
-        <div> tady je voda{Number(indicator.Water)}</div>
-        <div>je to stress {indicator.Stress}</div>
-        <div>je to cas{indicator.GoToSleep}</div>
-        <div>je to cas spani{indicator.WakeUp}</div>
-        <div>pocet tydnu je {repeater.AmountOfWeek}</div>
-        <div>konec je {String(repeater.EndDate)}</div>
-        <div>poznamka je {noteAndPhoto.Note}</div>*/}
+          <EditProducts
+            value={prod}
+            id="products-of-routine"
+            onChangeCleanser={(event, value) => {
 
+              setProd({
+                ...prod,
+                Cleanser: value,
+              });
+            }}
+            onChangeTreatment={(event, value) => {
+
+              setProd({
+                ...prod,
+                Treatment: value,
+              });
+            }}
+            onChangeMoisturizer={(event, value) => {
+
+              setProd({
+                ...prod,
+                Moisturizer: value,
+              });
+            }}
+            onChangeSunscreen={(event, value) => {
+
+              setProd({
+                ...prod,
+                Sunscreen: value,
+              });
+            }}
+            onChangeOther={(event, value) => {
+
+              setProd({
+                ...prod,
+                Other: value,
+              });
+            }}
+          />
+          <EditIndicator value={indicator}
+                         onChange={(event) => {
+                           setIndicators({
+                             ...indicator,
+                             [event.target.name]: event.target.value,
+                           });
+                         }}
+                         onChangeForGoToSlepp={(event) => {
+                           setIndicators({
+                             ...indicator,
+                             GoToSleep: event ? event.toString() : null,
+                           });
+                         }}
+                         onChangeForWakeUp={(event) => {
+                           setIndicators({
+                             ...indicator,
+                             WakeUp: event ? event.toString() : null,
+                           });
+                         }}
+                         onChangeForSlider={(event, newValue) => {
+                           setIndicators({
+                             ...indicator,
+                             Water: newValue,
+                           });
+                         }}
+          />
+        </Grid>
         <Grid container>
-          <Note value={note}></Note>
+          <Note value={note} onChanngeNote={(event) =>
+          setNote(event.target.value)
+        }/>
         </Grid>
       </Grid>
     </>

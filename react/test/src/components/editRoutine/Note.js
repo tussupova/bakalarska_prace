@@ -38,6 +38,7 @@ export default function Note(props) {
             rows={8}
             className={classes.noteTextField}
             value={props.value}
+            onChange={props.onChanngeNote}
           />
         </div>
       </FormControl>

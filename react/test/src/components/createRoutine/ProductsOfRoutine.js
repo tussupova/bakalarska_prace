@@ -62,7 +62,7 @@ export default function ProductsOfRoutine(props) {
     try {
       setInputValue(chars);
       console.log("zacatek hledani", chars);
-      const foundedProducts = await searchProducts(inputValue);
+      const foundedProducts = await searchProducts(chars);
       console.log("vysledek", foundedProducts.data);
       const pr = foundedProducts.data.map((e) => {
         return {

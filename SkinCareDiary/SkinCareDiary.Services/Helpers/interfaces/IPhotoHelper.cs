@@ -10,5 +10,6 @@ namespace SkinCareDiary.Services.Helpers
 
         DtoGetPhotos GetPhotosFromId(int photoId);
         public List<DtoPhotosInfo> GetPhotosInfo(int userId);
+        bool RemovePhoto(int photoId);
     }
 }

@@ -15,7 +15,10 @@ export function removeUsersProduct(id){
   })
 }
 export function searchProducts(chars){
-  return axios.get("https://localhost:5001/product/searchProduct/"+chars, {
+  return axios.get("https://localhost:5001/product/searchProduct/", {
+    params:{
+      chars,
+    },
     headers: {
       'Authorization': `Bearer ${localStorage.getItem('authToken')}`
     },

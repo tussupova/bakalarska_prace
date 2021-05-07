@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Mime;
@@ -53,7 +54,7 @@ namespace SkinCareDiary.Services.Helpers
 
                         var newDtoGetPhotos = new DtoGetPhotos()
                         {
-                            Name = x.NewName,
+                            Name = x.OriginalName,
                             Type = contentType,
                             Data = data
                         };
@@ -83,6 +84,22 @@ namespace SkinCareDiary.Services.Helpers
                         {Date = x.Date, OriginalName = x.OriginalName, PhotoId = x.Id})); //==foreach
 
                 return newPhotosInfo;
+            }
+        }
+
+        public bool RemovePhoto(int photoId)
+        {
+            using (var db = new RepositoryContext())
+            {
+                var photos = db.Photos.FirstOrDefault(o => o.Id == photoId);
+                if (photos == null)
+                {
+                    return false;
+                }
+
+                db.Photos.Remove(photos);
+                db.SaveChanges();
+                return true;
             }
         }
     }

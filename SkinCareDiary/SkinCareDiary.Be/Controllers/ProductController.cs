@@ -33,9 +33,9 @@ namespace SkinCareDiary.Be.Controllers
             }
             return null;
         }
-        [HttpGet("searchProduct/{chars}")]
+        [HttpGet("searchProduct")]
         [Authorize]
-        public  List<DtoGetUsersProduct> GetUsersProduct(string chars)
+        public  List<DtoGetUsersProduct> GetUsersProduct([FromQuery] string chars)
         {
             return _productHelper.SearchProducts(chars);
           

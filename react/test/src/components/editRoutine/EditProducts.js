@@ -1,8 +1,10 @@
+
+
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import MultiSelect from "react-select";
 import Grid from "@material-ui/core/Grid";
-import React, {useEffect} from "react";
+import React from "react";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import makeAnimated from "react-select/animated/dist/react-select.esm";
 import Autocomplete from "@material-ui/lab/Autocomplete";
@@ -50,22 +52,19 @@ const useStyles = makeStyles((theme) => ({
   }
 
 }));
-export default function EditProducts(props) {
+export default function ProductsOfRoutine(props) {
   const classes = useStyles();
   const [options, setOptions] = React.useState([]);
   const [inputValue, setInputValue] = React.useState("");
   const [selectedProduct, setSelectedProduct] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const loading = open && options.length === 0;
-  const [cleanser, setCleanser]=React.useState([]);
-  const [other, setOther]=React.useState([]);
-
 
   const getSearchingProducts = async (chars) => {
     try {
       setInputValue(chars);
       console.log("zacatek hledani", chars);
-      const foundedProducts = await searchProducts(inputValue);
+      const foundedProducts = await searchProducts(chars);
       console.log("vysledek", foundedProducts.data);
       const pr = foundedProducts.data.map((e) => {
         return {
@@ -85,7 +84,6 @@ export default function EditProducts(props) {
     setSelectedProduct(value)
     console.log('selected', selectedProduct)
   }
-
   return (
     <Grid className={classes.multiSelectGrid} xs={12} lg={7}>
       <Paper className={classes.paper}>
@@ -102,13 +100,22 @@ export default function EditProducts(props) {
               {...options}
               getOptionLabel={(options) => options.name}
               options={options}
+              value={props.value.Cleanser? props.value.Cleanser :[]}
               classes={{
                 option: classes.option,
               }}
               //onChange={props.onChange}
+              onChange={ (event, value) => props.onChangeCleanser(event, value) }
+              onInputChange={(event, newInputValue) => {
+                getSearchingProducts(newInputValue);
+              }}
               autoHighlight
-              disableClearable
-              value={props.value.Cleanser? props.value.Cleanser :[]}
+              renderOption={(options) => (
+                <React.Fragment>
+                  {<img className={classes.optionIcon} src={options.img}/>}{" "}
+                  {options.name}
+                </React.Fragment>
+              )}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -135,9 +142,8 @@ export default function EditProducts(props) {
           <Grid item xs={12} lg={12}>
             <Autocomplete
               multiple
-              disableClearable
-              value={props.value.Treatment? props.value.Treatment :[]}
               {...options}
+              value={props.value.Treatment? props.value.Treatment :[]}
               getOptionLabel={(options) => options.name}
               options={options}
               classes={{
@@ -148,6 +154,12 @@ export default function EditProducts(props) {
                 getSearchingProducts(newInputValue);
               }}
               autoHighlight
+              renderOption={(options) => (
+                <React.Fragment>
+                  {<img className={classes.optionIcon} src={options.img}/>}{" "}
+                  {options.name}
+                </React.Fragment>
+              )}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -174,10 +186,9 @@ export default function EditProducts(props) {
             <Autocomplete
               multiple
               {...options}
-              disableClearable
-              value={props.value.Moisturizer? props.value.Moisturizer :[]}
               getOptionLabel={(options) => options.name}
               options={options}
+              value={props.value.Moisturizer? props.value.Moisturizer :[]}
               classes={{
                 option: classes.option,
               }}
@@ -186,6 +197,12 @@ export default function EditProducts(props) {
                 getSearchingProducts(newInputValue);
               }}
               autoHighlight
+              renderOption={(options) => (
+                <React.Fragment>
+                  {<img className={classes.optionIcon} src={options.img}/>}{" "}
+                  {options.name}
+                </React.Fragment>
+              )}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -214,8 +231,7 @@ export default function EditProducts(props) {
               {...options}
               getOptionLabel={(options) => options.name}
               options={options}
-              disableClearable
-              //value={props.value.SunScreen}
+              value={props.value.Sunscreen? props.value.Sunscreen :[]}
               classes={{
                 option: classes.option,
               }}
@@ -224,6 +240,12 @@ export default function EditProducts(props) {
                 getSearchingProducts(newInputValue);
               }}
               autoHighlight
+              renderOption={(options) => (
+                <React.Fragment>
+                  {<img className={classes.optionIcon} src={options.img}/>}{" "}
+                  {options.name}
+                </React.Fragment>
+              )}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -251,9 +273,8 @@ export default function EditProducts(props) {
               multiple
               {...options}
               getOptionLabel={(options) => options.name}
-              options={options}
-              disableClearable
               value={props.value.Other? props.value.Other :[]}
+              options={options}
               classes={{
                 option: classes.option,
               }}
@@ -262,6 +283,12 @@ export default function EditProducts(props) {
                 getSearchingProducts(newInputValue);
               }}
               autoHighlight
+              renderOption={(options) => (
+                <React.Fragment>
+                  {<img className={classes.optionIcon} src={options.img}/>}{" "}
+                  {options.name}
+                </React.Fragment>
+              )}
               renderInput={(params) => (
                 <TextField
                   {...params}
