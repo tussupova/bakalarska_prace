@@ -23,7 +23,7 @@ namespace SkinCareDiary.Services.Helpers
             using var db = _context;
             var products = db.Shelves
                 .Include(o => o.AllProducts)
-                .Where(o => o.Routine.UserId == userId)
+                .Where(o => o.Routine.UserId == userId).Distinct()
                 .ToList();
 
             newProducts = products.Select(x => new DtoGetUsersProduct

@@ -1,5 +1,5 @@
-import React, {Component, useEffect, useState} from "react";
-import {Button} from "@material-ui/core";
+import React, { Component, useEffect, useState } from "react";
+import { Button } from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Grid from "@material-ui/core/Grid";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
@@ -8,17 +8,19 @@ import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 import HomeIcon from "@material-ui/icons/Home";
 import Snackbar from "@material-ui/core/Snackbar";
-import {useHistory, useParams} from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import NewBDay from "../NewBDay";
 import SetPeriod from "../SetPeriod";
-import {getEditRoutine} from "../../services/RoutineServices";
+import { getEditRoutine } from "../../services/RoutineServices";
 import ProductsOfRoutine from "../createRoutine/ProductsOfRoutine";
 import Indicator from "../createRoutine/Indicator";
 import Note from "../editRoutine/Note";
+import EditIndicator from "./EditIndicator";
+import EditProducts from "./EditProducts";
 
 const useStyles = makeStyles((theme) => ({
   breadcrumbs: {
@@ -30,9 +32,9 @@ const useStyles = makeStyles((theme) => ({
   titleRoutine: {
     color: theme.palette.primary.main,
   },
-  secondaryColor:{
+  secondaryColor: {
     //color: theme.palette.text.secondary
-    color: theme.palette.secondary.main
+    color: theme.palette.secondary.main,
   },
   root: {
     flexGrow: 1 /*justify="center"
@@ -85,12 +87,37 @@ export default function EditRoutine() {
   function homeClick(event) {
     history.push("/home");
   }
-
-  const {routineType, date} = useParams();
+  const [indicator, setIndicators] = useState({
+    Water: "",
+    Stress: "",
+    Sleep: "",
+  });
+  const [note, setNote] = useState();
+  const { routineType, date } = useParams();
+  const [products, setProducts] = useState({
+    Cleanser: [],
+    Treatment: [],
+    Moisturizer: [],
+    SunScreen: [],
+    Other: [],
+  });
   const getRoutines = async () => {
     try {
-      const res=await getEditRoutine({routineType, date});
+      const res = await getEditRoutine({ routineType, date });
+      setNote(res.data.note);
 
+      setIndicators({
+        Water: res.data.water,
+        Stress: res.data.stress,
+        Sleep: res.data.sleep,
+      });
+      setProducts({
+        Cleanser: res.data.cleanser,
+        Treatment: res.data.treatment,
+        Moisturizer: res.data.moisturizer,
+        SunScreen: res.data.sunScreen,
+        Other: res.data.other,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -106,7 +133,7 @@ export default function EditRoutine() {
       <Grid container>
         <Grid item className={classes.breadcrumbs} xs={12} sm={4}>
           <Breadcrumbs
-            separator={<NavigateNextIcon fontSize="inherit"/>}
+            separator={<NavigateNextIcon fontSize="inherit" />}
             aria-label="breadcrumb"
           >
             <Link color="inherit" href="/" fontSize>
@@ -114,7 +141,7 @@ export default function EditRoutine() {
                 className={classes.breadcrumbsFont}
                 onClick={homeClick}
               >
-                <HomeIcon/>
+                <HomeIcon />
               </Typography>
             </Link>
             <Link color="inherit">
@@ -169,8 +196,8 @@ export default function EditRoutine() {
       </Grid>
       <Grid xs={12}>
         <Grid container className={classes.test}>
-          <ProductsOfRoutine/>
-
+          <EditProducts value={products} />
+          <EditIndicator value={indicator}></EditIndicator>
         </Grid>
         {/*
         <div> tady je voda{Number(indicator.Water)}</div>
@@ -182,7 +209,7 @@ export default function EditRoutine() {
         <div>poznamka je {noteAndPhoto.Note}</div>*/}
 
         <Grid container>
-          <Note></Note>
+          <Note value={note}></Note>
         </Grid>
       </Grid>
     </>

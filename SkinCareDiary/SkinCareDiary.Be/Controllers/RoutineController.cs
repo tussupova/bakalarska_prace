@@ -44,7 +44,7 @@ namespace SkinCareDiary.Be.Controllers
             {
                 var userId = int.Parse(User.Identity.Name ?? throw new InvalidOperationException());
                 
-                var z= _routineHelper.GetEditRoutine(routineType, routineDate, userId);
+                return _routineHelper.GetEditRoutine(routineType, routineDate, userId);
             }
            
 

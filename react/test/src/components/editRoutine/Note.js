@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
   },
 }));
-export default function Note() {
+export default function Note(props) {
   const classes = useStyles();
   return (
     <>
@@ -37,8 +37,7 @@ export default function Note() {
             label={<Typography>Write some note</Typography>}
             rows={8}
             className={classes.noteTextField}
-            //value={props.value.noteAndPhoto}
-            //onChange={props.onChanngeNote}
+            value={props.value}
           />
         </div>
       </FormControl>
