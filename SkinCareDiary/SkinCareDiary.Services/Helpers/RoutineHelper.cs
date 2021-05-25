@@ -128,9 +128,9 @@ namespace SkinCareDiary.Services.Helpers
                 .Where(o => o.RoutineId == routineId)
                 .Where(o => o.ProductTypeId == productTypeId)
                 .ToList();
-            
+
             _context.Shelves.RemoveRange(existingProducts);
-            
+
             foreach (var product in products)
             {
                 var newProduct = new Shelf();
@@ -149,25 +149,25 @@ namespace SkinCareDiary.Services.Helpers
                 "Evening" => 2,
                 _ => 3
             };
-            var newDate = routineDate.AddDays(1);
-
             var x = _context.Routines
                 .Where(o => o.UserId == userId)
                 .Where(o => o.TypeOfRoutineId == routineTypeId)
-                .Where(o => (o.RoutineDate.Start == o.RoutineDate.End &&
-                             (o.RoutineDate.Start >= routineDate && o.RoutineDate.End <= newDate))
-                            || (o.RoutineDate.Start <= routineDate && o.RoutineDate.End >= newDate))
+                .Where(o => o.RoutineDate.Start.Date <= routineDate && o.RoutineDate.End.Date >= routineDate)
                 .OrderByDescending(o => o.RoutineDate.Start)
                 .FirstOrDefault();
 
-            var note = _context.Notes.Where(o => o.Date <= newDate && o.Date >= routineDate)
+            var note = _context.Notes.Where(o => o.Date.Date == routineDate)
+                .Where(o => o.RoutineId == x.Id)
                 .Select(o => o.Text).FirstOrDefault();
             var stress = _context.Indicators.Where(o => o.IndicatorTypeId == 2)
-                .Where(o => o.Date <= newDate && o.Date >= routineDate).Select(o => o.Value).FirstOrDefault();
+                .Where(o => o.RoutineId == x.Id)
+                .Where(o => o.Date.Date == routineDate).Select(o => o.Value).FirstOrDefault();
             var water = _context.Indicators.Where(o => o.IndicatorTypeId == 1)
-                .Where(o => o.Date <= newDate && o.Date >= routineDate).Select(o => o.Value).FirstOrDefault();
+                .Where(o => o.RoutineId == x.Id)
+                .Where(o => o.Date.Date == routineDate).Select(o => o.Value).FirstOrDefault();
             var sleep = _context.Indicators.Where(o => o.IndicatorTypeId == 3)
-                .Where(o => o.Date <= newDate && o.Date >= routineDate).Select(o => o.Value).FirstOrDefault();
+                .Where(o => o.RoutineId == x.Id)
+                .Where(o => o.Date.Date == routineDate).Select(o => o.Value).FirstOrDefault();
             var stressType = stress switch
             {
                 1 => "happy",
@@ -284,7 +284,7 @@ namespace SkinCareDiary.Services.Helpers
             {
                 throw new NotFoundException();
             }
-            
+
             var newDate = newRoutine.RoutineDate.AddDays(1);
             var note = _context.Notes
                 .Where(o => o.Date >= newRoutine.RoutineDate)
@@ -357,9 +357,9 @@ namespace SkinCareDiary.Services.Helpers
             var oldSleeping = indicators
                 .FirstOrDefault(o => o.IndicatorTypeId == 3);
 
-            
+
             var x = newRoutine.WakeUp - newRoutine.GoToSleep;
-            var sleeping = x?.TotalHours != null? (float) x.Value.TotalHours : 0;
+            var sleeping = x?.TotalHours != null ? (float) x.Value.TotalHours : 0;
             if (oldSleeping != null)
             {
                 oldSleeping.Value = sleeping;

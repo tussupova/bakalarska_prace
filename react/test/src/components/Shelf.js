@@ -90,9 +90,7 @@ export default function Shelf() {
   };
   const deleteProduct = async (id) => {
     try {
-
-      var x= window.confirm("Do you really want to remove this product?")
-      if(x==true){
+      if(window.confirm("Do you really want to remove this product?")){
         const deleteProduct = await removeUsersProduct(id);
         await getProducts();
       }

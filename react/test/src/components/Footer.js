@@ -10,7 +10,7 @@ export default function Footer() {
       <Container maxWidth="md">
         <Toolbar>
           <Typography variant="body1" color="inherit">
-            © 2021 Gistia
+            © 2021 Tussupova
           </Typography>
         </Toolbar>
       </Container>

@@ -1,4 +1,5 @@
 import axios from "axios";
+import {API_DEFAULT} from "../constants";
 
 
 export function createRoutineAsync({
@@ -20,7 +21,7 @@ export function createRoutineAsync({
   other
 }) {
   return axios.post(
-    "https://localhost:5001/routine/createRoutine",
+    API_DEFAULT + "/routine/createRoutine",
     {
       routineType,
       note,
@@ -47,8 +48,46 @@ export function createRoutineAsync({
   );
 }
 
+
+export function editRoutineAsync({
+  note,
+  stress,
+  water,
+  goToSleep,
+  wakeUp,
+  routineDate,
+  cleanser,
+  treatment,
+  moisturizer,
+  sunscreen,
+  other,
+  routineId
+}) {
+  return axios.put(
+    API_DEFAULT + "/routine/editRoutine/" + routineId,
+    {
+      note,
+      stress,
+      water,
+      goToSleep,
+      wakeUp,
+      routineDate,
+      cleanser,
+      treatment,
+      moisturizer,
+      sunscreen,
+      other
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      },
+    }
+  );
+}
+
 export function getEditRoutine({routineType, date}){
-  return axios.get("https://localhost:5001/routine/editRoutine", {
+  return axios.get(API_DEFAULT + "/routine/editRoutine", {
     params: {
       routineType: routineType,
       routineDate: date

@@ -73,26 +73,6 @@ export default function SetPeriod(props) {
       >
         <DialogTitle id="form-dialog-title">Set recurrence</DialogTitle>
         <DialogContent>
-          <Grid container className={classes.gridForDate}>
-            <div>
-              <Typography className={classes.labelInGrid}>
-                Amout of week
-              </Typography>
-            </div>
-            <div className={classes.inputForNumber}>
-              <FormControl>
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  id="name"
-                  type="number"
-                  fullWidth
-                  value={props.value.AmountOfWeek}
-                  onChange={props.onChangeAmountOfWeek}
-                />
-              </FormControl>
-            </div>
-          </Grid>
           <div>
             <Grid container className={classes.gridForDate}>
               <div>

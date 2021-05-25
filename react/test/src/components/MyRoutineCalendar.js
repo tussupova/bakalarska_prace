@@ -7,9 +7,9 @@ import { Button, Typography } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import { sendData } from "../services/UserServices";
 import { useHistory } from "react-router-dom";
-import {exportData, getUsersRoutine} from "../services/CalendarServices";
-import Tooltip from '@material-ui/core/Tooltip';
-
+import { exportData, getUsersRoutine } from "../services/CalendarServices";
+import Tooltip from "@material-ui/core/Tooltip";
+import {API_DEFAULT} from "../constants";
 
 BigCalendar.momentLocalizer(moment);
 /*
@@ -35,23 +35,21 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down("xs")]: {
       marginTop: theme.spacing(5),
       marginBottom: theme.spacing(5),
-      marginLeft: theme.spacing(1)
+      marginLeft: theme.spacing(1),
     },
   },
-  exportButton:{
+  exportButton: {
     marginTop: theme.spacing(5),
-    marginBottom: theme.spacing(5)
+    marginBottom: theme.spacing(5),
   },
-  buttonsGrid:{
+  buttonsGrid: {
     justifyContent: "flex-end",
     [theme.breakpoints.down("xs")]: {
-      justifyContent: "center"
+      justifyContent: "center",
     },
-  }
+  },
 }));
-const openRoutine=(event)=>{
-
-}
+const openRoutine = (event) => {};
 const getRoutineType = (date, culture, localizer) => {
   if (date.getHours() === 0) {
     return "Morning";
@@ -79,28 +77,30 @@ export default function Routine() {
     history.push("/create-routine");
   };
   const [event, setEvent] = React.useState([]);
-const exportUsersData=async ()=>{
-  try {
+  const exportUsersData = async () => {
+    try {
+      let anchor = document.createElement("a");
+      document.body.appendChild(anchor);
+      let file = API_DEFAULT + "/calendar/exportData";
+      let headers = new Headers();
+      headers.append(
+        "Authorization",
+        `Bearer ${localStorage.getItem("authToken")}`
+      );
 
-
-    let anchor=document.createElement("a");
-    document.body.appendChild(anchor);
-    let file="https://localhost:5001/calendar/exportData";
-    let headers=new Headers();
-    headers.append('Authorization', `Bearer ${localStorage.getItem('authToken')}`);
-
-    fetch(file, {method: 'POST', headers}).then(res=>res.blob())
-      .then(blobby=>{
-        let objectUrl=window.URL.createObjectURL(blobby);
-        anchor.href=objectUrl;
-        anchor.download = 'data.zip';
-        anchor.click();
-        window.URL.revokeObjectURL(objectUrl);
-      })
-  }catch (e) {
-    console.log("Export error", e)
-  }
-}
+      fetch(file, { method: "POST", headers })
+        .then((res) => res.blob())
+        .then((blobby) => {
+          let objectUrl = window.URL.createObjectURL(blobby);
+          anchor.href = objectUrl;
+          anchor.download = "data.zip";
+          anchor.click();
+          window.URL.revokeObjectURL(objectUrl);
+        });
+    } catch (e) {
+      console.log("Export error", e);
+    }
+  };
 
   const getRoutines = async () => {
     try {
@@ -130,7 +130,6 @@ const exportUsersData=async ()=>{
             ),
           };
         } else if (e.routineType === "Evening") {
-
           var evening = new Date(e.date);
           return {
             id: e.routineId,
@@ -182,19 +181,19 @@ const exportUsersData=async ()=>{
       console.log(e, "Get routines in calendar error");
     }
   };
-  const openEdit=(title, start)=>{
-    var routineMonth=start.getMonth()+1;
-    var day=start.getDate();
-    if(day<10){
-      day='0'+day;
+  const openEdit = (title, start) => {
+    var routineMonth = start.getMonth() + 1;
+    var day = start.getDate();
+    if (day < 10) {
+      day = "0" + day;
     }
-    if(routineMonth<10){
-      routineMonth='0'+routineMonth;
+    if (routineMonth < 10) {
+      routineMonth = "0" + routineMonth;
     }
-    var x = start.getFullYear()+'-'+routineMonth+'-'+day;
+    var x = start.getFullYear() + "-" + routineMonth + "-" + day;
 
-    history.push('/edit-routine/'+title+'/'+x)
-  }
+    history.push("/edit-routine/" + title + "/" + x);
+  };
   useEffect(() => {
     // vola se vzdycky pri renderovani a pouze jednou
     getRoutines();
@@ -214,16 +213,15 @@ const exportUsersData=async ()=>{
             <Typography>Create Routine</Typography>
           </Button>
           <Tooltip title="All info about routine will download ">
-          <Button
-            color="secondary"
-            className={classes.exportButton}
-            variant="contained"
-            href="#contained-buttons"
-            onClick={exportUsersData}
-          >
-            <Typography>Export All My Routine</Typography>
-
-          </Button>
+            <Button
+              color="secondary"
+              className={classes.exportButton}
+              variant="contained"
+              href="#contained-buttons"
+              onClick={exportUsersData}
+            >
+              <Typography>Export All My Routine</Typography>
+            </Button>
           </Tooltip>
         </Grid>
         <Grid item className={classes.calendarGrid}>
@@ -235,7 +233,6 @@ const exportUsersData=async ()=>{
             events={event}
             onSelectEvent={(event) => openEdit(event.title, event.start)}
             label={event.title}
-
             eventPropGetter={(event) => ({
               style: {
                 backgroundColor: "#E9816E",

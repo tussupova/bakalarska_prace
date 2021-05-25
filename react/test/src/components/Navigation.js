@@ -23,7 +23,9 @@ const useStyles = makeStyles((theme) => ({
   setflexend: {
     display: "flex",
     alignContent: "end"
-
+  },
+  imageCursor:{
+    cursor: "pointer"
   }
 }));
 
@@ -55,6 +57,9 @@ export default function Navigation() {
   const onClickHome=()=>{
     history.push('/home')
   }
+  const onClickLogout=()=>{
+    history.push('/sign-in')
+  }
 
   return (
     <div className={classes.root}>
@@ -63,7 +68,7 @@ export default function Navigation() {
           <div style={{width: '100%'}}>
             <Box display="flex" p={1}>
               <Box p={1} flexGrow={1}  onClick={onClickHome}>
-                <img src="./logo.png"/>
+                <img src="./logo.png" className={classes.imageCursor}/>
               </Box>
               <Button className={classes.menuButton} color="inherit" p={1} onClick={onClickRoutine}>
                 Routine
@@ -75,7 +80,7 @@ export default function Navigation() {
                 Shelf
               </Button>
                 <Button className={classes.menuButton} color="inherit" p={1} aria-controls="simple-menu"
-                        aria-haspopup="true" onClick={handleClick}>
+                        aria-haspopup="true" onClick={onClickLogout}>
                   Logout
                 </Button>
             </Box>

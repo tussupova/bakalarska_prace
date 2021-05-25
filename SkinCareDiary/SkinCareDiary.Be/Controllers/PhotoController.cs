@@ -29,7 +29,7 @@ namespace SkinCareDiary.Be.Controllers
         {
             try
             {
-                for (int i = 0; i < Request.Form.Count; i++)
+                for (int i = 0; i < Request.Form.Files.Count; i++)
                 {
                     var file = Request.Form.Files[i];
                     var folderName = Path.Combine("Resources", "Images");

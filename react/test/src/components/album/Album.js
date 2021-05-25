@@ -20,10 +20,10 @@ import IconButton from "@material-ui/core/IconButton";
 import AppBar from "@material-ui/core/AppBar";
 import DeleteIcon from "@material-ui/icons/Delete";
 import {
-  downloadPhoto,
+  deletePhotos,
   downloadPhotosInfoAsync,
-  uploadPhotosAsync,
 } from "../../services/PhotoServices";
+import {API_DEFAULT} from "../../constants";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,6 +48,7 @@ export default function Album() {
   const [currentImage, setCurrentImage] = useState(0);
   const [viewerIsOpen, setViewerIsOpen] = useState(false);
   const [photosWithTitle, setPhotosWithTitle] = useState([]);
+  const [deleteId, setId] = useState();
 
   useEffect(() => {
     getInfo();
@@ -55,14 +56,14 @@ export default function Album() {
   const getInfo = async () => {
     try {
       const res = await downloadPhotosInfoAsync();
-       const mappedPhotos = res.data.map((x) => {
+      const mappedPhotos = res.data.map((x) => {
         return {
           id: x.photoId,
           title: x.originalName,
           date: x.date,
           width: 4,
           height: 2,
-          src:"https://localhost:5001/photo/getPhotosFromId/" + x.photoId
+          src: API_DEFAULT + "/photo/getPhotosFromId/" + x.photoId,
         };
       });
       setPhotosWithTitle(mappedPhotos);
@@ -76,30 +77,34 @@ export default function Album() {
     setViewerIsOpen(true);
     setOpen(true);
     setPhotosId(index);
-    console.log('indeeeeex', index)
-  }, []);
+    setId(photo.id);
 
-  const deletePhoto=()=>{
-    var x= window.confirm(photosId)
-    //todo mazani fotek
-    //console.log(photo)
-  }
+  }, []);
 
   const closeLightbox = () => {
     setCurrentImage(0);
     setViewerIsOpen(false);
   };
   const [open, setOpen] = React.useState(false);
-  const [photosId, setPhotosId]=React.useState();
+  const [photosId, setPhotosId] = React.useState();
 
   const handleClose = () => {
     setOpen(false);
     closeLightbox();
   };
-
+  const deletePhoto = async (id) => {
+    try {
+      if (window.confirm("Do you really want to remove this photos?")) {
+        const res = await deletePhotos(id);
+        await getInfo();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
     <div data-cy="gallery">
-      <Gallery photos={photosWithTitle}  onClick={openLightbox} />
+      <Gallery photos={photosWithTitle} onClick={openLightbox} />
       <ModalGateway>
         {viewerIsOpen ? (
           <Modal onClose={closeLightbox}>
@@ -115,17 +120,14 @@ export default function Album() {
                     <CloseIcon />
                   </IconButton>
                   <Typography variant="h6" className={classes.title}>
-                    Date
+                    2021-24-05
                   </Typography>
                   <Button autoFocus color="inherit" onClick={handleClose}>
-                    <DeleteIcon onClick={() => deletePhoto()} />
+                    <DeleteIcon onClick={() => deletePhoto(deleteId)} />
                   </Button>
                 </Toolbar>
               </AppBar>
-              <Carousel
-                currentIndex={currentImage}
-                views={photosWithTitle}
-              />
+              <Carousel currentIndex={currentImage} views={photosWithTitle} />
             </Dialog>
           </Modal>
         ) : null}

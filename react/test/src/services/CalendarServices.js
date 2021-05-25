@@ -1,7 +1,8 @@
 import axios from "axios";
+import {API_DEFAULT} from "../constants";
 
 export function exportData() {
-  return axios.post("https://localhost:5001/calendar/exportData", {
+  return axios.post(API_DEFAULT + "/calendar/exportData", {
     headers: {
       'Authorization': `Bearer ${localStorage.getItem('authToken')}`
     },
@@ -10,7 +11,7 @@ export function exportData() {
   })
 }
 export function getUsersRoutine(){
-  return axios.get("https://localhost:5001/calendar/getRoutines",{
+  return axios.get(API_DEFAULT + "/calendar/getRoutines",{
     headers: {
       'Authorization': `Bearer ${localStorage.getItem('authToken')}`
     },

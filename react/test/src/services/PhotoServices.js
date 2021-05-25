@@ -1,11 +1,12 @@
 import axios from "axios";
+import {API_DEFAULT} from "../constants";
 
 export function uploadPhotosAsync(photos, {routineId}) {
   const formData = new FormData();
   for (const f of photos.photos) {
     formData.append("files", f);
   }
-  debugger
+
   formData.append("routineId", routineId);
   formData.append("date", new Date().toISOString());
   const config = {
@@ -14,13 +15,13 @@ export function uploadPhotosAsync(photos, {routineId}) {
       Authorization: `Bearer ${localStorage.getItem("authToken")}`,
     },
   };
-  return axios.post("https://localhost:5001/photo/upload", formData, config);
+  return axios.post(API_DEFAULT + "/photo/upload", formData, config);
 }
 
 //todo change routine ID
 export function downloadPhotosInfoAsync() {
   return axios.get(
-    "https://localhost:5001/photo/getPhotosInfo",{
+    API_DEFAULT + "/photo/getPhotosInfo",{
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('authToken')}`
       },
@@ -28,10 +29,12 @@ export function downloadPhotosInfoAsync() {
   );
 }
 
-/*export function downloadPhoto() {
-  return axios.get("https://localhost:5001/photo/getPhotosFromId", {
-    headers: {
-      'Authorization': `Bearer ${localStorage.getItem('authToken')}`
-    },
-  });
-}*/
+export function deletePhotos(id){
+  return axios.delete(
+    API_DEFAULT + "/photo/"+id,{
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+      },
+    }
+  )
+}

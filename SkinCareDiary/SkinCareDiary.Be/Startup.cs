@@ -11,11 +11,13 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SkinCareDiary.Database.DB;
@@ -38,7 +40,7 @@ namespace SkinCareDiary.Be
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
-           services.AddCors(options =>
+            services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
                 {
@@ -47,7 +49,7 @@ namespace SkinCareDiary.Be
                         .AllowAnyMethod();
                 });
             });
-            
+
 
             // settings
             services.Configure<JwtSettings>(Configuration.GetSection(nameof(JwtSettings)));
@@ -91,6 +93,7 @@ namespace SkinCareDiary.Be
                 );
 
 
+            services.AddLogging();
             // dependency injection registrace
             services.AddScoped<ILoginHelper, LoginHelper>();
             services.AddScoped<IRoutineHelper, RoutineHelper>();
@@ -99,6 +102,14 @@ namespace SkinCareDiary.Be
             services.AddScoped<IProductHelper, ProductHelper>();
             services.AddScoped<ICalendarHelper, CalendarHelper>();
             services.AddScoped<RepositoryContext, RepositoryContext>();
+            services.AddDbContext<RepositoryContext>(option =>
+            {
+                option
+                    .UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()))
+                    .UseMySql(
+                        Configuration.GetConnectionString("Database"),
+                        new MySqlServerVersion(new Version(8, 0, 21)));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

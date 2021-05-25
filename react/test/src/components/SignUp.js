@@ -113,10 +113,11 @@ export default function SignUp() {
     if (data.password.length < 6) {
       setPasswordError('Password is too short')
     }
+
     else if (data.password.length>25){
       setPasswordError('Password is too long')
     }
-    else if (data.name.length===0){
+    else if (data.name.length<3){
       setNameError('Please, fill the name')
     }
     else if (data.email.length===0){
@@ -133,6 +134,7 @@ export default function SignUp() {
           birthday: data.birthday,
           gender: data.gender
         });
+        localStorage.setItem('authToken', response.data.token);
         history.push('/my-routine')
       } catch (err) {
         //setEmailError('User with this email already exist')

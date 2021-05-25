@@ -229,9 +229,9 @@ export default function ProductsOfRoutine(props) {
             <Autocomplete
               multiple
               {...options}
+              value={props.value.Sunscreen? props.value.Sunscreen :[]}
               getOptionLabel={(options) => options.name}
               options={options}
-              value={props.value.Sunscreen? props.value.Sunscreen :[]}
               classes={{
                 option: classes.option,
               }}

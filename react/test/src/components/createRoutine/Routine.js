@@ -1,5 +1,5 @@
-import React, { Component, useState } from "react";
-import { Button } from "@material-ui/core";
+import React, {Component, useState} from "react";
+import {Button} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
@@ -20,12 +20,12 @@ import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import Link from "@material-ui/core/Link";
 import Breadcrumbs from "@material-ui/core/Breadcrumbs";
 import HomeIcon from "@material-ui/icons/Home";
-import { useForm } from "react-hook-form";
-import { signUpAsync } from "../../services/UserServices";
-import { createRoutineAsync } from "../../services/RoutineServices";
-import { uploadPhotosAsync } from "../../services/PhotoServices";
+import {useForm} from "react-hook-form";
+import {signUpAsync} from "../../services/UserServices";
+import {createRoutineAsync} from "../../services/RoutineServices";
+import {uploadPhotosAsync} from "../../services/PhotoServices";
 import * as theme from "@material-ui/system";
-import { useHistory } from "react-router-dom";
+import {useHistory} from "react-router-dom";
 //import ImageUpload from './ui/imge-upload/ImageUpload';
 
 const useStyles = makeStyles((theme) => ({
@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
       width: "80%",
     },
   },
-  titleRoutine:{
+  titleRoutine: {
     color: theme.palette.primary.main
   },
   createButton: {
@@ -126,7 +126,7 @@ export default function Routine() {
     GoToSleep: null,
     WakeUp: null,
   });
-  const[prod, setProd]=useState({
+  const [prod, setProd] = useState({
     Cleanser: [],
     Treatment: [],
     Moisturizer: [],
@@ -159,17 +159,13 @@ export default function Routine() {
   const handleOpen = () => {
     setOpen(true);
   };
-  const saveRoutine = (data) => {
-    console.log(data);
-  };
-  console.log(noteAndPhoto.Photos);
   const sendPhoto = async (routineId) => {
     try {
       const res = await uploadPhotosAsync(
         {
           photos: noteAndPhoto.Photos,
         },
-        { routineId: routineId }
+        {routineId: routineId}
       );
       console.log("Photo was send");
     } catch (e) {
@@ -183,7 +179,6 @@ export default function Routine() {
       const response = await createRoutineAsync({
         routineType: routineType,
         note: noteAndPhoto.Note,
-        //photos: noteAndPhoto.Photos,
         stress: indicator.Stress,
         water: Number(indicator.Water),
         goToSleep: indicator.GoToSleep
@@ -208,7 +203,6 @@ export default function Routine() {
       alertClick();
     } catch (err) {
       console.log("my error catch", err);
-      //setPasswordError('Invalid credentials')
     }
   };
 
@@ -227,13 +221,15 @@ export default function Routine() {
   function handleClick(event) {
     history.push("/my-routine");
   }
-  const testXX=(event, value)=>{
+
+  const testXX = (event, value) => {
 
     console.log('ALL PROD', prod)
     console.log('Cleanser Id', prod.Cleanser[0])
   }
 
-  function openAddProductDialog() {}
+  function openAddProductDialog() {
+  }
 
   /*  const PhotosApp = () => {
       const [files, setFiles] = useState<File[]>([]);
@@ -248,12 +244,12 @@ export default function Routine() {
       <Grid container>
         <Grid item className={classes.breadcrumbs} xs={12} sm={4}>
           <Breadcrumbs
-            separator={<NavigateNextIcon fontSize="inherit" />}
+            separator={<NavigateNextIcon fontSize="inherit"/>}
             aria-label="breadcrumb"
           >
             <Link color="inherit" href="/" onClick={handleClick} fontSize>
               <Typography className={classes.breadcrumbsFont}>
-                <HomeIcon />
+                <HomeIcon/>
               </Typography>
             </Link>
             <Link color="inherit" onClick={handleClick}>
@@ -266,10 +262,10 @@ export default function Routine() {
             </Typography>
           </Breadcrumbs>
         </Grid>
-        <Grid item className={classes.root} item xs={12} sm={4} container>
-         <Typography> <h2 className={classes.titleRoutine}>Create Daily Routine </h2></Typography>
+        <Grid className={classes.root} item xs={12} sm={4} container>
+          <Typography><h2 className={classes.titleRoutine}>Create Daily Routine </h2></Typography>
         </Grid>
-        <Grid item className={classes.root} item xs={12} sm={4} container>
+        <Grid className={classes.root} item xs={12} sm={4} container>
           <Button
             //`${this.state.className} ${this.props.content.divClassName}`
             className={`${classes.menuButton} ${classes.saveColor}`}
@@ -292,7 +288,7 @@ export default function Routine() {
             onClose={alertClose}
           >
             <Alert
-              style={{ width: "100%" }}
+              style={{width: "100%"}}
               onClose={alertClose}
               severity="info"
             >
@@ -344,7 +340,7 @@ export default function Routine() {
           value={repeater}
           valueDayOfWeek={dayOfWeek}
           onChangeAmountOfWeek={(event) => {
-            setRepeater({ ...repeater, AmountOfWeek: event.target.value });
+            setRepeater({...repeater, AmountOfWeek: event.target.value});
           }}
           onChangeEndDate={(event) => {
             setRepeater({
@@ -365,7 +361,7 @@ export default function Routine() {
         <Grid container className={classes.test}>
           <ProductsOfRoutine
             id="products-of-routine"
-            onChangeCleanser={(event, value)=>{
+            onChangeCleanser={(event, value) => {
               testXX(event, value);
               setProd({
                 ...prod,
@@ -373,28 +369,28 @@ export default function Routine() {
               })
 
             }}
-            onChangeTreatment={(event, value)=>{
+            onChangeTreatment={(event, value) => {
               testXX(event, value);
               setProd({
                 ...prod,
                 Treatment: value
               })
             }}
-            onChangeMoisturizer={(event, value)=>{
+            onChangeMoisturizer={(event, value) => {
               testXX(event, value);
               setProd({
                 ...prod,
                 Moisturizer: value
               })
             }}
-            onChangeSunscreen={(event, value)=>{
+            onChangeSunscreen={(event, value) => {
               testXX(event, value);
               setProd({
                 ...prod,
                 Sunscreen: value
               })
             }}
-            onChangeOther={(event, value)=>{
+            onChangeOther={(event, value) => {
               testXX(event, value);
               setProd({
                 ...prod,
@@ -445,11 +441,11 @@ export default function Routine() {
           <NoteAndPhotos
             value={noteAndPhoto}
             onChanngeNote={(event) =>
-              setNoteAndPhoto({ Note: event.target.value })
+              setNoteAndPhoto({...noteAndPhoto,Note: event.target.value})
             }
             onChangePhotos={(e) => {
               console.log("onchange", e);
-              setNoteAndPhoto({ Photos: e });
+              setNoteAndPhoto({...noteAndPhoto,Photos: e});
             }}
           />
         </Grid>
